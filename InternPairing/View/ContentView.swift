@@ -1,12 +1,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var dataManager = DataManager()
     @State private var isUserLoggedIn = false
     var body: some View {
         
         
         if isUserLoggedIn{
-            // Go somewhere
+            UserView()
+                .environmentObject(dataManager)
         } else{
             LoginView(isUserLoggedIn: $isUserLoggedIn)
         }
