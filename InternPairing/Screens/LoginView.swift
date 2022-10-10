@@ -1,30 +1,34 @@
-import SwiftUI
+//
+//  LoginView.swift
+//  InternPairing
+//
+//  Created by Johan Näsvall on 2022-10-10.
+//
 
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            LoginView()
-        }
-        .padding()
-    }
-}
+import SwiftUI
 
 struct LoginView: View {
     var authentication = Autentication()
     @State private var email = ""
     @State private var password = ""
+    @Binding var isUserLoggedIn: Bool
+    
     var body: some View {
-        ZStack {
+        ZStack{
             VStack {
+                
+                //Email
                 Text("E-mail:")
                 TextField("", text: $email)
                     .keyboardType(.emailAddress)
                     .textFieldStyle(.roundedBorder)
                 
+                //PW
                 Text("Password:")
                 SecureField("", text: $password)
                     .textFieldStyle(.roundedBorder)
                 
+                //Signup btn
                 Button(action: {
                     authentication.registerUser(email: email, password: password)
                 }, label: {
@@ -36,6 +40,7 @@ struct LoginView: View {
                         .cornerRadius(7)
                 })
                 
+                //Login btn
                 Button(action: {
                     authentication.loginUser(email: email, password: password)
                 }, label: {
@@ -46,13 +51,12 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .cornerRadius(7)
                 })
-            }.padding()
+            }
+            .padding()
+            .onAppear{
+                authentication.isUserLoggedIn(isUserLoggedIn: isUserLoggedIn)
+                
+            }
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView()
     }
 }
