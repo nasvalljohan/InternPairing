@@ -104,7 +104,8 @@
 		3268E83128F4237B0059BF70 /* InternPairing */ = {
 			isa = PBXGroup;
 			children = (
-				3268E86328F44F890059BF70 /* Screens */,
+				33F19FAD28F4532E00FA46C0 /* Model */,
+				3268E86328F44F890059BF70 /* View */,
 				3268E83228F4237B0059BF70 /* InternPairingApp.swift */,
 				33F19FAB28F43D1400FA46C0 /* Authentication.swift */,
 				3268E83628F423810059BF70 /* Assets.xcassets */,
@@ -139,13 +140,20 @@
 			path = InternPairingUITests;
 			sourceTree = "<group>";
 		};
-		3268E86328F44F890059BF70 /* Screens */ = {
+		3268E86328F44F890059BF70 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				3268E83428F4237B0059BF70 /* ContentView.swift */,
 				3268E86428F451980059BF70 /* LoginView.swift */,
 			);
-			path = Screens;
+			path = View;
+			sourceTree = "<group>";
+		};
+		33F19FAD28F4532E00FA46C0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
