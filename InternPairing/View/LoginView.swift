@@ -3,6 +3,7 @@ import SwiftUI
 import Firebase
 
 struct LoginView: View {
+    @StateObject var dataManager = DataManager()
     var authentication = Authentication()
     @State private var email = ""
     @State private var password = ""

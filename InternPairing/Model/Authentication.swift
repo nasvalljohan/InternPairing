@@ -11,6 +11,7 @@ struct Authentication {
             }
         }
     }
+
     
     func loginUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) {

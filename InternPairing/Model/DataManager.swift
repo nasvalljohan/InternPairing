@@ -2,11 +2,23 @@ import Foundation
 import Firebase
 
 class DataManager: ObservableObject {
+    
     @Published var userInterns = [UserIntern]()
     @Published var userRecruiters = [UserRecruiter]()
-    
     init() {
         fetchUsers(typeOfUser: "UserInterns")
+    }
+    
+    // MARK:  NOT YET IMPLEMENTED
+    func addUser() {
+        let db = Firestore.firestore()
+        let reference = db.collection("UserInterns").document("user")
+        reference.setData(["age": 10, "name": "johan", "id": "IDHANDLING"]) {
+            error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func fetchUsers(typeOfUser: String) {
