@@ -7,7 +7,7 @@ struct ContentView: View {
         
         
         if isUserLoggedIn{
-            UserView()
+            SwipeView()
                 .environmentObject(dataManager)
         } else{
             LoginView(isUserLoggedIn: $isUserLoggedIn)
