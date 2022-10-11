@@ -38,7 +38,6 @@ struct LoginView: View {
                 //Login btn
                 Button(action: {
                     authentication.loginUser(email: email, password: password)
-                    print(isUserLoggedIn)
                 }, label: {
                     Text("Login")
                         .padding()
@@ -50,13 +49,11 @@ struct LoginView: View {
             }
             .padding()
             .onAppear{
-//                authentication.isUserLoggedIn(isUserLoggedIn: isUserLoggedIn)
                 Auth.auth().addStateDidChangeListener { auth, user in
                     if user != nil {
                         isUserLoggedIn.toggle()
                     }
                 }
-                print(isUserLoggedIn)
             }
         }
     }

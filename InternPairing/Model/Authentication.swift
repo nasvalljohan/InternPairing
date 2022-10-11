@@ -20,13 +20,4 @@ struct Authentication {
             }
         }
     }
-    
-    func isUserLoggedIn(isUserLoggedIn: Bool) {
-        var userLogged = isUserLoggedIn
-        Auth.auth().addStateDidChangeListener { auth, user in
-            if user != nil {
-                userLogged.toggle()
-            }
-        }
-    }
 }

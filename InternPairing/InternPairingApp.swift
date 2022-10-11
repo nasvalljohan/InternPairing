@@ -4,7 +4,6 @@ import Firebase
 @main
 struct InternPairingApp: App {
     
-    @StateObject var dataManager = DataManager()
     init() {
         FirebaseApp.configure()
     }
@@ -12,8 +11,6 @@ struct InternPairingApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-//            UserView()
-//                .environmentObject(dataManager)
         }
     }
 }
