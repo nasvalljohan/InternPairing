@@ -50,7 +50,6 @@ struct LoginView: View {
             }
             .padding()
             .onAppear{
-//                authentication.isUserLoggedIn(isUserLoggedIn: isUserLoggedIn)
                 Auth.auth().addStateDidChangeListener { auth, user in
                     if user != nil {
                         isUserLoggedIn.toggle()
