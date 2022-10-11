@@ -1,7 +1,7 @@
 import Foundation
 import Firebase
 
-struct Autentication {
+struct Authentication {
     
     func registerUser(email: String, password: String) {
         Auth.auth().createUser(withEmail: email, password: password) {

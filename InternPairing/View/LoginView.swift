@@ -1,15 +1,9 @@
-//
-//  LoginView.swift
-//  InternPairing
-//
-//  Created by Johan Näsvall on 2022-10-10.
-//
 
 import SwiftUI
 import Firebase
 
 struct LoginView: View {
-    var authentication = Autentication()
+    var authentication = Authentication()
     @State private var email = ""
     @State private var password = ""
     @Binding var isUserLoggedIn: Bool
