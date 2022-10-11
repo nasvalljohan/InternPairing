@@ -11,9 +11,9 @@ struct InternPairingApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-            UserView()
-                .environmentObject(dataManager)
+            ContentView()
+//            UserView()
+//                .environmentObject(dataManager)
         }
     }
 }
