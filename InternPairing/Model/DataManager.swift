@@ -6,7 +6,7 @@ class DataManager: ObservableObject {
     @Published var userInterns = [UserIntern]()
     @Published var userRecruiters = [UserRecruiter]()
     init() {
-        fetchUsers(typeOfUser: "UserInterns")
+        fetchUserInterns()
     }
     
     // MARK:  NOT YET IMPLEMENTED
@@ -21,10 +21,10 @@ class DataManager: ObservableObject {
         }
     }
     
-    func fetchUsers(typeOfUser: String) {
+    func fetchUserInterns() {
         userInterns.removeAll()
         let db = Firestore.firestore()
-        let reference = db.collection(typeOfUser)
+        let reference = db.collection("UserInterns")
         reference.getDocuments {
             snapshot, error in
             guard error == nil else {
