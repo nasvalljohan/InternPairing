@@ -1,10 +1,3 @@
-//
-//  SignUpView.swift
-//  InternPairing
-//
-//  Created by Johan Näsvall on 2022-10-12.
-//
-
 import SwiftUI
 
 struct SignUpView: View {

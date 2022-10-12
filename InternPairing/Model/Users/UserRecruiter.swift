@@ -1,9 +1,8 @@
 import Foundation
-//import FirebaseFirestoreSwift
+import FirebaseFirestoreSwift
 
-struct UserRecruiter: Codable {
-    //@DocumentID var id: String?
-    var id: String
+struct UserRecruiter: Codable, Identifiable {
+    @DocumentID var id: String?
     var name: String
     var location: String
     var email: String
