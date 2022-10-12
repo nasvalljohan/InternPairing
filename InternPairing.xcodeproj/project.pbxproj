@@ -25,7 +25,7 @@
 		33F19FB328F4561C00FA46C0 /* UserProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F19FB228F4561C00FA46C0 /* UserProtocol.swift */; };
 		33F19FB528F4563E00FA46C0 /* UserRecruiter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F19FB428F4563E00FA46C0 /* UserRecruiter.swift */; };
 		33F19FB728F45ACA00FA46C0 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F19FB628F45ACA00FA46C0 /* DataManager.swift */; };
-		33F19FB928F45E7E00FA46C0 /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F19FB828F45E7E00FA46C0 /* SwipeView.swift */; };
+		33F19FB928F45E7E00FA46C0 /* LoggedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F19FB828F45E7E00FA46C0 /* LoggedInView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +64,7 @@
 		33F19FB228F4561C00FA46C0 /* UserProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProtocol.swift; sourceTree = "<group>"; };
 		33F19FB428F4563E00FA46C0 /* UserRecruiter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecruiter.swift; sourceTree = "<group>"; };
 		33F19FB628F45ACA00FA46C0 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
-		33F19FB828F45E7E00FA46C0 /* SwipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeView.swift; sourceTree = "<group>"; };
+		33F19FB828F45E7E00FA46C0 /* LoggedInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,7 +158,7 @@
 			children = (
 				3268E83428F4237B0059BF70 /* ContentView.swift */,
 				3268E86428F451980059BF70 /* LoginView.swift */,
-				33F19FB828F45E7E00FA46C0 /* SwipeView.swift */,
+				33F19FB828F45E7E00FA46C0 /* LoggedInView.swift */,
 				328DD42D28F6ABDF00F006EB /* SignUpView.swift */,
 			);
 			path = View;
@@ -339,7 +339,7 @@
 				3268E86528F451980059BF70 /* LoginView.swift in Sources */,
 				328DD42E28F6ABDF00F006EB /* SignUpView.swift in Sources */,
 				33F19FAF28F4549100FA46C0 /* UserIntern.swift in Sources */,
-				33F19FB928F45E7E00FA46C0 /* SwipeView.swift in Sources */,
+				33F19FB928F45E7E00FA46C0 /* LoggedInView.swift in Sources */,
 				33F19FAC28F43D1400FA46C0 /* Authentication.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

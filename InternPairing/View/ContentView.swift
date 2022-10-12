@@ -5,14 +5,13 @@ struct ContentView: View {
     @State private var isUserLoggedIn = false
     var body: some View {
         
-        
         if isUserLoggedIn{
-            SwipeView()
+            LoggedInView()
                 .environmentObject(dataManager)
         } else{
             LoginView(isUserLoggedIn: $isUserLoggedIn)
         }
-        
+
     }
 }
 

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SwipeView: View {
+struct LoggedInView: View {
     @EnvironmentObject var dataManager: DataManager
     
     var body: some View {
@@ -11,7 +11,7 @@ struct SwipeView: View {
 
 struct SwipeView_Previews: PreviewProvider {
     static var previews: some View {
-        SwipeView()
+        LoggedInView()
     }
 }
 
@@ -28,11 +28,15 @@ struct SwipeViewRecruiter: View {
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
+                SignUpView()
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                    }
                 Text("Home")
                     .tabItem {
                         Image(systemName: "house.fill")
                     }
-                Text("Swipe")
+                LoggedInView()
                     .tabItem{
                         Image(systemName: "suit.heart.fill")
                     }
