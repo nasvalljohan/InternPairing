@@ -1,5 +1,6 @@
 import SwiftUI
 
+// MARK: ContentView
 struct ContentView: View {
     @StateObject var dataManager = DataManager()
     @State private var isUserLoggedIn = false
@@ -16,6 +17,7 @@ struct ContentView: View {
     }
 }
 
+// MARK: Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
@@ -28,6 +30,7 @@ enum NavigationType: String, Hashable {
     case profile = "PROFILE VIEW"
 }
 
+// MARK: TabViewRecruiter
 struct TabViewRecruiter: View {
     @State var mainStack: [NavigationType] = []
     
@@ -50,13 +53,14 @@ struct TabViewRecruiter: View {
                 switch(value){
                 case .swipe: SignUpView()
                 case .contact: Text("Contact view")
-                case .profile: Text("Profile view!! ")
+                case .profile: Text("Profile view!!")
                 }
             }
         }
     }
 }
 
+// MARK: TabViewStudent
 struct TabViewStudent: View {
     @State var mainStack: [NavigationType] = []
     

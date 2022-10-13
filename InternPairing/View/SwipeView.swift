@@ -1,5 +1,6 @@
 import SwiftUI
 
+// MARK: SwipeView
 struct SwipeView: View {
     @EnvironmentObject var dataManager: DataManager
     
@@ -11,6 +12,7 @@ struct SwipeView: View {
     }
 }
 
+// MARK: Preview
 struct SwipeView_Previews: PreviewProvider {
     static var previews: some View {
         SwipeView()

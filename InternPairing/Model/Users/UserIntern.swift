@@ -3,11 +3,19 @@ import FirebaseFirestoreSwift
 
 struct UserIntern: Codable, Identifiable {
     @DocumentID var id: String?
-    var name: String
-    var age: Int
+    var firstName: String
+    var lastName: String
+    var dateOfBirth: Date
+    var gender: String
     
-    //Conform to identifiable
-//    var location: String
-//    var email: String
-//    var phoneNumber: Int
+    // profileSignup
+    var description: String
+    var linkedInLink: String
+    var githubLink: String
+    var otherLink: String
+    
+    // MATCHING RECRUITERS
+    var location: String
+    var typeOfDeveloper: String
+    var typeOfPosition: String
 }

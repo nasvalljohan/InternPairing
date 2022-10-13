@@ -1,12 +1,6 @@
-//
-//  ProfileView.swift
-//  InternPairing
-//
-//  Created by Johan Näsvall on 2022-10-12.
-//
-
 import SwiftUI
 
+// MARK: ProfileView
 struct ProfileView: View {
     var body: some View {
         VStack{
@@ -15,6 +9,7 @@ struct ProfileView: View {
     }
 }
 
+// MARK: Preview
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView()

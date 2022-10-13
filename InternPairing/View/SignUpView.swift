@@ -1,5 +1,6 @@
 import SwiftUI
 
+// MARK: SignUpView
 struct SignUpView: View {
     var body: some View {
         //RecruiterSignUp()
@@ -7,12 +8,14 @@ struct SignUpView: View {
     }
 }
 
+// MARK: Preview
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView()
     }
 }
 
+// MARK: RecruiterSignUp
 struct RecruiterSignUp: View {
     @State var companyName = ""
     @State var companyEmail = ""
@@ -74,6 +77,7 @@ struct RecruiterSignUp: View {
     }
 }
 
+// MARK: StudentSignUp
 struct StudentSignUp: View {
     @State var firstName = ""
     @State var lastName = ""
