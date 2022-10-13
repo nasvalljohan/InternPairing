@@ -10,6 +10,8 @@ struct Authentication {
                 print(error!.localizedDescription)
             }
         }
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        print("UID: \(userID)")
     }
 
     
