@@ -37,7 +37,7 @@ struct TabViewRecruiter: View {
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
-                SignUpView()
+                Text("this is the home page")
                     .tabItem {
                         Image(systemName: "house.fill")
                     }
@@ -49,13 +49,13 @@ struct TabViewRecruiter: View {
             }
             .navigationTitle("Jinder")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: NavigationType.self) { value in
-                switch(value){
-                case .swipe: SignUpView()
-                case .contact: Text("Contact view")
-                case .profile: Text("Profile view!!")
-                }
-            }
+//            .navigationDestination(for: NavigationType.self) { value in
+//                switch(value){
+//                //case .swipe: SignUpView()
+//                case .contact: Text("Contact view")
+//                case .profile: Text("Profile view!!")
+//                }
+//            }
         }
     }
 }

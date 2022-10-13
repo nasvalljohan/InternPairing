@@ -102,7 +102,7 @@ struct NoAccountView: View {
                 
                 //Signup btn
                 NavigationLink(destination:{
-                    SignUpView()
+                    SignUpView(selected: $selected)
                 }, label: {
                     Text("Sign up")
                         .padding()

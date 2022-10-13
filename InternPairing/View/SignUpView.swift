@@ -2,15 +2,15 @@ import SwiftUI
 
 // MARK: SignUpView
 struct SignUpView: View {
+    @Binding var selected: Int
     var body: some View {
         
-//        if selected == 1 {
-//            StudentSignUp()
-//        }
-//        else if selected == 2 {
-//            RecruiterSignUp()
-//        }
-        StudentSignUp()
+        if selected == 1 {
+            StudentSignUp()
+        }
+        else if selected == 2 {
+            RecruiterSignUp()
+        }
 
     }
 }
@@ -19,7 +19,7 @@ struct SignUpView: View {
 struct SignUpView_Previews: PreviewProvider {
     @Binding var selected: Int
     static var previews: some View {
-        SignUpView()
+        SignUpView(selected: .constant(1))
     }
 }
 
