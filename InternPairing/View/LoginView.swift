@@ -32,6 +32,7 @@ struct LoginView: View {
     }
 }
 
+// MARK: AccountView
 struct AccountView: View {
     @State private var email = ""
     @State private var password = ""

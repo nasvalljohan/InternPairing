@@ -161,9 +161,11 @@ struct StudentSignUp: View {
                         firstName: firstName,
                         lastName: lastName,
                         gender: "Male")
-                    authentication.registerUser(email: studentEmail, password: studentPassword)
-                    //Go somewhere
-                    print("Go somewhere")
+                    
+                    authentication.registerUser(
+                        email: studentEmail,
+                        password: studentPassword)
+
                 }, label: {
                     Text("Button")
                 })
