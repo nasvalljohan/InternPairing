@@ -1,12 +1,16 @@
 import SwiftUI
+import Firebase
 
 // MARK: SignUpView
 struct SignUpView: View {
+    @ObservedObject var dataManager: DataManager
+    
     @Binding var selected: Int
+    @Binding var authentication: Authentication
     var body: some View {
         
         if selected == 1 {
-            StudentSignUp()
+            StudentSignUp(dataManager: dataManager, authentication: $authentication)
         }
         else if selected == 2 {
             RecruiterSignUp()
@@ -15,13 +19,14 @@ struct SignUpView: View {
     }
 }
 
-// MARK: Preview
-struct SignUpView_Previews: PreviewProvider {
-    @Binding var selected: Int
-    static var previews: some View {
-        SignUpView(selected: .constant(1))
-    }
-}
+//// MARK: Preview
+//struct SignUpView_Previews: PreviewProvider {
+//    @Binding var selected: Int
+//    @Binding var authentication: Authentication
+//    static var previews: some View {
+//        SignUpView(selected: .constant(1), authentication: .constant(Authentication()), dataManager: .constant()
+//    }
+//}
 
 // MARK: RecruiterSignUp
 struct RecruiterSignUp: View {
@@ -87,10 +92,13 @@ struct RecruiterSignUp: View {
 
 // MARK: StudentSignUp
 struct StudentSignUp: View {
+    @ObservedObject var dataManager: DataManager
+    
     @State var firstName = ""
     @State var lastName = ""
     @State var studentEmail = ""
     @State var studentPassword = ""
+    @Binding var authentication: Authentication
     
     
     var body: some View {
@@ -112,11 +120,13 @@ struct StudentSignUp: View {
                         Text("Firstname")
                         TextField("FirstName", text: $firstName)
                             .frame(width: 150)
+                            .textFieldStyle(.roundedBorder)
                     }
                     VStack {
                         Text("Lastname")
                         TextField("LastName", text: $lastName)
                             .frame(width: 150)
+                            .textFieldStyle(.roundedBorder)
                     }
                 }
                 
@@ -126,6 +136,7 @@ struct StudentSignUp: View {
                     Text("Email:")
                     TextField("Email", text: $studentEmail)
                         .frame(width: 150)
+                        .textFieldStyle(.roundedBorder)
                 }.padding()
                 
                 //TW Password & Input för lösenord
@@ -133,6 +144,7 @@ struct StudentSignUp: View {
                     Text("Password:")
                     SecureField("Password", text: $studentPassword)
                         .frame(width: 150)
+                        .textFieldStyle(.roundedBorder)
                 }
                 
                 //TW Confirm password & input
@@ -140,10 +152,16 @@ struct StudentSignUp: View {
                     Text("Confirm password")
                     SecureField("Password", text: $studentPassword)
                         .frame(width: 150)
+                        .textFieldStyle(.roundedBorder)
                 }.padding()
                 
                 Button(action: {
-                    //authentication.registerUser(email: email, password: password)
+                    dataManager.addUserInternPage1(
+                        dateOfBirth: Date(),
+                        firstName: firstName,
+                        lastName: lastName,
+                        gender: "Male")
+                    authentication.registerUser(email: studentEmail, password: studentPassword)
                     //Go somewhere
                     print("Go somewhere")
                 }, label: {

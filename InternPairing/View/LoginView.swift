@@ -17,7 +17,7 @@ struct LoginView: View {
 //                } else {
 //                    NoAccountView(isNotAUser: $isNotAUser)
 //                }
-                NoAccountView(isNotAUser: $isNotAUser)
+                NoAccountView(dataManager: dataManager, authentication: $authentication, isNotAUser: $isNotAUser)
                 
             }
             .padding()
@@ -81,6 +81,9 @@ struct AccountView: View {
 
 // MARK: NoAccountView
 struct NoAccountView: View {
+    @ObservedObject var dataManager: DataManager
+    
+    @Binding var authentication: Authentication
     @Binding var isNotAUser: Bool
     @State private var selected = 1
     var body: some View {
@@ -102,7 +105,7 @@ struct NoAccountView: View {
                 
                 //Signup btn
                 NavigationLink(destination:{
-                    SignUpView(selected: $selected)
+                    SignUpView(dataManager: dataManager, selected: $selected, authentication: $authentication)
                 }, label: {
                     Text("Sign up")
                         .padding()

@@ -15,10 +15,10 @@ class DataManager: ObservableObject {
         let reference = db.collection("UserInterns").document("user")
         
         reference.setData([
-            "dateOfBirth": dateOfBirth,
+//            "dateOfBirth": dateOfBirth,
             "firstName": firstName,
             "lastName": lastName,
-            "gender": gender
+//            "gender": gender
         ]) {
             error in
             if let error = error {
@@ -42,7 +42,6 @@ class DataManager: ObservableObject {
                 for document in snapshot.documents {
                     let data = document.data()
                     
-                    let id = data["id"] as? String ?? ""
                     let firstName = data["firstName"] as? String ?? ""
                     let lastName = data["lastName"] as? String ?? ""
                     let dateOfBirth = data["dateOfBirth"] as? Date ?? Date()
