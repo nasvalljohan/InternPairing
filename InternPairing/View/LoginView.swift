@@ -12,11 +12,12 @@ struct LoginView: View {
     var body: some View {
         ZStack{
             VStack {
-                if !isNotAUser {
-                    AccountView(isNotAUser: $isNotAUser, authentication: $authentication)
-                } else {
-                    NoAccountView(isNotAUser: $isNotAUser)
-                }
+//                if !isNotAUser {
+//                    AccountView(isNotAUser: $isNotAUser, authentication: $authentication)
+//                } else {
+//                    NoAccountView(isNotAUser: $isNotAUser)
+//                }
+                NoAccountView(isNotAUser: $isNotAUser)
                 
             }
             .padding()
@@ -81,33 +82,45 @@ struct AccountView: View {
 // MARK: NoAccountView
 struct NoAccountView: View {
     @Binding var isNotAUser: Bool
+    @State private var selected = 1
     var body: some View {
-        VStack() {
-            Text("Sign up").font(.largeTitle)
-            HStack {
-                Text("I'm a")
-                HorizontalRadioGroupLayout()
-            }
-            
-            //Signup btn
-            Button(action: {
-                //authentication.registerUser(email: email, password: password)
-                print("hello")
-            }, label: {
-                Text("Sign up")
-                    .padding()
-                    .frame(width: 300)
-                    .background(.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(3)
-            })
-            HStack {
-                Text("Already an user?")
-                Button(action: {
-                    isNotAUser = false
-                }, label:{
-                    Text("Login")
+        NavigationView{
+            VStack() {
+                Text("Sign up").font(.largeTitle)
+                HStack {
+                    Text("I'm a")
+                    VStack {
+                        Picker(selection: $selected, label: Text("Favorite Color")) {
+                            Text("Student").tag(1)
+                            Text("Recruiter").tag(2)
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 150)
+                        .offset(x: -20)
+                    }
+                }
+                
+                //Signup btn
+                NavigationLink(destination:{
+                    SignUpView()
+                }, label: {
+                    Text("Sign up")
+                        .padding()
+                        .frame(width: 300)
+                        .background(.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(3)
                 })
+                
+                
+                HStack {
+                    Text("Already an user?")
+                    Button(action: {
+                        isNotAUser = false
+                    }, label:{
+                        Text("Login")
+                    })
+                }
             }
         }
     }

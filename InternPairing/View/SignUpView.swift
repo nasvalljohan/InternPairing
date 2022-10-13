@@ -3,13 +3,21 @@ import SwiftUI
 // MARK: SignUpView
 struct SignUpView: View {
     var body: some View {
-        //RecruiterSignUp()
+        
+//        if selected == 1 {
+//            StudentSignUp()
+//        }
+//        else if selected == 2 {
+//            RecruiterSignUp()
+//        }
         StudentSignUp()
+
     }
 }
 
 // MARK: Preview
 struct SignUpView_Previews: PreviewProvider {
+    @Binding var selected: Int
     static var previews: some View {
         SignUpView()
     }
@@ -95,7 +103,6 @@ struct StudentSignUp: View {
                 VStack (alignment: .leading) {
                     Text("Register as").font(.title).bold()
                     Text("Student").font(.title).bold()
-                    
                 }
                 
                 //TW Firstname - Lastname HStack
@@ -134,6 +141,14 @@ struct StudentSignUp: View {
                     SecureField("Password", text: $studentPassword)
                         .frame(width: 150)
                 }.padding()
+                
+                Button(action: {
+                    //authentication.registerUser(email: email, password: password)
+                    //Go somewhere
+                    print("Go somewhere")
+                }, label: {
+                    Text("Button")
+                })
                 
                 
                 Spacer()
