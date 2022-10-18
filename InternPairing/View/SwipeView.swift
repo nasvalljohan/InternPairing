@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: SwipeView
 struct SwipeView: View {
-    @EnvironmentObject var dataManager: DataManager
+    @EnvironmentObject var dataManager: DatabaseConnection
     
     var body: some View {
 

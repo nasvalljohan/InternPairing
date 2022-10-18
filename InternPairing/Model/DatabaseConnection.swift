@@ -1,7 +1,7 @@
 import Foundation
 import Firebase
 
-class DataManager: ObservableObject {
+class DatabaseConnection: ObservableObject {
     
     @Published var userInterns = [UserIntern]()
     @Published var userRecruiters = [UserRecruiter]()
@@ -10,6 +10,7 @@ class DataManager: ObservableObject {
     }
     
     // MARK:  NOT YET IMPLEMENTED
+    // MARK: Firebase
     func addUserInternPage1(dateOfBirth: Date, firstName: String, lastName: String, gender: String) {
         let db = Firestore.firestore()
         let reference = db.collection("UserInterns").document("user")
@@ -70,6 +71,28 @@ class DataManager: ObservableObject {
                 }
             }
             
+        }
+    }
+    
+    // MARK: Authentication
+    func registerUser(email: String, password: String) {
+        Auth.auth().createUser(withEmail: email, password: password) {
+            result, error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        print("UID: \(userID)")
+    }
+
+    
+    func loginUser(email: String, password: String) {
+        Auth.auth().signIn(withEmail: email, password: password) {
+            result, error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
         }
     }
 }

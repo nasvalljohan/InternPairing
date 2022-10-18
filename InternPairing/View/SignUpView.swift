@@ -3,14 +3,13 @@ import Firebase
 
 // MARK: SignUpView
 struct SignUpView: View {
-    @ObservedObject var dataManager: DataManager
+    @ObservedObject var databaseConnection: DatabaseConnection
     
     @Binding var selected: Int
-    @Binding var authentication: Authentication
     var body: some View {
         
         if selected == 1 {
-            StudentSignUp(dataManager: dataManager, authentication: $authentication)
+            StudentSignUp(databaseConnection: databaseConnection)
         }
         else if selected == 2 {
             RecruiterSignUp()
@@ -92,13 +91,12 @@ struct RecruiterSignUp: View {
 
 // MARK: StudentSignUp
 struct StudentSignUp: View {
-    @ObservedObject var dataManager: DataManager
+    @ObservedObject var databaseConnection: DatabaseConnection
     
     @State var firstName = ""
     @State var lastName = ""
     @State var studentEmail = ""
     @State var studentPassword = ""
-    @Binding var authentication: Authentication
     
     
     var body: some View {
@@ -156,13 +154,13 @@ struct StudentSignUp: View {
                 }.padding()
                 
                 Button(action: {
-                    dataManager.addUserInternPage1(
+                    databaseConnection.addUserInternPage1(
                         dateOfBirth: Date(),
                         firstName: firstName,
                         lastName: lastName,
                         gender: "Male")
                     
-                    authentication.registerUser(
+                    databaseConnection.registerUser(
                         email: studentEmail,
                         password: studentPassword)
 

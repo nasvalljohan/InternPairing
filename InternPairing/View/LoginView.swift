@@ -4,8 +4,7 @@ import Firebase
 
 // MARK: LoginView
 struct LoginView: View {
-    @StateObject var dataManager = DataManager()
-    @State var authentication = Authentication()
+    @StateObject var databaseConnection = DatabaseConnection()
     @State var isNotAUser: Bool = false
     @Binding var isUserLoggedIn: Bool
     
@@ -17,7 +16,7 @@ struct LoginView: View {
 //                } else {
 //                    NoAccountView(isNotAUser: $isNotAUser)
 //                }
-                NoAccountView(dataManager: dataManager, authentication: $authentication, isNotAUser: $isNotAUser)
+                NoAccountView(databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
                 
             }
             .padding()
@@ -34,10 +33,12 @@ struct LoginView: View {
 
 // MARK: AccountView
 struct AccountView: View {
+    
+    @ObservedObject var databaseConnection: DatabaseConnection
     @State private var email = ""
     @State private var password = ""
     @Binding var isNotAUser: Bool
-    @Binding var authentication: Authentication
+
     var body: some View {
         VStack {
             Text("Login").font(.largeTitle)
@@ -58,7 +59,7 @@ struct AccountView: View {
                 
                 //Login btn
                 Button(action: {
-                    authentication.loginUser(email: email, password: password)
+                    databaseConnection.loginUser(email: email, password: password)
                 }, label: {
                     Text("Login")
                         .padding()
@@ -82,9 +83,8 @@ struct AccountView: View {
 
 // MARK: NoAccountView
 struct NoAccountView: View {
-    @ObservedObject var dataManager: DataManager
+    @ObservedObject var databaseConnection: DatabaseConnection
     
-    @Binding var authentication: Authentication
     @Binding var isNotAUser: Bool
     @State private var selected = 1
     var body: some View {
@@ -106,7 +106,7 @@ struct NoAccountView: View {
                 
                 //Signup btn
                 NavigationLink(destination:{
-                    SignUpView(dataManager: dataManager, selected: $selected, authentication: $authentication)
+                    SignUpView(databaseConnection: databaseConnection, selected: $selected)
                 }, label: {
                     Text("Sign up")
                         .padding()

@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: ContentView
 struct ContentView: View {
-    @StateObject var dataManager = DataManager()
+    @StateObject var databaseConnection = DatabaseConnection()
     @State private var isUserLoggedIn = false
     var body: some View {
         
