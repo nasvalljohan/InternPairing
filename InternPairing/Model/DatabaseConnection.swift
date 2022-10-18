@@ -37,32 +37,10 @@ class DatabaseConnection: ObservableObject {
             }
         }
     }
+
     
-    // MARK:  NOT YET IMPLEMENTED
-    // MARK: Firebase
-    func addUserInternPage1(dateOfBirth: Date, firstName: String, lastName: String, gender: String) {
-        if let currentUser = currentUser {
-            let reference = db.collection("UserInterns").document(currentUser.uid)
-            
-            reference.setData([
-                //            "dateOfBirth": dateOfBirth,
-                "firstName": firstName,
-                "lastName": lastName,
-                
-                //            "gender": gender
-            ]) {
-                error in
-                if let error = error {
-                    print(error.localizedDescription)
-                    print("")
-                }
-            }
-        }
-    }
-    
-    
-    // MARK: Authentication
-    func registerUserIntern(email: String, password: String) {
+    // MARK: Register User Intern
+    func registerUserIntern(email: String, password: String,dateOfBirth: Date, firstName: String, lastName: String, gender: String) {
        
         Auth.auth().createUser(withEmail: email, password: password) {
             authDataResult, error in
@@ -73,10 +51,10 @@ class DatabaseConnection: ObservableObject {
             if let authDataResult = authDataResult {
                 let newUserIntern = UserIntern(
                     id: authDataResult.user.uid,
-                    firstName: "",
-                    lastName: "",
-                    dateOfBirth: "",
-                    gender: "",
+                    firstName: firstName,
+                    lastName: lastName,
+                    dateOfBirth: Date(),
+                    gender: gender,
                     description: "",
                     linkedInLink: "",
                     githubLink: "",
@@ -96,8 +74,26 @@ class DatabaseConnection: ObservableObject {
                 }
             }
         }
+        
+        if let currentUser = currentUser {
+            let reference = db.collection("UserInterns").document(currentUser.uid)
+            
+            reference.setData([
+                //            "dateOfBirth": dateOfBirth,
+                "firstName": firstName,
+                "lastName": lastName,
+                //            "gender": gender
+            ]) {
+                error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    print("")
+                }
+            }
+        }
     }
     
+    // MARK: LoginUser
     
     func loginUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) {
@@ -110,4 +106,24 @@ class DatabaseConnection: ObservableObject {
     
 // MARK: TODO:
 // add read function
+    
+    
+    // Implement this for details
+//    func addUserInternDetails() {
+//        if let currentUser = currentUser {
+//            let reference = db.collection("UserInterns").document(currentUser.uid)
+//
+//            reference.updateData([
+//                // Detail data
+//            ]) {
+//                error in
+//                if let error = error {
+//                    print(error.localizedDescription)
+//                    print("")
+//                }
+//            }
+//        }
+//    }
+    
+    
 }

@@ -154,24 +154,9 @@ struct StudentSignUp: View {
                 
                 Button(action: {
                     
-                    databaseConnection.registerUserIntern(
-                        email: studentEmail,
-                        password: studentPassword)
+                    databaseConnection.registerUserIntern(email: studentEmail, password: studentPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, gender: "male")
                     
-                    databaseConnection.addUserInternPage1(
-                        dateOfBirth: Date(),
-                        firstName: firstName,
-                        lastName: lastName,
-                        gender: "Male")
-                    
-//                    _ = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) {_ in
-//                        databaseConnection.addUserInternPage1(
-//                            dateOfBirth: Date(),
-//                            firstName: firstName,
-//                            lastName: lastName,
-//                            gender: "Male")
-//                        print("hello")
-//                    }
+
                     
                     
                 }, label: {

@@ -5,7 +5,7 @@ struct UserIntern: Codable, Identifiable {
     @DocumentID var id: String?
     var firstName: String
     var lastName: String
-    var dateOfBirth: String
+    var dateOfBirth: Date
     var gender: String
     
     // profileSignup
