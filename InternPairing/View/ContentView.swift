@@ -3,15 +3,14 @@ import SwiftUI
 // MARK: ContentView
 struct ContentView: View {
     @StateObject var databaseConnection = DatabaseConnection()
-    @State private var isUserLoggedIn = false
     var body: some View {
         
-        if isUserLoggedIn{
+        if databaseConnection.userLoggedIn {
             //IF student or recruiter?? Show diff tab
             TabViewRecruiter()
             //TabViewStudent()
         } else{
-            LoginView(isUserLoggedIn: $isUserLoggedIn)
+            LoginView()
         }
 
     }

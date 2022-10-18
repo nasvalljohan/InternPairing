@@ -6,17 +6,16 @@ import Firebase
 struct LoginView: View {
     @StateObject var databaseConnection = DatabaseConnection()
     @State var isNotAUser: Bool = false
-    @Binding var isUserLoggedIn: Bool
     
     var body: some View {
         ZStack{
             VStack {
-//                if !isNotAUser {
-//                    AccountView(isNotAUser: $isNotAUser, authentication: $authentication)
-//                } else {
-//                    NoAccountView(isNotAUser: $isNotAUser)
-//                }
-                NoAccountView(databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
+                if !isNotAUser {
+                    AccountView( databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
+                } else {
+                    NoAccountView(databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
+                }
+//                NoAccountView(databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
                 
             }
             .padding()
@@ -144,6 +143,6 @@ struct HorizontalRadioGroupLayout: View {
 struct LoginView_Previews: PreviewProvider {
     @Binding var isUserLoggedIn: Bool
     static var previews: some View {
-        LoginView(isUserLoggedIn: .constant(true))
+        LoginView()
     }
 }
