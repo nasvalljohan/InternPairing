@@ -12,7 +12,7 @@ struct SignUpView: View {
             StudentSignUp(databaseConnection: databaseConnection)
         }
         else if selected == 2 {
-            RecruiterSignUp()
+            RecruiterSignUp(databaseConnection: databaseConnection)
         }
         
     }
@@ -29,6 +29,8 @@ struct SignUpView: View {
 
 // MARK: RecruiterSignUp
 struct RecruiterSignUp: View {
+    @ObservedObject var databaseConnection: DatabaseConnection
+    
     @State var companyName = ""
     @State var companyEmail = ""
     @State var companyPassword = ""
@@ -74,8 +76,7 @@ struct RecruiterSignUp: View {
                 }.padding()
                 
                 Button(action: {
-                    //Go somewhere
-                    print("Go somewhere")
+                    databaseConnection.registerUserRecruiter(email: companyEmail, password: companyPassword, companyName: companyName)
                 }, label: {
                     Text("Button")
                 })
