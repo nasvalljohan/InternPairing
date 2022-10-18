@@ -5,9 +5,8 @@ class DatabaseConnection: ObservableObject {
     private var db = Firestore.firestore()
     
     // Arrays of users
-    @Published var userIntern: UserIntern?
-    @Published var userRecruiter: UserRecruiter?
-    
+//    @Published var userIntern: UserIntern?
+//    @Published var userRecruiter: UserRecruiter?
     @Published var userLoggedIn = false
     @Published var currentUser: User?
     
@@ -28,43 +27,31 @@ class DatabaseConnection: ObservableObject {
             if let user = user {
                 self.userLoggedIn = true
                 self.currentUser = user
-//                self.fetchUserInterns()
                 
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
-                //                self.stopListenToDatabase()
             }
         }
     }
 
     
-    // MARK: Register User Intern
+    // MARK: Register Intern
     func registerUserIntern(email: String, password: String,dateOfBirth: Date, firstName: String, lastName: String, gender: String) {
        
+        // AUTH: call
         Auth.auth().createUser(withEmail: email, password: password) {
             authDataResult, error in
             if let error = error {
                 print(error.localizedDescription)
             }
             
+            // AUTH: If successfull
             if let authDataResult = authDataResult {
-                let newUserIntern = UserIntern(
-                    id: authDataResult.user.uid,
-                    firstName: firstName,
-                    lastName: lastName,
-                    dateOfBirth: Date(),
-                    gender: gender,
-                    description: "",
-                    linkedInLink: "",
-                    githubLink: "",
-                    otherLink: "",
-                    location: "",
-                    typeOfDeveloper: "",
-                    typeOfPosition: ""
+                let newUserIntern = UserIntern(id: authDataResult.user.uid,firstName: firstName,lastName: lastName,dateOfBirth: Date() ,gender: gender,description: "",linkedInLink: "",githubLink: "",otherLink: "",location: "",typeOfDeveloper: "",typeOfPosition: ""
                 )
                 
-                
+                // Firestore: Set new document to uid and set data from newUserIntern.
                 do {
                     try self.db.collection("UserInterns")
                         .document(authDataResult.user.uid)
@@ -75,23 +62,66 @@ class DatabaseConnection: ObservableObject {
             }
         }
         
+        // Firestore: Set more values from user input
         if let currentUser = currentUser {
             let reference = db.collection("UserInterns").document(currentUser.uid)
             
             reference.setData([
-                //            "dateOfBirth": dateOfBirth,
                 "firstName": firstName,
                 "lastName": lastName,
-                //            "gender": gender
             ]) {
                 error in
                 if let error = error {
                     print(error.localizedDescription)
-                    print("")
                 }
             }
         }
     }
+    
+    
+    
+    
+    // MARK: Register Recruiter
+    
+    func registerUserRecruiter(email: String, password: String, companyName: String) {
+       
+        // AUTH: Call
+        Auth.auth().createUser(withEmail: email, password: password) {
+            authDataResult, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            
+            // AUTH: If successful
+            if let authDataResult = authDataResult {
+                let newUserIntern = UserRecruiter(id: authDataResult.user.uid ,companyName: companyName, description: "", linkedInLink: "", companyLink: "", location: "", typeOfDeveloper: "", typeOfPosition: "")
+                
+                // Firestore: Set new document to uid and set data from newUserIntern.
+                do {
+                    try self.db.collection("UserRecruiters")
+                        .document(authDataResult.user.uid)
+                        .setData(from: newUserIntern)
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
+        // Firestore: Set more values from user input
+        if let currentUser = currentUser {
+            let reference = db.collection("UserRecruiters").document(currentUser.uid)
+            
+            reference.setData([
+                "companyName": companyName,
+            ]) {
+                error in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
     
     // MARK: LoginUser
     
@@ -103,6 +133,28 @@ class DatabaseConnection: ObservableObject {
             }
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 // MARK: TODO:
 // add read function
