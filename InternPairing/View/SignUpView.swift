@@ -14,7 +14,7 @@ struct SignUpView: View {
         else if selected == 2 {
             RecruiterSignUp()
         }
-
+        
     }
 }
 
@@ -32,7 +32,7 @@ struct RecruiterSignUp: View {
     @State var companyName = ""
     @State var companyEmail = ""
     @State var companyPassword = ""
-
+    
     var body: some View {
         ZStack {
             VStack {
@@ -65,7 +65,7 @@ struct RecruiterSignUp: View {
                     SecureField("Password", text: $companyPassword)
                         .frame(width: 150)
                 }
-
+                
                 //TW Confirm password & input
                 VStack{
                     Text("Confirm password")
@@ -85,7 +85,7 @@ struct RecruiterSignUp: View {
             }
             
         }
-
+        
     }
 }
 
@@ -98,9 +98,8 @@ struct StudentSignUp: View {
     @State var studentEmail = ""
     @State var studentPassword = ""
     
-    
     var body: some View {
-
+        
         ZStack{
             VStack{
                 Spacer()
@@ -154,20 +153,30 @@ struct StudentSignUp: View {
                 }.padding()
                 
                 Button(action: {
+                    
+                    databaseConnection.registerUserIntern(
+                        email: studentEmail,
+                        password: studentPassword)
+                    
                     databaseConnection.addUserInternPage1(
                         dateOfBirth: Date(),
                         firstName: firstName,
                         lastName: lastName,
                         gender: "Male")
                     
-                    databaseConnection.registerUser(
-                        email: studentEmail,
-                        password: studentPassword)
-
+//                    _ = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) {_ in
+//                        databaseConnection.addUserInternPage1(
+//                            dateOfBirth: Date(),
+//                            firstName: firstName,
+//                            lastName: lastName,
+//                            gender: "Male")
+//                        print("hello")
+//                    }
+                    
+                    
                 }, label: {
-                    Text("Button")
+                    Text("write db")
                 })
-                
                 
                 Spacer()
                 //TW Date of birth
@@ -177,7 +186,7 @@ struct StudentSignUp: View {
         }
         
         
-
+        
         
     }
 }
