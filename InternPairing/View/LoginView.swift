@@ -20,13 +20,6 @@ struct LoginView: View {
                 
             }
             .padding()
-            .onAppear{
-                Auth.auth().addStateDidChangeListener { auth, user in
-                    if user != nil {
-                        isUserLoggedIn.toggle()
-                    }
-                }
-            }
         }
     }
 }

@@ -2,17 +2,46 @@ import Foundation
 import Firebase
 
 class DatabaseConnection: ObservableObject {
+    private var db = Firestore.firestore()
     
+    // Arrays of users
     @Published var userInterns = [UserIntern]()
     @Published var userRecruiters = [UserRecruiter]()
+    
+    @Published var userLoggedIn = false
+    @Published var currentUser: User?
+    
+    // nil as long as user is logged out
+    var userDocumentListener: ListenerRegistration?
+    
     init() {
-        fetchUserInterns()
+        // to see if user is logged in or not
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print("logged out")
+        }
+        
+        Auth.auth().addStateDidChangeListener {
+            auth, user in
+            
+            if let user = user {
+                self.userLoggedIn = true
+                self.currentUser = user
+                self.fetchUserInterns()
+                
+            } else {
+                self.userLoggedIn = false
+                self.currentUser = nil
+//                self.stopListenToDatabase()
+            }
+        }
     }
     
     // MARK:  NOT YET IMPLEMENTED
     // MARK: Firebase
     func addUserInternPage1(dateOfBirth: Date, firstName: String, lastName: String, gender: String) {
-        let db = Firestore.firestore()
+        
         let reference = db.collection("UserInterns").document("user")
         
         reference.setData([
@@ -30,7 +59,6 @@ class DatabaseConnection: ObservableObject {
     
     func fetchUserInterns() {
         userInterns.removeAll()
-        let db = Firestore.firestore()
         let reference = db.collection("UserInterns")
         reference.getDocuments {
             snapshot, error in
