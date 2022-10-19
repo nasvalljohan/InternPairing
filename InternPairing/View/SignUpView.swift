@@ -18,15 +18,6 @@ struct SignUpView: View {
     }
 }
 
-//// MARK: Preview
-//struct SignUpView_Previews: PreviewProvider {
-//    @Binding var selected: Int
-//    @Binding var authentication: Authentication
-//    static var previews: some View {
-//        SignUpView(selected: .constant(1), authentication: .constant(Authentication()), dataManager: .constant()
-//    }
-//}
-
 // MARK: RecruiterSignUp
 struct RecruiterSignUp: View {
     @ObservedObject var databaseConnection: DatabaseConnection
@@ -34,56 +25,58 @@ struct RecruiterSignUp: View {
     @State var companyName = ""
     @State var companyEmail = ""
     @State var companyPassword = ""
+    @State var confirmCompanyPassword = ""
     
     var body: some View {
         ZStack {
-            VStack {
-                Spacer()
+            VStack(spacing: 20) {
                 
                 //TW Register as recruiter
-                VStack (alignment: .leading) {
-                    Text("Register as").font(.title).bold()
-                    Text("Recruiter").font(.title).bold()
+                VStack {
+                    Text("Register as Recruiter").font(.title).bold()
                 }
                 
                 
                 //TW Company Name & Input för company name
-                VStack{
+                VStack(alignment: .leading) {
                     Text("Company name:")
                     TextField("Tjena", text: $companyName)
-                        .frame(width: 150)
-                }.padding()
+                        .textFieldStyle(.roundedBorder)
+                }
                 
                 //TW Email & Input för email
-                VStack{
+                VStack(alignment: .leading) {
                     Text("Email:")
                     TextField("Email", text: $companyEmail)
-                        .frame(width: 150)
-                }.padding()
+                        .textFieldStyle(.roundedBorder)
+                }
                 
                 //TW Password & Input för lösenord
-                VStack{
+                VStack(alignment: .leading) {
                     Text("Password:")
                     SecureField("Password", text: $companyPassword)
-                        .frame(width: 150)
+                        .textFieldStyle(.roundedBorder)
                 }
                 
                 //TW Confirm password & input
-                VStack{
-                    Text("Confirm password")
-                    SecureField("Password", text: $companyPassword)
-                        .frame(width: 150)
-                }.padding()
-                
+                VStack(alignment: .leading) {
+                    Text("Confirm password:")
+                    SecureField("Password", text: $confirmCompanyPassword)
+                        .textFieldStyle(.roundedBorder)
+                }
                 Button(action: {
                     databaseConnection.registerUserRecruiter(email: companyEmail, password: companyPassword, companyName: companyName)
                 }, label: {
-                    Text("Button")
+                    Text("Next")
+                        .padding()
+                        .frame(width: 300)
+                        .background(.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(3)
                 })
                 
-                Spacer()
                 
-            }
+            }.padding()
             
         }
         
@@ -98,81 +91,86 @@ struct StudentSignUp: View {
     @State var lastName = ""
     @State var studentEmail = ""
     @State var studentPassword = ""
+    @State var confirmStudentPassword = ""
     
     var body: some View {
         
         ZStack{
-            VStack{
-                Spacer()
+            VStack(spacing: 20) {
                 
-                //TW Register as student
+                
+                //TV Register as student
                 VStack (alignment: .leading) {
-                    Text("Register as").font(.title).bold()
-                    Text("Student").font(.title).bold()
-                }
+                    Text("Register as Student").font(.title).bold()
+                }.padding()
                 
-                //TW Firstname - Lastname HStack
+                
+                //TV Firstname - Lastname HStack
                 //Input first-lastname hstack
                 HStack{
-                    VStack {
+                    VStack(alignment: .leading){
                         Text("Firstname")
                         TextField("FirstName", text: $firstName)
-                            .frame(width: 150)
                             .textFieldStyle(.roundedBorder)
                     }
-                    VStack {
+                    VStack(alignment: .leading) {
                         Text("Lastname")
                         TextField("LastName", text: $lastName)
-                            .frame(width: 150)
+
                             .textFieldStyle(.roundedBorder)
                     }
                 }
                 
-                //TW Email
+                //TV Email
                 //Input email
-                VStack{
+                VStack(alignment: .leading) {
                     Text("Email:")
                     TextField("Email", text: $studentEmail)
-                        .frame(width: 150)
                         .textFieldStyle(.roundedBorder)
-                }.padding()
+                }
+
                 
-                //TW Password & Input för lösenord
-                VStack{
+                //TV Password & Input för lösenord
+                VStack(alignment: .leading){
                     Text("Password:")
                     SecureField("Password", text: $studentPassword)
-                        .frame(width: 150)
                         .textFieldStyle(.roundedBorder)
                 }
                 
-                //TW Confirm password & input
-                VStack{
+                //TV Confirm password & input
+                VStack(alignment: .leading){
                     Text("Confirm password")
-                    SecureField("Password", text: $studentPassword)
-                        .frame(width: 150)
+                    SecureField("Password", text: $confirmStudentPassword)
                         .textFieldStyle(.roundedBorder)
-                }.padding()
+                }
                 
                 Button(action: {
-                    
                     databaseConnection.registerUserIntern(email: studentEmail, password: studentPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, gender: "male")
-                    
-
-                    
-                    
                 }, label: {
                     Text("write db")
+                        .padding()
+                        .frame(width: 300)
+                        .background(.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(3)
                 })
                 
-                Spacer()
+                
+                
                 //TW Date of birth
                 //Hstack year-month-day
                 
-            }
+            }.padding()
         }
+    }
+    
+    // MARK: Preview
+    struct SignUpView_Previews: PreviewProvider {
+        @ObservedObject var databaseConnection: DatabaseConnection
+        @Binding var selected: Int
         
-        
-        
-        
+        static var previews: some View {
+            SignUpView(databaseConnection: DatabaseConnection(), selected: .constant(2))
+        }
     }
 }
