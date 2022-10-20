@@ -16,12 +16,6 @@ class DatabaseConnection: ObservableObject {
     init() {
         
         // to see if user is logged in or not
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            print("logged out")
-        }
-        
         Auth.auth().addStateDidChangeListener {
             auth, user in
             
@@ -49,7 +43,7 @@ class DatabaseConnection: ObservableObject {
             
             // AUTH: If successfull
             if let authDataResult = authDataResult {
-                let newUserIntern = UserIntern(id: authDataResult.user.uid, isUserComplete: false, role: "student",firstName: firstName,lastName: lastName,dateOfBirth: Date() ,gender: gender,description: "",linkedInLink: "",githubLink: "",otherLink: "",location: "",typeOfDeveloper: "",typeOfPosition: ""
+                let newUserIntern = UserIntern(id: authDataResult.user.uid, isUserComplete: false, role: "student", firstName: firstName, lastName: lastName, dateOfBirth: Date(), gender: gender, description: "", linkedInLink: "", githubLink: "", otherLink: "", location: "", typeOfDeveloper: "", typeOfPosition: ""
                 )
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
@@ -58,21 +52,6 @@ class DatabaseConnection: ObservableObject {
                         .document(authDataResult.user.uid)
                         .setData(from: newUserIntern)
                 } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        }
-        
-        // Firestore: Set more values from user input
-        if let currentUser = currentUser {
-            let reference = db.collection("UserInterns").document(currentUser.uid)
-            
-            reference.setData([
-                "firstName": firstName,
-                "lastName": lastName,
-            ]) {
-                error in
-                if let error = error {
                     print(error.localizedDescription)
                 }
             }
@@ -135,7 +114,18 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    
+    func fetchUserIntern() {
+        let docRef = db.collection("UserInterns").document(currentUser?.uid ?? "")
+        
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                print("Document data: \(dataDescription)")
+            } else {
+                print("Document does not exist")
+            }
+        }
+    }
     
     
     
