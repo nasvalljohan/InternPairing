@@ -11,13 +11,18 @@ class DatabaseConnection: ObservableObject {
     @Published var currentUser: User?
     
     // nil as long as user is logged out
-    var internDocumentListener: ListenerRegistration?
-    var recruiterDocumentListener: ListenerRegistration?
+    var userDocumentListener: ListenerRegistration?
     
     
     init() {
         
         // to see if user is logged in or not
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print("logged out")
+        }
+        
         Auth.auth().addStateDidChangeListener {
             auth, user in
             
@@ -107,7 +112,7 @@ class DatabaseConnection: ObservableObject {
     //MARK: fetchUserIntern
     func fetchUserIntern() {
         if let currentUser = currentUser {
-            internDocumentListener = self.db
+            userDocumentListener = self.db
                 .collection("UserInterns")
                 .document("intern" + currentUser.uid)
                 .addSnapshotListener {
@@ -138,7 +143,7 @@ class DatabaseConnection: ObservableObject {
     //MARK: fetchUserRecruiter
     func fetchUserRecruiter() {
         if let currentUser = currentUser {
-            internDocumentListener = self.db
+            userDocumentListener = self.db
                 .collection("UserRecruiters")
                 .document("recruiter" + currentUser.uid)
                 .addSnapshotListener {
@@ -166,11 +171,10 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
+    //MARK: stopListenToDatabase
     func stopListenToDatabase() {
-        if let internDocumentListener = internDocumentListener,
-           let recruiterDocumentListener = recruiterDocumentListener {
-            internDocumentListener.remove()
-            recruiterDocumentListener.remove()
+        if let userDocumentListener = userDocumentListener {
+            userDocumentListener.remove()
         }
     }
     

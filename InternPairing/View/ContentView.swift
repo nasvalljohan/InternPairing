@@ -10,24 +10,24 @@ struct ContentView: View {
             if databaseConnection.userLoggedIn {
                 if databaseConnection.userRecruiter?.role == "recruiter" {
                     Text(databaseConnection.userRecruiter?.companyName ?? "")
-                        TabViewRecruiter()
+                        TabViewRecruiter(databaseConnection: databaseConnection)
                 } else if databaseConnection.userIntern?.role == "student" {
                     Text(databaseConnection.userIntern?.firstName ?? "")
-                        TabViewStudent()
+                        TabViewStudent(databaseConnection: databaseConnection)
                     }
                 } else{
                     LoginView()
                 }
                 
-                Button(action: {
-                    do {
-                        try Auth.auth().signOut()
-                    } catch {
-                        print("logged out")
-                    }
-                }, label: {
-                    Text("Logga ut")
-                })
+//                Button(action: {
+//                    do {
+//                        try Auth.auth().signOut()
+//                    } catch {
+//                        print("logged out")
+//                    }
+//                }, label: {
+//                    Text("Logga ut")
+//                })
             
         }
     }
@@ -48,6 +48,7 @@ enum NavigationType: String, Hashable {
 
 // MARK: TabViewRecruiter
 struct TabViewRecruiter: View {
+    @ObservedObject var databaseConnection: DatabaseConnection
     @State var mainStack: [NavigationType] = []
     
     var body: some View {
@@ -64,7 +65,7 @@ struct TabViewRecruiter: View {
                 Text("Contacts").tabItem{
                     Image(systemName: "message.fill")
                 }
-                Text("Profile")
+                ProfileView(databaseConnection: databaseConnection)
                     .tabItem{
                     Image(systemName: "person.circle")
                 }
@@ -86,19 +87,23 @@ struct TabViewRecruiter: View {
 // MARK: TabViewStudent
 struct TabViewStudent: View {
     @State var mainStack: [NavigationType] = []
+    @ObservedObject var databaseConnection: DatabaseConnection
     
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
-                Text("Home").tabItem {
-                    Image(systemName: "house.fill")
-                }
-                Text("Profile").tabItem{
-                    Image(systemName: "person.circle")
-                }
-                Text("Contacts").tabItem{
-                    Image(systemName: "message.fill")
-                }
+                Text("Home")
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                    }
+                ProfileView(databaseConnection: databaseConnection)
+                    .tabItem{
+                        Image(systemName: "person.circle")
+                    }
+                Text("Contacts")
+                    .tabItem{
+                        Image(systemName: "message.fill")
+                    }
             }
             .navigationTitle("Jinder")
             .navigationBarTitleDisplayMode(.inline)

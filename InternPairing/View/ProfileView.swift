@@ -2,20 +2,26 @@ import SwiftUI
 
 // MARK: ProfileView
 struct ProfileView: View {
+    @ObservedObject var databaseConnection: DatabaseConnection
     var body: some View {
         VStack{
-            //StudentProfileView()
-            RecruiterProfileView()
+            if databaseConnection.userRecruiter?.role == "recruiter" {
+                RecruiterProfileView()
+            } else if databaseConnection.userIntern?.role == "student" {
+                    StudentProfileView()
+                }
+            
+            
         }
     }
 }
 
 // MARK: Preview
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
-    }
-}
+//struct ProfileView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ProfileView()
+//    }
+//}
 
 struct RecruiterProfileView: View {
     var companyName = "Apple"
