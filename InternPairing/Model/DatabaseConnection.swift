@@ -6,12 +6,14 @@ class DatabaseConnection: ObservableObject {
     
     // Arrays of users
     @Published var userIntern: UserIntern?
-//    @Published var userRecruiter: UserRecruiter?
+    @Published var userRecruiter: UserRecruiter?
     @Published var userLoggedIn = false
     @Published var currentUser: User?
     
     // nil as long as user is logged out
-    var userDocumentListener: ListenerRegistration?
+    var internDocumentListener: ListenerRegistration?
+    var recruiterDocumentListener: ListenerRegistration?
+    
     
     init() {
         
@@ -23,18 +25,30 @@ class DatabaseConnection: ObservableObject {
                 self.userLoggedIn = true
                 self.currentUser = user
                 self.fetchUserIntern()
+                self.fetchUserRecruiter()
+//                if let currentUser = self.currentUser {
+//                    if currentUser.uid.contains("intern") {
+//                        print("intern")
+//                        self.fetchUserIntern()
+//                    } else if currentUser.uid.contains("recruiter") {
+//                        print("recruiter")
+//                        self.fetchUserRecruiter()
+//                    }
+//                }
+                
                 
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
+                self.stopListenToDatabase()
             }
         }
     }
-
+    
     
     // MARK: Register Intern
     func registerUserIntern(email: String, password: String,dateOfBirth: Date, firstName: String, lastName: String, gender: String) {
-       
+        
         // AUTH: call
         Auth.auth().createUser(withEmail: email, password: password) {
             authDataResult, error in
@@ -50,7 +64,7 @@ class DatabaseConnection: ObservableObject {
                 // Firestore: Set new document to uid and set data from newUserIntern.
                 do {
                     try self.db.collection("UserInterns")
-                        .document(authDataResult.user.uid)
+                        .document("intern" + authDataResult.user.uid)
                         .setData(from: newUserIntern)
                 } catch {
                     print(error.localizedDescription)
@@ -65,7 +79,7 @@ class DatabaseConnection: ObservableObject {
     // MARK: Register Recruiter
     
     func registerUserRecruiter(email: String, password: String, companyName: String) {
-       
+        
         // AUTH: Call
         Auth.auth().createUser(withEmail: email, password: password) {
             authDataResult, error in
@@ -75,28 +89,14 @@ class DatabaseConnection: ObservableObject {
             
             // AUTH: If successful
             if let authDataResult = authDataResult {
-                let newUserIntern = UserRecruiter(id: authDataResult.user.uid, isUserComplete: false, role: "recruiter", companyName: companyName, description: "", linkedInLink: "", companyLink: "", location: "", typeOfDeveloper: "", typeOfPosition: "")
+                let newUserRecruiter = UserRecruiter(id: authDataResult.user.uid, isUserComplete: false, role: "recruiter", companyName: companyName, description: "", linkedInLink: "", companyLink: "", location: "", typeOfDeveloper: "", typeOfPosition: "")
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
                 do {
                     try self.db.collection("UserRecruiters")
-                        .document(authDataResult.user.uid)
-                        .setData(from: newUserIntern)
+                        .document("recruiter" + authDataResult.user.uid)
+                        .setData(from: newUserRecruiter)
                 } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        }
-        
-        // Firestore: Set more values from user input
-        if let currentUser = currentUser {
-            let reference = db.collection("UserRecruiters").document(currentUser.uid)
-            
-            reference.setData([
-                "companyName": companyName,
-            ]) {
-                error in
-                if let error = error {
                     print(error.localizedDescription)
                 }
             }
@@ -117,11 +117,11 @@ class DatabaseConnection: ObservableObject {
     //MARK: fetchUserIntern
     func fetchUserIntern() {
         if let currentUser = currentUser {
-            userDocumentListener = self.db
+            internDocumentListener = self.db
                 .collection("UserInterns")
                 .document(currentUser.uid)
                 .addSnapshotListener {
-                snapshot, error in
+                    snapshot, error in
                     if let error = error {
                         print(error.localizedDescription)
                         return
@@ -141,7 +141,75 @@ class DatabaseConnection: ObservableObject {
                         print(error.localizedDescription)
                         break
                     }
-            }
+                }
+        }
+    }
+    
+    //MARK: fetchUserRecruiter
+    func fetchUserRecruiter() {
+        if let currentUser = currentUser {
+            internDocumentListener = self.db
+                .collection("UserRecruiters")
+                .document(currentUser.uid)
+                .addSnapshotListener {
+                    snapshot, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    
+                    guard let snapshot = snapshot else { return }
+                    
+                    let result = Result {
+                        try snapshot.data(as: UserRecruiter.self)
+                    }
+                    
+                    switch result {
+                    case .success(let userRecruiter):
+                        self.userRecruiter = userRecruiter
+                        break
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        break
+                    }
+                }
+        }
+    }
+    //    func fetchUserRecruiter() {
+    //        if let currentUser = currentUser {
+    //            recruiterDocumentListener = self.db
+    //                .collection("userRecruiters")
+    //                .document(currentUser.uid)
+    //                .addSnapshotListener {
+    //                    snapshot, error in
+    //                    if let error = error {
+    //                        print(error.localizedDescription)
+    //                        return
+    //                    }
+    //
+    //                    guard let snapshot = snapshot else { return }
+    //
+    //                    let result = Result {
+    //                        try snapshot.data(as: UserRecruiter.self)
+    //                    }
+    //
+    //                    switch result {
+    //                    case .success(let userData):
+    //                        self.userRecruiter = userData
+    //                        break
+    //                    case .failure(let error):
+    //                        print(error.localizedDescription)
+    //                        break
+    //                    }
+    //                }
+    //        }
+    //    }
+    
+    func stopListenToDatabase() {
+        if let internDocumentListener = internDocumentListener,
+           let recruiterDocumentListener = recruiterDocumentListener {
+            internDocumentListener.remove()
+            recruiterDocumentListener.remove()
         }
     }
     
@@ -165,26 +233,26 @@ class DatabaseConnection: ObservableObject {
     
     
     
-// MARK: TODO:
-// add read function
+    // MARK: TODO:
+    // add read function
     
     
     // Implement this for details
-//    func addUserInternDetails() {
-//        if let currentUser = currentUser {
-//            let reference = db.collection("UserInterns").document(currentUser.uid)
-//
-//            reference.updateData([
-//                // Detail data
-//            ]) {
-//                error in
-//                if let error = error {
-//                    print(error.localizedDescription)
-//                    print("")
-//                }
-//            }
-//        }
-//    }
+    //    func addUserInternDetails() {
+    //        if let currentUser = currentUser {
+    //            let reference = db.collection("UserInterns").document(currentUser.uid)
+    //
+    //            reference.updateData([
+    //                // Detail data
+    //            ]) {
+    //                error in
+    //                if let error = error {
+    //                    print(error.localizedDescription)
+    //                    print("")
+    //                }
+    //            }
+    //        }
+    //    }
     
     
 }
