@@ -12,6 +12,17 @@ struct ContentView: View {
         } else{
             LoginView()
         }
+        
+        Button(action: {
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print("logged out")
+            }
+        }, label: {
+            Text("Logga ut")
+        })
+        
 
     }
 }
