@@ -9,15 +9,25 @@ struct ContentView: View {
         VStack {
             if databaseConnection.userLoggedIn {
                 if databaseConnection.userRecruiter?.role == "recruiter" {
-                    Text(databaseConnection.userRecruiter?.companyName ?? "")
+                    if databaseConnection.userRecruiter?.isUserComplete == false{
+                        UserDetailsView(databaseConnection: databaseConnection)
+                    }else {
+                        Text(databaseConnection.userRecruiter?.companyName ?? "")
                         TabViewRecruiter(databaseConnection: databaseConnection)
+                    }
+                    
                 } else if databaseConnection.userIntern?.role == "student" {
-                    Text(databaseConnection.userIntern?.firstName ?? "")
+                    if databaseConnection.userIntern?.isUserComplete == false {
+                        UserDetailsView(databaseConnection: databaseConnection)
+                    } else {
+                        Text(databaseConnection.userIntern?.firstName ?? "")
                         TabViewStudent(databaseConnection: databaseConnection)
                     }
-                } else{
-                    LoginView()
+                    
                 }
+            } else{
+                LoginView()
+            }
                 
 //                Button(action: {
 //                    do {

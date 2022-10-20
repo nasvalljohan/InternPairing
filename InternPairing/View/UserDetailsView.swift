@@ -2,9 +2,14 @@
 import SwiftUI
 
 struct UserDetailsView: View {
+    @ObservedObject var databaseConnection: DatabaseConnection
     var body: some View {
-        //InternDetailsView()
-        RecruiterDetailsView()
+        
+        if databaseConnection.userRecruiter?.role == "recruiter" {
+            RecruiterDetailsView()
+        } else if databaseConnection.userIntern?.role == "student" {
+                InternDetailsView()
+            }
     }
 }
 
@@ -191,6 +196,6 @@ struct InternDetailsView: View {
 
 struct UserDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        UserDetailsView()
+        UserDetailsView(databaseConnection: DatabaseConnection())
     }
 }
