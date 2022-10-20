@@ -14,6 +14,7 @@ class DatabaseConnection: ObservableObject {
     var userDocumentListener: ListenerRegistration?
     
     init() {
+        
         // to see if user is logged in or not
         do {
             try Auth.auth().signOut()
@@ -48,7 +49,7 @@ class DatabaseConnection: ObservableObject {
             
             // AUTH: If successfull
             if let authDataResult = authDataResult {
-                let newUserIntern = UserIntern(id: authDataResult.user.uid,firstName: firstName,lastName: lastName,dateOfBirth: Date() ,gender: gender,description: "",linkedInLink: "",githubLink: "",otherLink: "",location: "",typeOfDeveloper: "",typeOfPosition: ""
+                let newUserIntern = UserIntern(id: authDataResult.user.uid, isUserComplete: false, role: "student",firstName: firstName,lastName: lastName,dateOfBirth: Date() ,gender: gender,description: "",linkedInLink: "",githubLink: "",otherLink: "",location: "",typeOfDeveloper: "",typeOfPosition: ""
                 )
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
@@ -94,7 +95,7 @@ class DatabaseConnection: ObservableObject {
             
             // AUTH: If successful
             if let authDataResult = authDataResult {
-                let newUserIntern = UserRecruiter(id: authDataResult.user.uid ,companyName: companyName, description: "", linkedInLink: "", companyLink: "", location: "", typeOfDeveloper: "", typeOfPosition: "")
+                let newUserIntern = UserRecruiter(id: authDataResult.user.uid, isUserComplete: false, role: "recruiter", companyName: companyName, description: "", linkedInLink: "", companyLink: "", location: "", typeOfDeveloper: "", typeOfPosition: "")
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
                 do {

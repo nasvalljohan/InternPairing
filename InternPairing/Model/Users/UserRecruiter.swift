@@ -3,6 +3,8 @@ import FirebaseFirestoreSwift
 
 struct UserRecruiter: Codable, Identifiable {
     @DocumentID var id: String?
+    var isUserComplete: Bool
+    var role: String
     var companyName: String
     
     // profile sign up
