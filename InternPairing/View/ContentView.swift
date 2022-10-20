@@ -1,4 +1,5 @@
 import SwiftUI
+import FirebaseAuth
 
 // MARK: ContentView
 struct ContentView: View {
@@ -12,6 +13,20 @@ struct ContentView: View {
         } else{
             LoginView()
         }
+
+        Button(action: {
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print("logged out")
+            }
+        }, label: {
+            Text("Logga ut")
+        })
+        
+        
+        
+        
 
     }
 }
@@ -48,13 +63,7 @@ struct TabViewRecruiter: View {
             }
             .navigationTitle("Jinder")
             .navigationBarTitleDisplayMode(.inline)
-//            .navigationDestination(for: NavigationType.self) { value in
-//                switch(value){
-//                //case .swipe: SignUpView()
-//                case .contact: Text("Contact view")
-//                case .profile: Text("Profile view!!")
-//                }
-//            }
+
         }
     }
 }
@@ -66,13 +75,16 @@ struct TabViewStudent: View {
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
-                Text("Home").tabItem {
+                Text("Home")
+                    .tabItem {
                     Image(systemName: "house.fill")
                 }
-                Text("Profile").tabItem{
+                Text("Profile")
+                    .tabItem{
                     Image(systemName: "person.circle")
                 }
-                Text("Contacts").tabItem{
+                Text("Contacts")
+                    .tabItem{
                     Image(systemName: "message.fill")
                 }
             }

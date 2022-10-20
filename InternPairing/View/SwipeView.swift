@@ -7,7 +7,7 @@ struct SwipeView: View {
     var body: some View {
 
         VStack {
-            Text("THIS IS WHERE THE SWIPE VIEW GOES")
+            
         }
     }
 }
@@ -18,6 +18,9 @@ struct SwipeView_Previews: PreviewProvider {
         SwipeView()
     }
 }
+
+
+
 
 
 
