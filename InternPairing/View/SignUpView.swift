@@ -29,12 +29,16 @@ struct RecruiterSignUp: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 20) {
+            VStack {
+                
+                Spacer()
                 
                 //TW Register as recruiter
                 VStack {
                     Text("Register as Recruiter").font(.title).bold()
                 }
+                
+                Spacer()
                 
                 
                 //TW Company Name & Input för company name
@@ -64,6 +68,9 @@ struct RecruiterSignUp: View {
                     SecureField("Password", text: $confirmCompanyPassword)
                         .textFieldStyle(.roundedBorder)
                 }
+                
+                Spacer()
+                
                 Button(action: {
                     databaseConnection.registerUserRecruiter(email: companyEmail, password: companyPassword, companyName: companyName)
                 }, label: {
@@ -75,7 +82,7 @@ struct RecruiterSignUp: View {
                         .cornerRadius(3)
                 })
                 
-                
+                Spacer()
             }.padding()
             
         }
@@ -95,19 +102,21 @@ struct StudentSignUp: View {
     
     var body: some View {
         
-        ZStack{
-            VStack(spacing: 20) {
+        ZStack {
+            VStack {
                 
+                Spacer()
                 
                 //TV Register as student
                 VStack (alignment: .leading) {
                     Text("Register as Student").font(.title).bold()
                 }.padding()
                 
+                Spacer()
                 
                 //TV Firstname - Lastname HStack
                 //Input first-lastname hstack
-                HStack{
+                HStack {
                     VStack(alignment: .leading){
                         Text("Firstname")
                         TextField("FirstName", text: $firstName)
@@ -131,18 +140,19 @@ struct StudentSignUp: View {
 
                 
                 //TV Password & Input för lösenord
-                VStack(alignment: .leading){
+                VStack(alignment: .leading) {
                     Text("Password:")
                     SecureField("Password", text: $studentPassword)
                         .textFieldStyle(.roundedBorder)
                 }
                 
                 //TV Confirm password & input
-                VStack(alignment: .leading){
+                VStack(alignment: .leading) {
                     Text("Confirm password")
                     SecureField("Password", text: $confirmStudentPassword)
                         .textFieldStyle(.roundedBorder)
                 }
+                Spacer()
                 
                 Button(action: {
                     databaseConnection.registerUserIntern(email: studentEmail, password: studentPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, gender: "male")
@@ -155,8 +165,7 @@ struct StudentSignUp: View {
                         .cornerRadius(3)
                 })
                 
-                
-                
+                Spacer()
                 //TW Date of birth
                 //Hstack year-month-day
                 
@@ -170,7 +179,7 @@ struct StudentSignUp: View {
         @Binding var selected: Int
         
         static var previews: some View {
-            SignUpView(databaseConnection: DatabaseConnection(), selected: .constant(2))
+            SignUpView(databaseConnection: DatabaseConnection(), selected: .constant(1))
         }
     }
 }
