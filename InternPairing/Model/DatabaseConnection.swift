@@ -5,7 +5,7 @@ class DatabaseConnection: ObservableObject {
     private var db = Firestore.firestore()
     
     // Arrays of users
-//    @Published var userIntern: UserIntern?
+    @Published var userIntern: UserIntern?
 //    @Published var userRecruiter: UserRecruiter?
     @Published var userLoggedIn = false
     @Published var currentUser: User?
@@ -22,6 +22,7 @@ class DatabaseConnection: ObservableObject {
             if let user = user {
                 self.userLoggedIn = true
                 self.currentUser = user
+                self.fetchUserIntern()
                 
             } else {
                 self.userLoggedIn = false
@@ -104,7 +105,6 @@ class DatabaseConnection: ObservableObject {
     
     
     // MARK: LoginUser
-    
     func loginUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) {
             result, error in
@@ -114,15 +114,33 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
+    //MARK: fetchUserIntern
     func fetchUserIntern() {
-        let docRef = db.collection("UserInterns").document(currentUser?.uid ?? "")
-        
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                print("Document data: \(dataDescription)")
-            } else {
-                print("Document does not exist")
+        if let currentUser = currentUser {
+            userDocumentListener = self.db
+                .collection("UserInterns")
+                .document(currentUser.uid)
+                .addSnapshotListener {
+                snapshot, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    
+                    guard let snapshot = snapshot else { return }
+                    
+                    let result = Result {
+                        try snapshot.data(as: UserIntern.self)
+                    }
+                    
+                    switch result {
+                    case .success(let userIntern):
+                        self.userIntern = userIntern
+                        break
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        break
+                    }
             }
         }
     }

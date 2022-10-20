@@ -4,27 +4,32 @@ import FirebaseAuth
 // MARK: ContentView
 struct ContentView: View {
     @StateObject var databaseConnection = DatabaseConnection()
+    
     var body: some View {
-        
-        if databaseConnection.userLoggedIn {
-            //IF student or recruiter?? Show diff tab
-            TabViewRecruiter()
-            //TabViewStudent()
-        } else{
-            LoginView()
+        VStack {
+            if databaseConnection.userLoggedIn {
+                if databaseConnection.userIntern?.role == "recruiter" {
+                    Text("hello")
+                        TabViewRecruiter()
+                } else if databaseConnection.userIntern?.role == "student" {
+                    Text("tjena")
+                        TabViewStudent()
+                    }
+                } else{
+                    LoginView()
+                }
+                
+                Button(action: {
+                    do {
+                        try Auth.auth().signOut()
+                    } catch {
+                        print("logged out")
+                    }
+                }, label: {
+                    Text("Logga ut")
+                })
+            
         }
-        
-        Button(action: {
-            do {
-                try Auth.auth().signOut()
-            } catch {
-                print("logged out")
-            }
-        }, label: {
-            Text("Logga ut")
-        })
-        
-
     }
 }
 
