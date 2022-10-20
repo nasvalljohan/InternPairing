@@ -8,25 +8,26 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if databaseConnection.userLoggedIn {
-                if databaseConnection.currentUser?.uid.contains("intern") ?? false {
-                        
-                        TabViewStudent()
-                } else if databaseConnection.currentUser?.uid.contains("recruiter") ?? false {
+                if databaseConnection.userRecruiter?.role == "recruiter" {
+                    Text(databaseConnection.userRecruiter?.companyName ?? "")
                         TabViewRecruiter()
+                } else if databaseConnection.userIntern?.role == "student" {
+                    Text(databaseConnection.userIntern?.firstName ?? "")
+                        TabViewStudent()
                     }
-            } else{
-                LoginView()
-            }
-            
-            Button(action: {
-                do {
-                    try Auth.auth().signOut()
-                } catch {
-                    print("logged out")
+                } else{
+                    LoginView()
                 }
-            }, label: {
-                Text("Logga ut")
-            })
+                
+                Button(action: {
+                    do {
+                        try Auth.auth().signOut()
+                    } catch {
+                        print("logged out")
+                    }
+                }, label: {
+                    Text("Logga ut")
+                })
             
         }
     }
@@ -65,19 +66,19 @@ struct TabViewRecruiter: View {
                 }
                 Text("Profile")
                     .tabItem{
-                        Image(systemName: "person.circle")
-                    }
+                    Image(systemName: "person.circle")
+                }
                 
             }
             .navigationTitle("Jinder")
             .navigationBarTitleDisplayMode(.inline)
-            //            .navigationDestination(for: NavigationType.self) { value in
-            //                switch(value){
-            //                //case .swipe: SignUpView()
-            //                case .contact: Text("Contact view")
-            //                case .profile: Text("Profile view!!")
-            //                }
-            //            }
+//            .navigationDestination(for: NavigationType.self) { value in
+//                switch(value){
+//                //case .swipe: SignUpView()
+//                case .contact: Text("Contact view")
+//                case .profile: Text("Profile view!!")
+//                }
+//            }
         }
     }
 }

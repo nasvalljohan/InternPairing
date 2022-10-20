@@ -26,16 +26,6 @@ class DatabaseConnection: ObservableObject {
                 self.currentUser = user
                 self.fetchUserIntern()
                 self.fetchUserRecruiter()
-//                if let currentUser = self.currentUser {
-//                    if currentUser.uid.contains("intern") {
-//                        print("intern")
-//                        self.fetchUserIntern()
-//                    } else if currentUser.uid.contains("recruiter") {
-//                        print("recruiter")
-//                        self.fetchUserRecruiter()
-//                    }
-//                }
-                
                 
             } else {
                 self.userLoggedIn = false
@@ -119,11 +109,11 @@ class DatabaseConnection: ObservableObject {
         if let currentUser = currentUser {
             internDocumentListener = self.db
                 .collection("UserInterns")
-                .document(currentUser.uid)
+                .document("intern" + currentUser.uid)
                 .addSnapshotListener {
                     snapshot, error in
                     if let error = error {
-                        print(error.localizedDescription)
+                        print("intern " + error.localizedDescription)
                         return
                     }
                     
@@ -138,7 +128,7 @@ class DatabaseConnection: ObservableObject {
                         self.userIntern = userIntern
                         break
                     case .failure(let error):
-                        print(error.localizedDescription)
+                        print("intern " + error.localizedDescription)
                         break
                     }
                 }
@@ -150,11 +140,11 @@ class DatabaseConnection: ObservableObject {
         if let currentUser = currentUser {
             internDocumentListener = self.db
                 .collection("UserRecruiters")
-                .document(currentUser.uid)
+                .document("recruiter" + currentUser.uid)
                 .addSnapshotListener {
                     snapshot, error in
                     if let error = error {
-                        print(error.localizedDescription)
+                        print("recruiter " + error.localizedDescription)
                         return
                     }
                     
@@ -169,41 +159,12 @@ class DatabaseConnection: ObservableObject {
                         self.userRecruiter = userRecruiter
                         break
                     case .failure(let error):
-                        print(error.localizedDescription)
+                        print("recruiter " + error.localizedDescription)
                         break
                     }
                 }
         }
     }
-    //    func fetchUserRecruiter() {
-    //        if let currentUser = currentUser {
-    //            recruiterDocumentListener = self.db
-    //                .collection("userRecruiters")
-    //                .document(currentUser.uid)
-    //                .addSnapshotListener {
-    //                    snapshot, error in
-    //                    if let error = error {
-    //                        print(error.localizedDescription)
-    //                        return
-    //                    }
-    //
-    //                    guard let snapshot = snapshot else { return }
-    //
-    //                    let result = Result {
-    //                        try snapshot.data(as: UserRecruiter.self)
-    //                    }
-    //
-    //                    switch result {
-    //                    case .success(let userData):
-    //                        self.userRecruiter = userData
-    //                        break
-    //                    case .failure(let error):
-    //                        print(error.localizedDescription)
-    //                        break
-    //                    }
-    //                }
-    //        }
-    //    }
     
     func stopListenToDatabase() {
         if let internDocumentListener = internDocumentListener,
