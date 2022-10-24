@@ -65,7 +65,7 @@ struct TabViewRecruiter: View {
                 Text("Contacts").tabItem{
                     Image(systemName: "message.fill")
                 }
-                ProfileView(databaseConnection: databaseConnection)
+                ProfileView()
                     .tabItem{
                     Image(systemName: "person.circle")
                 }
@@ -96,7 +96,7 @@ struct TabViewStudent: View {
                     .tabItem {
                         Image(systemName: "house.fill")
                     }
-                ProfileView(databaseConnection: databaseConnection)
+                ProfileView()
                     .tabItem{
                         Image(systemName: "person.circle")
                     }
