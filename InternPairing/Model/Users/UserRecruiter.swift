@@ -14,6 +14,6 @@ struct UserRecruiter: Codable, Identifiable {
     
     // MATCHING STUDENTS
     var location: String
-    var typeOfDeveloper: String
-    var typeOfPosition: String
+    var typeOfDeveloper: Int
+    var typeOfPosition: Int
 }
