@@ -3,14 +3,14 @@ import Firebase
 
 // MARK: SignUpView
 struct SignUpView: View {
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     
-    @Binding var selected: Int
     var body: some View {
         
-        if selected == 1 {
+        if databaseConnection.selected == 1 {
             StudentSignUp()
         }
-        else if selected == 2 {
+        else if databaseConnection.selected == 2 {
             RecruiterSignUp()
         }
         
@@ -71,7 +71,7 @@ struct RecruiterSignUp: View {
                 Spacer()
                 
                 Button(action: {
-                    databaseConnection.registerUserRecruiter(email: companyEmail, password: companyPassword, companyName: companyName)
+                    databaseConnection.registerTheUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: "", lastName: "", gender: "", companyName: companyName, isUserComplete: false)
                 }, label: {
                     Text("Next")
                         .padding()
@@ -85,7 +85,6 @@ struct RecruiterSignUp: View {
             }.padding()
             
         }
-        
     }
 }
 
@@ -154,7 +153,7 @@ struct StudentSignUp: View {
                 Spacer()
                 
                 Button(action: {
-                    databaseConnection.registerUserIntern(email: studentEmail, password: studentPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, gender: "male")
+                    databaseConnection.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
                 }, label: {
                     Text("write db")
                         .padding()
@@ -177,7 +176,7 @@ struct StudentSignUp: View {
         @Binding var selected: Int
         
         static var previews: some View {
-            SignUpView(selected: .constant(1))
+            SignUpView()
         }
     }
 }

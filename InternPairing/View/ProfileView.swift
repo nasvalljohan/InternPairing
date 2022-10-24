@@ -5,13 +5,11 @@ struct ProfileView: View {
     @ObservedObject var databaseConnection: DatabaseConnection
     var body: some View {
         VStack{
-            if databaseConnection.userRecruiter?.role == "recruiter" {
+            if databaseConnection.theUser?.role == "Recruiter" {
                 RecruiterProfileView()
-            } else if databaseConnection.userIntern?.role == "student" {
+            } else if databaseConnection.theUser?.role == "Intern" {
                     StudentProfileView()
                 }
-            
-            
         }
     }
 }

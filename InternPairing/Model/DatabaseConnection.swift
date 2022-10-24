@@ -4,24 +4,20 @@ import Firebase
 class DatabaseConnection: ObservableObject {
     private var db = Firestore.firestore()
     
-    // Arrays of users
-    @Published var userIntern: UserIntern?
-    @Published var userRecruiter: UserRecruiter?
+    // Published variables
+    var collection = "Users"
+    @Published var selected = 1
+    @Published var theUser: TheUser?
     @Published var userLoggedIn = false
     @Published var currentUser: User?
     
     // nil as long as user is logged out
     var userDocumentListener: ListenerRegistration?
     
-    
     init() {
         
-        // to see if user is logged in or not
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            print("logged out")
-        }
+        do {try Auth.auth().signOut() }
+        catch { print("logged out") }
         
         Auth.auth().addStateDidChangeListener {
             auth, user in
@@ -29,9 +25,7 @@ class DatabaseConnection: ObservableObject {
             if let user = user {
                 self.userLoggedIn = true
                 self.currentUser = user
-                self.fetchUserIntern()
-                self.fetchUserRecruiter()
-                
+                self.fetchTheUser()
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -40,9 +34,18 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
+    //MARK: Listener
+    func stopListenToDatabase() {
+        if let userDocumentListener = userDocumentListener {
+            userDocumentListener.remove()
+        }
+    }
     
-    // MARK: Register Intern
-    func registerUserIntern(email: String, password: String,dateOfBirth: Date, firstName: String, lastName: String, gender: String) {
+    
+    // MARK: Register user
+    func registerTheUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
+        var userRole = ""
+        var tempUser = TheUser()
         
         // AUTH: call
         Auth.auth().createUser(withEmail: email, password: password) {
@@ -53,14 +56,23 @@ class DatabaseConnection: ObservableObject {
             
             // AUTH: If successfull
             if let authDataResult = authDataResult {
-                let newUserIntern = UserIntern(id: authDataResult.user.uid, isUserComplete: false, role: "student", firstName: firstName, lastName: lastName, dateOfBirth: Date(), gender: gender, description: "", linkedInLink: "", githubLink: "", otherLink: "", location: "", typeOfDeveloper: 0, typeOfPosition: 0
-                )
+                
+                if self.selected == 1 {
+                    userRole = "Intern"
+                    tempUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: Date(), gender: gender)
+                } else if self.selected == 2 {
+                    userRole = "Recruiter"
+                    tempUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName)
+                }
+                
+                let newUser = tempUser
+                
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
                 do {
-                    try self.db.collection("UserInterns")
-                        .document("intern" + authDataResult.user.uid)
-                        .setData(from: newUserIntern)
+                    try self.db.collection(self.collection)
+                        .document(authDataResult.user.uid)
+                        .setData(from: newUser)
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -69,37 +81,7 @@ class DatabaseConnection: ObservableObject {
     }
     
     
-    
-    
-    // MARK: Register Recruiter
-    
-    func registerUserRecruiter(email: String, password: String, companyName: String) {
-        
-        // AUTH: Call
-        Auth.auth().createUser(withEmail: email, password: password) {
-            authDataResult, error in
-            if let error = error {
-                print(error.localizedDescription)
-            }
-            
-            // AUTH: If successful
-            if let authDataResult = authDataResult {
-                let newUserRecruiter = UserRecruiter(id: authDataResult.user.uid, isUserComplete: false, role: "recruiter", companyName: companyName, description: "", linkedInLink: "", companyLink: "", location: "", typeOfDeveloper: 0, typeOfPosition: 0)
-                
-                // Firestore: Set new document to uid and set data from newUserIntern.
-                do {
-                    try self.db.collection("UserRecruiters")
-                        .document("recruiter" + authDataResult.user.uid)
-                        .setData(from: newUserRecruiter)
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        }
-    }
-    
-    
-    // MARK: LoginUser
+    // MARK: Login User
     func loginUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) {
             result, error in
@@ -109,83 +91,14 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    //MARK: fetchUserIntern
-    func fetchUserIntern() {
+    
+    
+    // MARK: Add user details
+    func addUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String) {
         if let currentUser = currentUser {
-            userDocumentListener = self.db
-                .collection("UserInterns")
-                .document("intern" + currentUser.uid)
-                .addSnapshotListener {
-                    snapshot, error in
-                    if let error = error {
-                        print("intern " + error.localizedDescription)
-                        return
-                    }
-                    
-                    guard let snapshot = snapshot else { return }
-                    
-                    let result = Result {
-                        try snapshot.data(as: UserIntern.self)
-                    }
-                    
-                    switch result {
-                    case .success(let userIntern):
-                        self.userIntern = userIntern
-                        break
-                    case .failure(let error):
-                        print("intern " + error.localizedDescription)
-                        break
-                    }
-                }
-        }
-    }
-    
-    //MARK: fetchUserRecruiter
-    func fetchUserRecruiter() {
-        if let currentUser = currentUser {
-            userDocumentListener = self.db
-                .collection("UserRecruiters")
-                .document("recruiter" + currentUser.uid)
-                .addSnapshotListener {
-                    snapshot, error in
-                    if let error = error {
-                        print("recruiter " + error.localizedDescription)
-                        return
-                    }
-                    
-                    guard let snapshot = snapshot else { return }
-                    
-                    let result = Result {
-                        try snapshot.data(as: UserRecruiter.self)
-                    }
-                    
-                    switch result {
-                    case .success(let userRecruiter):
-                        self.userRecruiter = userRecruiter
-                        break
-                    case .failure(let error):
-                        print("recruiter " + error.localizedDescription)
-                        break
-                    }
-                }
-        }
-    }
-    
-    //MARK: stopListenToDatabase
-    func stopListenToDatabase() {
-        if let userDocumentListener = userDocumentListener {
-            userDocumentListener.remove()
-        }
-    }
-    
-
-    
-//     Implement this for details
-    func addUserInternDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int) {
-            if let currentUser = currentUser {
-                let reference = db.collection("UserInterns").document("intern" + currentUser.uid)
-    
-                
+            let reference = db.collection(collection).document(currentUser.uid)
+            
+            if selected == 1{
                 reference.updateData([
                     "description": description,
                     "githubLink": githubLink,
@@ -195,30 +108,21 @@ class DatabaseConnection: ObservableObject {
                     "typeOfDeveloper": typeOfDeveloper,
                     "typeOfPosition":typeOfPosition,
                     "isUserComplete": true,
-                    
                 ]) {
                     error in
                     if let error = error {
                         print(error.localizedDescription)
                     }
                 }
-            }
-        }
-    
-    func addUserRecruiterDetails(companyLink: String, description: String, linkedIn: String, location: String, typeOfDeveloper: Int, typeOfPosition: Int) {
-            if let currentUser = currentUser {
-                let reference = db.collection("UserRecruiters").document("recruiter" + currentUser.uid)
-    
-                
+            } else if selected == 2 {
                 reference.updateData([
                     "companyLink": companyLink,
                     "description": description,
                     "isUserComplete": true,
-                    "linkedInLink": linkedIn,
+                    "linkedInLink": linkedInLink,
                     "location": location,
                     "typeOfDeveloper": typeOfDeveloper,
                     "typeOfPosition": typeOfPosition,
-                    
                 ]) {
                     error in
                     if let error = error {
@@ -226,6 +130,42 @@ class DatabaseConnection: ObservableObject {
                     }
                 }
             }
+            
+            //TODO: IF Student, add that user to collection in db, prep for swipeview. 
         }
-
+    }
+    
+    
+    
+    
+    //MARK: fetchUser
+    func fetchTheUser() {
+        if let currentUser = currentUser {
+            userDocumentListener = self.db
+                .collection(collection)
+                .document(currentUser.uid)
+                .addSnapshotListener {
+                    snapshot, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    
+                    guard let snapshot = snapshot else { return }
+                    
+                    let result = Result {
+                        try snapshot.data(as: TheUser.self)
+                    }
+                    
+                    switch result {
+                    case .success(let theUser):
+                        self.theUser = theUser
+                        break
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        break
+                    }
+                }
+        }
+    }
 }

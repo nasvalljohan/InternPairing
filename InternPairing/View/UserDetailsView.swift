@@ -5,11 +5,11 @@ struct UserDetailsView: View {
     @EnvironmentObject var databaseConnection: DatabaseConnection
     var body: some View {
         
-        if databaseConnection.userRecruiter?.role == "recruiter" {
+        if databaseConnection.theUser?.role == "Recruiter" {
             RecruiterDetailsView()
-        } else if databaseConnection.userIntern?.role == "student" {
+        } else if databaseConnection.theUser?.role == "Intern" {
             InternDetailsView()
-            }
+        }
     }
 }
 
@@ -21,8 +21,8 @@ struct RecruiterDetailsView: View {
     @State var linkedIn = ""
     @State var location = ""
     @State var website = ""
-    @State var selectedPlatform = 0
-    @State var selectedPosition = 0
+    @State var typeOfDeveloper = 0
+    @State var typeOfPosition = 0
     
     var body: some View {
         ZStack {
@@ -58,7 +58,7 @@ struct RecruiterDetailsView: View {
                         
                         HStack(spacing: 0) {
                             Picker(
-                                selection: $selectedPlatform, label: Text("I am")) {
+                                selection: $typeOfDeveloper, label: Text("I am")) {
                                     Text("We're looking for..").tag(0)
                                     Text("Android Dev").tag(1)
                                     Text("iOS Dev").tag(2)
@@ -73,7 +73,7 @@ struct RecruiterDetailsView: View {
                                 .clipped()
                             
                             Picker(
-                                selection: $selectedPosition,
+                                selection: $typeOfPosition,
                                 label: Text("as..")) {
                                     Text("as..").tag(0)
                                     Text("Fullstack").tag(1)
@@ -92,7 +92,7 @@ struct RecruiterDetailsView: View {
                 }
                 Button(action: {
                     print("Trying to update")
-                    databaseConnection.addUserRecruiterDetails(companyLink: website, description: description, linkedIn: linkedIn, location: location, typeOfDeveloper: selectedPlatform, typeOfPosition: selectedPosition)
+                    databaseConnection.addUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website)
                 }, label: {
                     Text("Save")
                         .padding()
@@ -114,8 +114,8 @@ struct InternDetailsView: View {
     @State var linkedIn = ""
     @State var location = ""
     @State var github = ""
-    @State var selectedPlatform = 0
-    @State var selectedPosition = 0
+    @State var typeOfDeveloper = 0
+    @State var typeOfPosition = 0
     var body: some View {
         ZStack {
             VStack {
@@ -150,7 +150,7 @@ struct InternDetailsView: View {
                         
                         HStack(spacing: 0) {
                             Picker(
-                                selection: $selectedPlatform, label: Text("I am")) {
+                                selection: $typeOfDeveloper, label: Text("I am")) {
                                     Text("I am a..").tag(0)
                                     Text("Android Dev").tag(1)
                                     Text("iOS Dev").tag(2)
@@ -165,7 +165,7 @@ struct InternDetailsView: View {
                                 .clipped()
                             
                             Picker(
-                                selection: $selectedPosition,
+                                selection: $typeOfPosition,
                                 label: Text("Looking for:")) {
                                     Text("looking for..").tag(0)
                                     Text("Fullstack").tag(1)
@@ -183,14 +183,15 @@ struct InternDetailsView: View {
                     }
                 }
                 Button(action: {
-                    databaseConnection.addUserInternDetails(
+                    databaseConnection.addUserDetails(
                         description: description,
                         linkedInLink: linkedIn,
                         otherLink: "",
                         location: location,
                         githubLink: github,
-                        typeOfDeveloper: selectedPlatform,
-                        typeOfPosition: selectedPosition)
+                        typeOfDeveloper: typeOfDeveloper,
+                        typeOfPosition: typeOfPosition,
+                        companyLink: "")
                 }, label: {
                     Text("Save")
                         .padding()

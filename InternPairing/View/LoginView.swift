@@ -78,7 +78,7 @@ struct NoAccountView: View {
     @EnvironmentObject var databaseConnection: DatabaseConnection
     
     @Binding var isNotAUser: Bool
-    @State private var selected = 1
+
     var body: some View {
         NavigationView{
             VStack() {
@@ -86,7 +86,7 @@ struct NoAccountView: View {
                 HStack {
                     Text("I'm a")
                     VStack {
-                        Picker(selection: $selected, label: Text("Favorite Color")) {
+                        Picker(selection: $databaseConnection.selected, label: Text("Favorite Color")) {
                             Text("Student").tag(1)
                             Text("Recruiter").tag(2)
                         }
@@ -98,7 +98,7 @@ struct NoAccountView: View {
                 
                 //Signup btn
                 NavigationLink(destination:{
-                    SignUpView(selected: $selected)
+                    SignUpView()
                 }, label: {
                     Text("Sign up")
                         .padding()
@@ -112,6 +112,7 @@ struct NoAccountView: View {
                 HStack {
                     Text("Already an user?")
                     Button(action: {
+                        print(databaseConnection.selected)
                         isNotAUser = false
                     }, label:{
                         Text("Login")
@@ -122,22 +123,7 @@ struct NoAccountView: View {
     }
 }
 
-// MARK: HorizontalRadioGroupLayout
-struct HorizontalRadioGroupLayout: View {
-    @State private var selected = 1
-    var body: some View {
-        VStack {
-            Picker(selection: $selected, label: Text("Favorite Color")) {
-                Text("Student").tag(1)
-                Text("Recruiter").tag(2)
-            }
-            .pickerStyle(.wheel)
-            .frame(width: 150)
-            .offset(x: -20)
-        }
-//        .border(Color.gray)
-    }
-}
+
 
 // MARK: Preview
 struct LoginView_Previews: PreviewProvider {

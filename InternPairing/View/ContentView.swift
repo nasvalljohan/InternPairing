@@ -8,19 +8,19 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if databaseConnection.userLoggedIn {
-                if databaseConnection.userRecruiter?.role == "recruiter" {
-                    if databaseConnection.userRecruiter?.isUserComplete == false{
+                if databaseConnection.theUser?.role == "Recruiter" {
+                    if databaseConnection.theUser?.isUserComplete == false{
                         UserDetailsView()
                     }else {
-                        Text(databaseConnection.userRecruiter?.companyName ?? "")
+                        Text(databaseConnection.theUser?.companyName ?? "")
                         TabViewRecruiter()
                     }
                     
-                } else if databaseConnection.userIntern?.role == "student" {
-                    if databaseConnection.userIntern?.isUserComplete == false {
+                } else if databaseConnection.theUser?.role == "Intern" {
+                    if databaseConnection.theUser?.isUserComplete == false {
                         UserDetailsView()
                     } else {
-                        Text(databaseConnection.userIntern?.firstName ?? "")
+                        Text(databaseConnection.theUser?.firstName ?? "")
                         TabViewStudent()
                     }
                     
@@ -29,16 +29,6 @@ struct ContentView: View {
                 LoginView()
             }
                 
-//                Button(action: {
-//                    do {
-//                        try Auth.auth().signOut()
-//                    } catch {
-//                        print("logged out")
-//                    }
-//                }, label: {
-//                    Text("Logga ut")
-//                })
-            
         }.environmentObject(databaseConnection)
     }
 }
