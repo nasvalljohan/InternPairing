@@ -45,7 +45,7 @@ class DatabaseConnection: ObservableObject {
     // MARK: Register user
     func registerTheUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
         var userRole = ""
-        var tempUser = TheUser()
+        var tempUser: TheUser?
         
         // AUTH: call
         Auth.auth().createUser(withEmail: email, password: password) {
