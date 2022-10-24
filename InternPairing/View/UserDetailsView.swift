@@ -6,7 +6,7 @@ struct UserDetailsView: View {
     var body: some View {
         
         if databaseConnection.userRecruiter?.role == "recruiter" {
-            RecruiterDetailsView()
+            RecruiterDetailsView(databaseConnection: databaseConnection)
         } else if databaseConnection.userIntern?.role == "student" {
             InternDetailsView(databaseConnection: databaseConnection)
             }
@@ -16,6 +16,7 @@ struct UserDetailsView: View {
 
 // MARK: Recruiter view
 struct RecruiterDetailsView: View {
+    @ObservedObject var databaseConnection: DatabaseConnection
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -90,7 +91,8 @@ struct RecruiterDetailsView: View {
                     }
                 }
                 Button(action: {
-                    print("hello")
+                    print("Trying to update")
+                    databaseConnection.addUserRecruiterDetails(companyLink: website, description: description, linkedIn: linkedIn, location: location, typeOfDeveloper: selectedPlatform, typeOfPosition: selectedPosition)
                 }, label: {
                     Text("Save")
                         .padding()
@@ -182,7 +184,7 @@ struct InternDetailsView: View {
                 }
                 Button(action: {
                     databaseConnection.addUserInternDetails(
-                        desciption: description,
+                        description: description,
                         linkedInLink: linkedIn,
                         otherLink: "",
                         location: location,

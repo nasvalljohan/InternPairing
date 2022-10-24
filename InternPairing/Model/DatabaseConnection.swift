@@ -178,18 +178,16 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    // MARK: TODO:
-    // add read function
-    
+
     
 //     Implement this for details
-    func addUserInternDetails(desciption: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int) {
+    func addUserInternDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int) {
             if let currentUser = currentUser {
                 let reference = db.collection("UserInterns").document("intern" + currentUser.uid)
     
                 
                 reference.updateData([
-                    "description": desciption,
+                    "description": description,
                     "githubLink": githubLink,
                     "linkedInLink": linkedInLink,
                     "location": location,
@@ -207,5 +205,27 @@ class DatabaseConnection: ObservableObject {
             }
         }
     
+    func addUserRecruiterDetails(companyLink: String, description: String, linkedIn: String, location: String, typeOfDeveloper: Int, typeOfPosition: Int) {
+            if let currentUser = currentUser {
+                let reference = db.collection("UserRecruiters").document("recruiter" + currentUser.uid)
     
+                
+                reference.updateData([
+                    "companyLink": companyLink,
+                    "description": description,
+                    "isUserComplete": true,
+                    "linkedInLink": linkedIn,
+                    "location": location,
+                    "typeOfDeveloper": typeOfDeveloper,
+                    "typeOfPosition": typeOfPosition,
+                    
+                ]) {
+                    error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
+
 }
