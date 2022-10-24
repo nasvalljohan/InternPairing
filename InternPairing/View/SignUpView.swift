@@ -3,16 +3,15 @@ import Firebase
 
 // MARK: SignUpView
 struct SignUpView: View {
-    @ObservedObject var databaseConnection: DatabaseConnection
     
     @Binding var selected: Int
     var body: some View {
         
         if selected == 1 {
-            StudentSignUp(databaseConnection: databaseConnection)
+            StudentSignUp()
         }
         else if selected == 2 {
-            RecruiterSignUp(databaseConnection: databaseConnection)
+            RecruiterSignUp()
         }
         
     }
@@ -20,7 +19,7 @@ struct SignUpView: View {
 
 // MARK: RecruiterSignUp
 struct RecruiterSignUp: View {
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     
     @State var companyName = ""
     @State var companyEmail = ""
@@ -92,7 +91,7 @@ struct RecruiterSignUp: View {
 
 // MARK: StudentSignUp
 struct StudentSignUp: View {
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     
     @State var firstName = ""
     @State var lastName = ""
@@ -175,11 +174,10 @@ struct StudentSignUp: View {
     
     // MARK: Preview
     struct SignUpView_Previews: PreviewProvider {
-        @ObservedObject var databaseConnection: DatabaseConnection
         @Binding var selected: Int
         
         static var previews: some View {
-            SignUpView(databaseConnection: DatabaseConnection(), selected: .constant(1))
+            SignUpView(selected: .constant(1))
         }
     }
 }

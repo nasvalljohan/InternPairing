@@ -2,13 +2,13 @@
 import SwiftUI
 
 struct UserDetailsView: View {
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     var body: some View {
         
         if databaseConnection.userRecruiter?.role == "recruiter" {
-            RecruiterDetailsView(databaseConnection: databaseConnection)
+            RecruiterDetailsView()
         } else if databaseConnection.userIntern?.role == "student" {
-            InternDetailsView(databaseConnection: databaseConnection)
+            InternDetailsView()
             }
     }
 }
@@ -16,7 +16,7 @@ struct UserDetailsView: View {
 
 // MARK: Recruiter view
 struct RecruiterDetailsView: View {
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -109,7 +109,7 @@ struct RecruiterDetailsView: View {
 
 //MARK: Intern View
 struct InternDetailsView: View {
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -206,6 +206,6 @@ struct InternDetailsView: View {
 
 struct UserDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        UserDetailsView(databaseConnection: DatabaseConnection())
+        UserDetailsView()
     }
 }

@@ -4,16 +4,16 @@ import Firebase
 
 // MARK: LoginView
 struct LoginView: View {
-    @StateObject var databaseConnection = DatabaseConnection()
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     @State var isNotAUser: Bool = false
     
     var body: some View {
         ZStack{
             VStack {
                 if !isNotAUser {
-                    AccountView( databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
+                    AccountView(isNotAUser: $isNotAUser)
                 } else {
-                    NoAccountView(databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
+                    NoAccountView(isNotAUser: $isNotAUser)
                 }
 //                NoAccountView(databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
                 
@@ -26,7 +26,7 @@ struct LoginView: View {
 // MARK: AccountView
 struct AccountView: View {
     
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     @State private var email = ""
     @State private var password = ""
     @Binding var isNotAUser: Bool
@@ -75,7 +75,7 @@ struct AccountView: View {
 
 // MARK: NoAccountView
 struct NoAccountView: View {
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     
     @Binding var isNotAUser: Bool
     @State private var selected = 1
@@ -98,7 +98,7 @@ struct NoAccountView: View {
                 
                 //Signup btn
                 NavigationLink(destination:{
-                    SignUpView(databaseConnection: databaseConnection, selected: $selected)
+                    SignUpView(selected: $selected)
                 }, label: {
                     Text("Sign up")
                         .padding()

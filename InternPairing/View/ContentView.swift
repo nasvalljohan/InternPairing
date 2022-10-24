@@ -3,25 +3,25 @@ import FirebaseAuth
 
 // MARK: ContentView
 struct ContentView: View {
-    @StateObject var databaseConnection = DatabaseConnection()
+    @StateObject var databaseConnection: DatabaseConnection = DatabaseConnection()
     
     var body: some View {
         VStack {
             if databaseConnection.userLoggedIn {
                 if databaseConnection.userRecruiter?.role == "recruiter" {
                     if databaseConnection.userRecruiter?.isUserComplete == false{
-                        UserDetailsView(databaseConnection: databaseConnection)
+                        UserDetailsView()
                     }else {
                         Text(databaseConnection.userRecruiter?.companyName ?? "")
-                        TabViewRecruiter(databaseConnection: databaseConnection)
+                        TabViewRecruiter()
                     }
                     
                 } else if databaseConnection.userIntern?.role == "student" {
                     if databaseConnection.userIntern?.isUserComplete == false {
-                        UserDetailsView(databaseConnection: databaseConnection)
+                        UserDetailsView()
                     } else {
                         Text(databaseConnection.userIntern?.firstName ?? "")
-                        TabViewStudent(databaseConnection: databaseConnection)
+                        TabViewStudent()
                     }
                     
                 }
@@ -39,7 +39,7 @@ struct ContentView: View {
 //                    Text("Logga ut")
 //                })
             
-        }
+        }.environmentObject(databaseConnection)
     }
 }
 
@@ -58,7 +58,7 @@ enum NavigationType: String, Hashable {
 
 // MARK: TabViewRecruiter
 struct TabViewRecruiter: View {
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     @State var mainStack: [NavigationType] = []
     
     var body: some View {
@@ -97,7 +97,7 @@ struct TabViewRecruiter: View {
 // MARK: TabViewStudent
 struct TabViewStudent: View {
     @State var mainStack: [NavigationType] = []
-    @ObservedObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     
     var body: some View {
         NavigationStack(path: $mainStack){
