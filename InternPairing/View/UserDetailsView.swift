@@ -8,7 +8,7 @@ struct UserDetailsView: View {
         if databaseConnection.userRecruiter?.role == "recruiter" {
             RecruiterDetailsView()
         } else if databaseConnection.userIntern?.role == "student" {
-                InternDetailsView()
+            InternDetailsView(databaseConnection: databaseConnection)
             }
     }
 }
@@ -107,6 +107,7 @@ struct RecruiterDetailsView: View {
 
 //MARK: Intern View
 struct InternDetailsView: View {
+    @ObservedObject var databaseConnection: DatabaseConnection
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -180,7 +181,14 @@ struct InternDetailsView: View {
                     }
                 }
                 Button(action: {
-                    print("hello")
+                    databaseConnection.addUserInternDetails(
+                        desciption: description,
+                        linkedInLink: linkedIn,
+                        otherLink: "",
+                        location: location,
+                        githubLink: github,
+                        typeOfDeveloper: selectedPlatform,
+                        typeOfPosition: selectedPosition)
                 }, label: {
                     Text("Save")
                         .padding()

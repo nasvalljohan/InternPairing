@@ -178,46 +178,34 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // MARK: TODO:
     // add read function
     
     
-    // Implement this for details
-    //    func addUserInternDetails() {
-    //        if let currentUser = currentUser {
-    //            let reference = db.collection("UserInterns").document(currentUser.uid)
-    //
-    //            reference.updateData([
-    //                // Detail data
-    //            ]) {
-    //                error in
-    //                if let error = error {
-    //                    print(error.localizedDescription)
-    //                    print("")
-    //                }
-    //            }
-    //        }
-    //    }
+//     Implement this for details
+    func addUserInternDetails(desciption: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int) {
+            if let currentUser = currentUser {
+                let reference = db.collection("UserInterns").document("intern" + currentUser.uid)
+    
+                
+                reference.updateData([
+                    "description": desciption,
+                    "githubLink": githubLink,
+                    "linkedInLink": linkedInLink,
+                    "location": location,
+                    "otherLink": otherLink,
+                    "typeOfDeveloper": typeOfDeveloper,
+                    "typeOfPosition":typeOfPosition,
+                    "isUserComplete": true,
+                    
+                ]) {
+                    error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
     
     
 }
