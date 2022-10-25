@@ -7,8 +7,8 @@ class DatabaseConnection: ObservableObject {
     // Published variables
     private let collection = "Users"
     private let swipeableCollection = "SwipeableStudents"
-    private var fetchedArray: Array<Any> = []
-    
+
+    @Published var fetchedArray: Array<TheUser> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
@@ -29,6 +29,7 @@ class DatabaseConnection: ObservableObject {
                 self.userLoggedIn = true
                 self.currentUser = user
                 self.fetchTheUser()
+                self.fetchSwipeableStudents()
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -166,16 +167,22 @@ class DatabaseConnection: ObservableObject {
     func fetchSwipeableStudents() {
         
         db.collection(self.swipeableCollection).whereField("isUserComplete", isEqualTo: true)
-            .getDocuments() { (querySnapshot, error) in
+            .getDocuments() { (snapshot, error) in
                 
                 if let error = error {
                     print("\(error) getting documents: (err)")
                 } else {
-                    for document in querySnapshot!.documents {
-                        //                        print("\(document.documentID) => \(document.data())")
-                        self.fetchedArray.append(document.data())
-//                        self.addToLikedInternArr(intern: document.documentID)
+                    
+                    // convert the querySnapshots to TheUser format
+                    for document in snapshot!.documents {
+                        do {
+                            self.theUser = try document.data(as: TheUser.self)
+                            self.fetchedArray.append(self.theUser ?? TheUser())
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                     }
+//                    print(self.fetchedArray)
                 }
             }
     }
