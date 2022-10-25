@@ -2,7 +2,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct TheUser: Codable, Identifiable {
+struct TheUser: Codable, Identifiable, Hashable {
     
     //MARK: Shared variables
     @DocumentID var id: String?
