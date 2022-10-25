@@ -5,8 +5,10 @@ struct SwipeView: View {
     @EnvironmentObject var databaseConnection: DatabaseConnection
     var body: some View {
         VStack {
+            
             Button(action: {
                 databaseConnection.fetchSwipeableStudents()
+                
             }, label: {
                 Text("Fetch swipeable students")
             })

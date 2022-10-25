@@ -5,8 +5,10 @@ class DatabaseConnection: ObservableObject {
     private var db = Firestore.firestore()
     
     // Published variables
-    var collection = "Users"
-    var swipeableCollection = "SwipeableStudents"
+    private let collection = "Users"
+    private let swipeableCollection = "SwipeableStudents"
+    private var fetchedArray: Array<Any> = []
+    
     @Published var selected = 1
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
@@ -63,7 +65,7 @@ class DatabaseConnection: ObservableObject {
                     newUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: Date(), gender: gender)
                 } else if self.selected == 2 {
                     userRole = "Recruiter"
-                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName, swipedInterns: [])
+                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName, likedInterns: [])
                 }
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
@@ -150,17 +152,32 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
+    // MARK: addToLikedInternArr
+    func addToLikedInternArr(intern: Any) {
+        if let currentUser = currentUser {
+            let reference = db.collection(collection).document(currentUser.uid)
+            reference.updateData([
+                "likedInterns": FieldValue.arrayUnion([intern])
+            ])
+        }
+    }
+    
+    // MARK: fetchSwipeableStudents
     func fetchSwipeableStudents() {
+        
         db.collection(self.swipeableCollection).whereField("isUserComplete", isEqualTo: true)
             .getDocuments() { (querySnapshot, error) in
+                
                 if let error = error {
                     print("\(error) getting documents: (err)")
                 } else {
                     for document in querySnapshot!.documents {
-                        print("\(document.documentID) => \(document.data())")
+                        //                        print("\(document.documentID) => \(document.data())")
+                        self.fetchedArray.append(document.data())
+//                        self.addToLikedInternArr(intern: document.documentID)
                     }
                 }
-        }
+            }
     }
     
     //MARK: fetchUser
