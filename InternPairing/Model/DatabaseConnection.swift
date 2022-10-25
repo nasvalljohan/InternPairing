@@ -6,6 +6,7 @@ class DatabaseConnection: ObservableObject {
     
     // Published variables
     var collection = "Users"
+    var swipeableCollection = "SwipeableStudents"
     @Published var selected = 1
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
@@ -70,9 +71,16 @@ class DatabaseConnection: ObservableObject {
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
                 do {
+                    if self.selected == 1 {
+                        try self.db.collection(self.swipeableCollection)
+                            .document(authDataResult.user.uid)
+                            .setData(from: newUser)
+                    }
+                    
                     try self.db.collection(self.collection)
                         .document(authDataResult.user.uid)
                         .setData(from: newUser)
+                        
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -97,6 +105,7 @@ class DatabaseConnection: ObservableObject {
     func addUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
+            let swipeableReference = db.collection(swipeableCollection).document(currentUser.uid)
             
             if selected == 1{
                 reference.updateData([
@@ -107,7 +116,18 @@ class DatabaseConnection: ObservableObject {
                     "otherLink": otherLink,
                     "typeOfDeveloper": typeOfDeveloper,
                     "typeOfPosition":typeOfPosition,
-                    "isUserComplete": true,
+                    "isUserComplete": true
+                ])
+                
+                swipeableReference.updateData([
+                    "description": description,
+                    "githubLink": githubLink,
+                    "linkedInLink": linkedInLink,
+                    "location": location,
+                    "otherLink": otherLink,
+                    "typeOfDeveloper": typeOfDeveloper,
+                    "typeOfPosition":typeOfPosition,
+                    "isUserComplete": true
                 ]) {
                     error in
                     if let error = error {
