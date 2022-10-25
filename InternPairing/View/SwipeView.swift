@@ -2,12 +2,14 @@ import SwiftUI
 
 // MARK: SwipeView
 struct SwipeView: View {
-    @EnvironmentObject var dataManager: DatabaseConnection
-    
+    @EnvironmentObject var databaseConnection: DatabaseConnection
     var body: some View {
-
         VStack {
-            
+            Button(action: {
+                databaseConnection.fetchSwipeableStudents()
+            }, label: {
+                Text("Fetch swipeable students")
+            })
         }
     }
 }

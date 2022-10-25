@@ -19,6 +19,7 @@ struct TheUser: Codable, Identifiable {
     //MARK: Recruiter variables
     var companyName: String?
     var companyLink: String?
+    var swipedInterns: Array<String>?
     
     //MARK: Student variables
     var firstName: String?

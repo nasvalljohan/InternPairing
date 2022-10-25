@@ -63,11 +63,8 @@ class DatabaseConnection: ObservableObject {
                     newUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: Date(), gender: gender)
                 } else if self.selected == 2 {
                     userRole = "Recruiter"
-                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName)
+                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName, swipedInterns: [])
                 }
-                
-//                let newUser = tempUser
-                
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
                 do {
@@ -150,13 +147,21 @@ class DatabaseConnection: ObservableObject {
                     }
                 }
             }
-            
-            //TODO: IF Student, add that user to collection in db, prep for swipeview. 
         }
     }
     
-    
-    
+    func fetchSwipeableStudents() {
+        db.collection(self.swipeableCollection).whereField("isUserComplete", isEqualTo: true)
+            .getDocuments() { (querySnapshot, error) in
+                if let error = error {
+                    print("\(error) getting documents: (err)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        print("\(document.documentID) => \(document.data())")
+                    }
+                }
+        }
+    }
     
     //MARK: fetchUser
     func fetchTheUser() {
