@@ -6,8 +6,6 @@ class DatabaseConnection: ObservableObject {
     
     // Published variables
     private let collection = "Users"
-    private let swipeableCollection = "SwipeableStudents"
-
     @Published var fetchedArray: Array<TheUser> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
@@ -18,7 +16,6 @@ class DatabaseConnection: ObservableObject {
     var userDocumentListener: ListenerRegistration?
     
     init() {
-        
         do {try Auth.auth().signOut() }
         catch { print("logged out") }
         
@@ -30,8 +27,6 @@ class DatabaseConnection: ObservableObject {
                 self.currentUser = user
                 self.fetchTheUser()
                 self.fetchSwipeableStudents()
-
-                
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -73,23 +68,16 @@ class DatabaseConnection: ObservableObject {
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
                 do {
-                    if self.selected == 1 {
-                        try self.db.collection(self.swipeableCollection)
-                            .document(authDataResult.user.uid)
-                            .setData(from: newUser)
-                    }
-                    
                     try self.db.collection(self.collection)
                         .document(authDataResult.user.uid)
                         .setData(from: newUser)
-                        
+                    
                 } catch {
                     print(error.localizedDescription)
                 }
             }
         }
     }
-    
     
     // MARK: Login User
     func loginUser(email: String, password: String) {
@@ -101,27 +89,13 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    
-    
     // MARK: Add user details
     func addUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
-            let swipeableReference = db.collection(swipeableCollection).document(currentUser.uid)
             
             if selected == 1{
                 reference.updateData([
-                    "description": description,
-                    "githubLink": githubLink,
-                    "linkedInLink": linkedInLink,
-                    "location": location,
-                    "otherLink": otherLink,
-                    "typeOfDeveloper": typeOfDeveloper,
-                    "typeOfPosition":typeOfPosition,
-                    "isUserComplete": true
-                ])
-                
-                swipeableReference.updateData([
                     "description": description,
                     "githubLink": githubLink,
                     "linkedInLink": linkedInLink,
@@ -168,7 +142,7 @@ class DatabaseConnection: ObservableObject {
     // MARK: fetchSwipeableStudents
     func fetchSwipeableStudents() {
         
-        db.collection(self.swipeableCollection).whereField("isUserComplete", isEqualTo: true)
+        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true && "role" != "Recruiter")
             .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
