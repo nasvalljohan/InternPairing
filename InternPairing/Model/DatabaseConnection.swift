@@ -45,7 +45,7 @@ class DatabaseConnection: ObservableObject {
     // MARK: Register user
     func registerTheUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
         var userRole = ""
-        var tempUser: TheUser?
+        var newUser: TheUser?
         
         // AUTH: call
         Auth.auth().createUser(withEmail: email, password: password) {
@@ -59,13 +59,13 @@ class DatabaseConnection: ObservableObject {
                 
                 if self.selected == 1 {
                     userRole = "Intern"
-                    tempUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: Date(), gender: gender)
+                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: Date(), gender: gender)
                 } else if self.selected == 2 {
                     userRole = "Recruiter"
-                    tempUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName)
+                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName)
                 }
                 
-                let newUser = tempUser
+//                let newUser = tempUser
                 
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.

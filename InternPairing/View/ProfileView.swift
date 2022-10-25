@@ -30,6 +30,8 @@ struct RecruiterProfileView: View {
         ZStack {
             if let companyName = db.theUser?.companyName,
                let description = db.theUser?.description {
+                let typeOfPosition = typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)
+                let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
                 VStack {
                     VStack {
                         Image(systemName: "person")
@@ -37,7 +39,7 @@ struct RecruiterProfileView: View {
                             .frame(width: 250, height: 250)
                             .border(.black)
                         Text("\(companyName)").font(.title3).bold()
-                        Text("\(typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)) \(typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0))  developer").font(.subheadline).bold()
+                        Text("\(typeOfPosition) \(typeOfDeveloper)  developer").font(.subheadline).bold()
                         HStack {
                             Image(systemName: "square").resizable().frame(width: 20, height: 20)
                             Image(systemName: "square").resizable().frame(width: 20, height: 20)
@@ -78,6 +80,8 @@ struct StudentProfileView: View {
                let dateOfBirth = db.theUser?.dateOfBirth,
                let location = db.theUser?.location,
                let description = db.theUser?.description {
+                let typeOfPosition = typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)
+                let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
                 VStack {
                     
                     VStack {
@@ -86,7 +90,7 @@ struct StudentProfileView: View {
                             .frame(width: 250, height: 250)
                             .border(.black)
                         Text("\(firstName) \(lastName), \(dateOfBirth) \(location)").font(.title3).bold()
-                        Text("\(typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)) \(typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0))  developer").font(.subheadline).bold()
+                        Text("\(typeOfPosition) \(typeOfDeveloper)  developer").font(.subheadline).bold()
                         HStack {
                             Image(systemName: "square").resizable().frame(width: 20, height: 20)
                             Image(systemName: "square").resizable().frame(width: 20, height: 20)
@@ -134,8 +138,8 @@ struct TypeOf {
         var str = ""
         
         switch int {
-        case 1: str = "Frontend"
-        case 2: str = "Backend"
+        case 1: str = "Backend"
+        case 2: str = "Frontend"
         case 3: str = "Fullstack"
         default: str = "Not specified"
         }
