@@ -24,18 +24,21 @@ struct SwipeView: View {
     ]
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack{
-                
-                ForEach(self.users, id: \.self) { user in
-//                    CardView(user: user)
+        
+        VStack {
+            GeometryReader { geometry in
+                ZStack{
                     
-                    CardView(user: user, onRemove: { removedUser in
-                       // Remove that user from our array
-                       self.users.removeAll { $0.id == removedUser.id }
-                      })
-                    .animation(.spring(), value: 10)
+                    ForEach(databaseConnection.fetchedArray, id: \.self) { user in
+    //                    CardView(user: user)
+                        
+                        CardView(user: user, onRemove: { removedUser in
+                           // Remove that user from our array
+//                           self.users.removeAll { $0.id == removedUser.id }
+                          })
+                        .animation(.spring(), value: 10)
 
+                    }
                 }
             }
         }
@@ -44,12 +47,12 @@ struct SwipeView: View {
 
 struct CardView: View {
     @State private var translation: CGSize = .zero
-    private var user: UserMockup
-    private var onRemove: (_ user: UserMockup) -> Void
+    private var user: TheUser
+    private var onRemove: (_ user: TheUser) -> Void
     private var thresholdPercentage: CGFloat = 0.5 // when the user has draged 50% the width of the screen in either direction
    
     
-    init(user: UserMockup, onRemove: @escaping (_ user: UserMockup) -> Void){
+    init(user: TheUser, onRemove: @escaping (_ user: TheUser) -> Void){
         self.user = user
         self.onRemove = onRemove
     }
@@ -66,7 +69,7 @@ struct CardView: View {
 
                 VStack(alignment: .leading) {
                     
-                    AsyncImage(url: URL(string: user.image), content: {
+                    AsyncImage(url: URL(string: "https://media.istockphoto.com/vectors/man-silhouette-profile-picture-vector-id526947869?k=20&m=526947869&s=612x612&w=0&h=j528SMpxB1AOCNs-WUcuQjvNRVuO-0PO1djfq-Rq6dE="), content: {
                         pic in
                         pic.resizable()
                     }, placeholder: {
@@ -77,13 +80,13 @@ struct CardView: View {
                     
                     HStack {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("\(user.firstName), \(user.age)")
+                            Text("\(user.firstName ?? "not specified"), \(user.dateOfBirth ?? Date())")
                                 .font(.title)
                                 .bold()
-                            Text("\(user.role)")
+                            Text("\(user.role ?? "not specified")")
                                 .font(.subheadline)
                                 .bold()
-                            Text("\(user.location)")
+                            Text("\(user.location ?? "not specified")")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }

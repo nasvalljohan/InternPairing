@@ -30,6 +30,8 @@ class DatabaseConnection: ObservableObject {
                 self.currentUser = user
                 self.fetchTheUser()
                 self.fetchSwipeableStudents()
+
+                
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -167,22 +169,22 @@ class DatabaseConnection: ObservableObject {
     func fetchSwipeableStudents() {
         
         db.collection(self.swipeableCollection).whereField("isUserComplete", isEqualTo: true)
-            .getDocuments() { (snapshot, error) in
+            .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
                     print("\(error) getting documents: (err)")
                 } else {
                     
                     // convert the querySnapshots to TheUser format
-                    for document in snapshot!.documents {
+                    for document in querySnapshot!.documents {
                         do {
-                            self.theUser = try document.data(as: TheUser.self)
-                            self.fetchedArray.append(self.theUser ?? TheUser())
+                            let user = try document.data(as: TheUser.self)
+                            self.fetchedArray.append(user)
                         } catch {
                             print(error.localizedDescription)
                         }
                     }
-//                    print(self.fetchedArray)
+                    print(self.fetchedArray)
                 }
             }
     }
