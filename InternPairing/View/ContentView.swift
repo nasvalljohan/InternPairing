@@ -33,12 +33,6 @@ struct ContentView: View {
     }
 }
 
-// MARK: Preview
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
 
 enum NavigationType: String, Hashable {
     case swipe = "SWIPE VIEW"
@@ -73,13 +67,7 @@ struct TabViewRecruiter: View {
             }
             .navigationTitle("Jinder")
             .navigationBarTitleDisplayMode(.inline)
-//            .navigationDestination(for: NavigationType.self) { value in
-//                switch(value){
-//                //case .swipe: SignUpView()
-//                case .contact: Text("Contact view")
-//                case .profile: Text("Profile view!!")
-//                }
-//            }
+
         }
     }
 }
@@ -111,5 +99,11 @@ struct TabViewStudent: View {
     }
 }
 
+// MARK: Preview
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
 
 

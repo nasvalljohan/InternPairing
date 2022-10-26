@@ -11,8 +11,7 @@ struct SwipeView: View {
                 ZStack{
                     
                     ForEach(databaseConnection.fetchedArray, id: \.self) { user in
-    //                    CardView(user: user)
-                        
+
                         CardView(user: user, onRemove: { removedUser in
 //                            Remove that user from our array
                             databaseConnection.fetchedArray.removeAll { $0.id == removedUser.id }
@@ -109,7 +108,12 @@ struct EnlargedCardView: View {
 
 // MARK: Preview
 struct SwipeView_Previews: PreviewProvider {
+ 
     static var previews: some View {
-        SwipeView()
+        
+        CardView(user: TheUser(role: "Intern", location: "Stockholm", firstName: "Johan", dateOfBirth: Date()), onRemove: {
+            removedUser in
+        })
+        
     }
 }

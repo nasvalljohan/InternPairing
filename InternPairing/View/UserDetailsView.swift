@@ -206,7 +206,10 @@ struct InternDetailsView: View {
 }
 
 struct UserDetailsView_Previews: PreviewProvider {
+
     static var previews: some View {
-        UserDetailsView()
+
+        //InternDetailsView()
+        RecruiterDetailsView()
     }
 }

@@ -15,8 +15,7 @@ struct LoginView: View {
                 } else {
                     NoAccountView(isNotAUser: $isNotAUser)
                 }
-//                NoAccountView(databaseConnection: databaseConnection, isNotAUser: $isNotAUser)
-                
+
             }
             .padding()
         }
@@ -127,8 +126,11 @@ struct NoAccountView: View {
 
 // MARK: Preview
 struct LoginView_Previews: PreviewProvider {
-    @Binding var isUserLoggedIn: Bool
     static var previews: some View {
-        LoginView()
+//        LoginView()
+        AccountView(isNotAUser: .constant(true))
+        .environmentObject(DatabaseConnection())
+//        NoAccountView(isNotAUser: .constant(false))
+//            .environmentObject(DatabaseConnection())
     }
 }

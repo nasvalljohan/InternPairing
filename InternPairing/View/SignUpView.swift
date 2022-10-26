@@ -13,7 +13,6 @@ struct SignUpView: View {
         else if databaseConnection.selected == 2 {
             RecruiterSignUp()
         }
-        
     }
 }
 
@@ -173,7 +172,6 @@ struct StudentSignUp: View {
     
     // MARK: Preview
     struct SignUpView_Previews: PreviewProvider {
-        @Binding var selected: Int
         
         static var previews: some View {
             SignUpView()
