@@ -96,6 +96,7 @@ struct StudentSignUp: View {
     @State var studentEmail = ""
     @State var studentPassword = ""
     @State var confirmStudentPassword = ""
+    @State private var date = Date()
     
     var body: some View {
         
@@ -136,6 +137,14 @@ struct StudentSignUp: View {
                 }
 
                 
+                VStack {
+                    Text("Enter your birthday")
+                        .font(.largeTitle)
+                    DatePicker("", selection: $date,
+                               displayedComponents: [.date])
+                    .datePickerStyle(.wheel)
+                }
+                
                 //TV Password & Input för lösenord
                 VStack(alignment: .leading) {
                     Text("Password:")
@@ -150,19 +159,20 @@ struct StudentSignUp: View {
                         .textFieldStyle(.roundedBorder)
                 }
                 Spacer()
-                
-                Button(action: {
-                    databaseConnection.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
-                }, label: {
-                    Text("write db")
-                        .padding()
-                        .frame(width: 300)
-                        .background(.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(3)
-                })
-                
-                Spacer()
+                VStack {
+                    Button(action: {
+                        print(date)
+                        databaseConnection.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
+                    }, label: {
+                        Text("write db")
+                            .padding()
+                            .frame(width: 300)
+                            .background(.gray)
+                            .foregroundColor(.white)
+                            .cornerRadius(3)
+                    })
+                }
+//                Spacer()
                 //TW Date of birth
                 //Hstack year-month-day
                 
@@ -174,7 +184,7 @@ struct StudentSignUp: View {
     struct SignUpView_Previews: PreviewProvider {
         
         static var previews: some View {
-            SignUpView()
+            StudentSignUp()
         }
     }
 }
