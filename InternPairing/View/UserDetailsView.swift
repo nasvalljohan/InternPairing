@@ -119,9 +119,17 @@ struct InternDetailsView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text("Profile Information")
-                    .font(.largeTitle)
-                    .padding()
+                
+                ZStack {
+                    Image("profile-placeholder").resizable()
+                        .frame(width: 200, height: 200).clipShape(Circle())
+                    VStack{
+                        Image(systemName: "camera.fill").resizable().frame(width: 20, height: 17)
+                    }  .foregroundColor(.black)
+                        .padding(12)
+                        .background(Color.gray)
+                        .clipShape(Circle()).offset(x: 65, y: 65)
+                }
                 
                 VStack(alignment: .leading) {
                     Text("Description:")
@@ -209,7 +217,7 @@ struct UserDetailsView_Previews: PreviewProvider {
 
     static var previews: some View {
 
-        //InternDetailsView()
-        RecruiterDetailsView()
+        InternDetailsView()
+        //RecruiterDetailsView()
     }
 }
