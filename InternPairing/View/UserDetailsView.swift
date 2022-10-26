@@ -1,5 +1,6 @@
 
 import SwiftUI
+import PhotosUI
 
 struct UserDetailsView: View {
     @EnvironmentObject var databaseConnection: DatabaseConnection
@@ -110,6 +111,9 @@ struct RecruiterDetailsView: View {
 //MARK: Intern View
 struct InternDetailsView: View {
     @EnvironmentObject var databaseConnection: DatabaseConnection
+    
+    @State private var selectedItem: PhotosPickerItem? = nil
+     @State private var selectedImageData: Data? = nil
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -119,9 +123,42 @@ struct InternDetailsView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text("Profile Information")
-                    .font(.largeTitle)
-                    .padding()
+                
+                ZStack {
+                    
+                    if let selectedImageData,
+                       let uiImage = UIImage(data: selectedImageData) {
+                        Image(uiImage: uiImage).resizable()
+                            .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
+                        
+                    } else {
+                        Image("profile-placeholder").resizable()
+                            .frame(width: 200, height: 200).clipShape(Circle())
+                    }
+                    
+                    VStack{
+                        PhotosPicker(
+                            selection: $selectedItem,
+                            matching: .images,
+                            photoLibrary: .shared()) {
+                                Image(systemName: "camera.fill")
+                                    .resizable()
+                                    .frame(width: 20, height: 17)
+                            }            .onChange(of: selectedItem) { newItem in
+                                Task {
+                                    // Retrieve selected asset in the form of Data
+                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                        selectedImageData = data
+                                    }
+                                }
+                            }
+                        
+                    }  .foregroundColor(.black)
+                        .padding(12)
+                        .background(Color.gray)
+                        .clipShape(Circle())
+                        .offset(x: 65, y: 65)
+                }
                 
                 VStack(alignment: .leading) {
                     Text("Description:")
@@ -209,7 +246,7 @@ struct UserDetailsView_Previews: PreviewProvider {
 
     static var previews: some View {
 
-        //InternDetailsView()
-        RecruiterDetailsView()
+        InternDetailsView()
+        //RecruiterDetailsView()
     }
 }
