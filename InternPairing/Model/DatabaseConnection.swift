@@ -60,7 +60,7 @@ class DatabaseConnection: ObservableObject {
                 
                 if self.selected == 1 {
                     userRole = "Intern"
-                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: Date(), gender: gender)
+                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, gender: gender)
                 } else if self.selected == 2 {
                     userRole = "Recruiter"
                     newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName, likedInterns: [])
@@ -158,7 +158,6 @@ class DatabaseConnection: ObservableObject {
                             print(error.localizedDescription)
                         }
                     }
-                    print(self.fetchedArray)
                 }
             }
     }

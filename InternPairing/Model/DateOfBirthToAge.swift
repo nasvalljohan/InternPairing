@@ -1,11 +1,21 @@
 import Foundation
 
-class DateManager: DateFormatter {
+class DateOfBirthToAge: DateFormatter {
+    var formatter = DateFormatter()
     
-    func ageConverter(dateOfBirth: Date) {
-        let now = Date.now
+    func dateToString(dateOfBirth: Date) -> String {
+        formatter.dateFormat = "dd/MM/yyyy"
         
-        var formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: dateOfBirth)
+    }
+    
+    func ageConverter(string: String) {
+        let startDate = formatter.date(from: string)
+        let endDate = Date()
+
+        let calendar = Calendar.current
+        let calcAge = calendar.dateComponents([.year], from: startDate!, to: endDate)
+        let age = calcAge.year
+        print(age ?? 0)
     }
 }

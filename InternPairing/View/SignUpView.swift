@@ -90,6 +90,7 @@ struct RecruiterSignUp: View {
 // MARK: StudentSignUp
 struct StudentSignUp: View {
     @EnvironmentObject var databaseConnection: DatabaseConnection
+    var formatter = DateOfBirthToAge()
     
     @State var firstName = ""
     @State var lastName = ""
@@ -97,30 +98,28 @@ struct StudentSignUp: View {
     @State var studentPassword = ""
     @State var confirmStudentPassword = ""
     @State private var date = Date()
-    
     var body: some View {
         
         ZStack {
-            VStack {
-                
+            VStack(spacing: 20) {
                 Spacer()
-                
                 //TV Register as student
                 VStack (alignment: .leading) {
                     Text("Register as Student").font(.title).bold()
                 }.padding()
                 
                 Spacer()
-                
                 //TV Firstname - Lastname HStack
                 //Input first-lastname hstack
                 HStack {
+                    
                     VStack(alignment: .leading){
                         Text("Firstname")
                         TextField("FirstName", text: $firstName)
                             .textFieldStyle(.roundedBorder)
                     }
                     VStack(alignment: .leading) {
+                        
                         Text("Lastname")
                         TextField("LastName", text: $lastName)
 
@@ -137,12 +136,14 @@ struct StudentSignUp: View {
                 }
 
                 
-                VStack {
-                    Text("Enter your birthday")
-                        .font(.largeTitle)
+                VStack(alignment: .leading) {
+                    Text("Date of Birth:")
                     DatePicker("", selection: $date,
                                displayedComponents: [.date])
                     .datePickerStyle(.wheel)
+                    .labelsHidden()
+                    .frame(height: 80)
+                    .clipped()
                 }
                 
                 //TV Password & Input för lösenord
@@ -158,11 +159,12 @@ struct StudentSignUp: View {
                     SecureField("Password", text: $confirmStudentPassword)
                         .textFieldStyle(.roundedBorder)
                 }
-                Spacer()
                 VStack {
+                    Spacer()
                     Button(action: {
+                        
+                        databaseConnection.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
                         print(date)
-                        databaseConnection.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
                     }, label: {
                         Text("write db")
                             .padding()
@@ -171,11 +173,8 @@ struct StudentSignUp: View {
                             .foregroundColor(.white)
                             .cornerRadius(3)
                     })
+                    Spacer()
                 }
-//                Spacer()
-                //TW Date of birth
-                //Hstack year-month-day
-                
             }.padding()
         }
     }
