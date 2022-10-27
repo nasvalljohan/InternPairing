@@ -2,7 +2,7 @@ import Foundation
 import Firebase
 
 class DatabaseConnection: ObservableObject {
-    private var db = Firestore.firestore()
+    var db = Firestore.firestore()
     
     // Published variables
     private let collection = "Users"
@@ -94,7 +94,7 @@ class DatabaseConnection: ObservableObject {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             
-            if selected == 1{
+            if selected == 1 {
                 reference.updateData([
                     "description": description,
                     "githubLink": githubLink,
@@ -126,6 +126,17 @@ class DatabaseConnection: ObservableObject {
                     }
                 }
             }
+        }
+    }
+    
+    // MARK: addImage
+    
+    func addImage(imageUrl: String) {
+        if let currentUser = currentUser {
+            let reference = db.collection(collection).document(currentUser.uid)
+            reference.updateData([
+                "image": imageUrl
+            ])
         }
     }
     

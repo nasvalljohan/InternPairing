@@ -121,6 +121,7 @@ struct InternDetailsView: View {
     @State var github = ""
     @State var typeOfDeveloper = 0
     @State var typeOfPosition = 0
+    @State var imageUrl = ""
     var body: some View {
         ZStack {
             VStack {
@@ -151,6 +152,11 @@ struct InternDetailsView: View {
                                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                                         selectedImageData = data
                                         
+                                        // Push to storage
+                                        imageUrl = storageConnection.uploadImage(image: data)
+                                        print("hellohello")
+                                        print("hello link: \(imageUrl)")
+                                        print("hellohello")
                                     }
                                 }
                             }
@@ -231,12 +237,10 @@ struct InternDetailsView: View {
                         typeOfDeveloper: typeOfDeveloper,
                         typeOfPosition: typeOfPosition,
                         companyLink: "")
-                    
-                    // Push to storage
-                    if let selectedImageData = selectedImageData {
-                        storageConnection.uploadImage(image: selectedImageData)
+
+                        databaseConnection.addImage(imageUrl: imageUrl)
+                        
                         print("button has been pressed")
-                    }
                 }, label: {
                     Text("Save")
                         .padding()
