@@ -111,6 +111,7 @@ struct RecruiterDetailsView: View {
 //MARK: Intern View
 struct InternDetailsView: View {
     @EnvironmentObject var databaseConnection: DatabaseConnection
+    @StateObject var storageConnection = StorageConnection()
     
     @State private var selectedItem: PhotosPickerItem? = nil
      @State private var selectedImageData: Data? = nil
@@ -150,6 +151,7 @@ struct InternDetailsView: View {
                                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                                         selectedImageData = data
                                         // Push to storage
+                                        storageConnection.uploadImage(image: data)
                                     }
                                 }
                             }
