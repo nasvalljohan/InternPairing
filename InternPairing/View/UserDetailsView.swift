@@ -149,6 +149,7 @@ struct InternDetailsView: View {
                                     // Retrieve selected asset in the form of Data
                                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                                         selectedImageData = data
+                                        // Push to storage
                                     }
                                 }
                             }
