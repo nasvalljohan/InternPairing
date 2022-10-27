@@ -17,7 +17,7 @@ struct ProfileView: View {
 // MARK: Preview
 //struct ProfileView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        ProfileView()
+//        StudentProfileView().environmentObject(DatabaseConnection())
 //    }
 //}
 
@@ -85,10 +85,20 @@ struct StudentProfileView: View {
                 VStack {
                     
                     VStack {
-                        Image(systemName: "person")
-                            .resizable()
-                            .frame(width: 250, height: 250)
-                            .border(.black)
+                        AsyncImage(
+                            url: URL(string: db.theUser?.image ?? ""),
+                            content: { image in
+                                
+                                image.resizable()
+                                
+                        }, placeholder: {
+                            Image(systemName: "person")
+                                .resizable()
+                                .frame(width: 250, height: 250)
+                                .border(.black)
+                        })
+                        .frame(width: UIScreen.main.bounds.width, height: 250)
+                        .border(.black)
                         Text("\(firstName) \(lastName), \(dateOfBirth) \(location)").font(.title3).bold()
                         Text("\(typeOfPosition) \(typeOfDeveloper)  developer").font(.subheadline).bold()
                         HStack {
