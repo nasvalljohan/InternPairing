@@ -18,7 +18,8 @@ class StorageConnection: ObservableObject {
             imageReference.downloadURL { (url, error) in
                 guard let downloadURL = url else { return }
                 
-                print(downloadURL)
+                print("this is inside storage function calling you")
+                
             }
             
         }

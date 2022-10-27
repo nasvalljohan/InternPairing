@@ -150,8 +150,7 @@ struct InternDetailsView: View {
                                     // Retrieve selected asset in the form of Data
                                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                                         selectedImageData = data
-                                        // Push to storage
-                                        storageConnection.uploadImage(image: data)
+                                        
                                     }
                                 }
                             }
@@ -232,6 +231,12 @@ struct InternDetailsView: View {
                         typeOfDeveloper: typeOfDeveloper,
                         typeOfPosition: typeOfPosition,
                         companyLink: "")
+                    
+                    // Push to storage
+                    if let selectedImageData = selectedImageData {
+                        storageConnection.uploadImage(image: selectedImageData)
+                        print("button has been pressed")
+                    }
                 }, label: {
                     Text("Save")
                         .padding()
