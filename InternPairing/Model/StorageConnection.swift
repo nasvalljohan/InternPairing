@@ -7,8 +7,9 @@ class StorageConnection: ObservableObject, Identifiable {
     
     private var storage = Storage.storage()
     
-    func uploadImage(image: Data) -> String {
-        var urlString = ""
+    var stringUrl = ""
+    
+    func uploadImage(image: Data) {
         let storageReference = storage.reference()
         let imageReference = storageReference.child("\(self.id)") // Later UUID from user
         
@@ -27,16 +28,9 @@ class StorageConnection: ObservableObject, Identifiable {
                     
                     guard let downloadURL = url else { return } // Check download
                     
-                    print("---------------")
-                    print(downloadURL)
-                    print("Above is url")
-                    print("-------------")
-                    
-                    urlString = "\(downloadURL)"
-                    print("kom igen: \(urlString)")
+                    self.stringUrl = "\(downloadURL)"
                 }
             }
         }
-        return urlString
     }
 }

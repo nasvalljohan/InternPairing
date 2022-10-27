@@ -153,10 +153,7 @@ struct InternDetailsView: View {
                                         selectedImageData = data
                                         
                                         // Push to storage
-                                        imageUrl = storageConnection.uploadImage(image: data)
-                                        print("hellohello")
-                                        print("hello link: \(imageUrl)")
-                                        print("hellohello")
+                                        storageConnection.uploadImage(image: data)
                                     }
                                 }
                             }
@@ -238,7 +235,7 @@ struct InternDetailsView: View {
                         typeOfPosition: typeOfPosition,
                         companyLink: "")
 
-                        databaseConnection.addImage(imageUrl: imageUrl)
+                    databaseConnection.addImage(imageUrl: storageConnection.stringUrl)
                         
                         print("button has been pressed")
                 }, label: {

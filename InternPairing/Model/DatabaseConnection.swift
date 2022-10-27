@@ -79,7 +79,7 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    // MARK: Login User
+    // MARK: LoginUser
     func loginUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) {
             result, error in
@@ -89,7 +89,7 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    // MARK: Add user details
+    // MARK: AddUserDetails
     func addUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
@@ -130,7 +130,6 @@ class DatabaseConnection: ObservableObject {
     }
     
     // MARK: addImage
-    
     func addImage(imageUrl: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
