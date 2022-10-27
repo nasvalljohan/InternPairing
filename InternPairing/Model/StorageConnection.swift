@@ -2,13 +2,14 @@ import FirebaseStorage
 
 import Foundation
 
-class StorageConnection: ObservableObject {
+class StorageConnection: ObservableObject, Identifiable {
+    internal var id = UUID()
     
     private var storage = Storage.storage()
     
     func uploadImage(image: Data) {
         let storageReference = storage.reference()
-        let imageReference = storageReference.child("abc") // Later UUID from user
+        let imageReference = storageReference.child("\(self.id)") // Later UUID from user
         
         
         let uploadTask = imageReference.putData(image, metadata: nil) {
