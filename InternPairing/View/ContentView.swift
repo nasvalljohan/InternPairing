@@ -3,6 +3,8 @@ import FirebaseAuth
 
 // MARK: ContentView
 struct ContentView: View {
+    
+    @StateObject var photosPickerModel: PhotosPickerModel
     @StateObject var databaseConnection: DatabaseConnection = DatabaseConnection()
     
     var body: some View {
@@ -29,7 +31,9 @@ struct ContentView: View {
                 LoginView()
             }
                 
-        }.environmentObject(databaseConnection)
+        }
+        .environmentObject(databaseConnection)
+        .environmentObject(photosPickerModel)
     }
 }
 
@@ -74,8 +78,9 @@ struct TabViewRecruiter: View {
 
 // MARK: TabViewStudent
 struct TabViewStudent: View {
-    @State var mainStack: [NavigationType] = []
     @EnvironmentObject var databaseConnection: DatabaseConnection
+    @State var mainStack: [NavigationType] = []
+    
     
     var body: some View {
         NavigationStack(path: $mainStack){
@@ -101,8 +106,9 @@ struct TabViewStudent: View {
 
 // MARK: Preview
 struct ContentView_Previews: PreviewProvider {
+   
     static var previews: some View {
-        ContentView()
+        ContentView(photosPickerModel: PhotosPickerModel())
     }
 }
 

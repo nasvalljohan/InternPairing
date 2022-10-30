@@ -166,7 +166,7 @@ struct StudentSignUp: View {
                         databaseConnection.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
                         print(date)
                     }, label: {
-                        Text("write db")
+                        Text("Next")
                             .padding()
                             .frame(width: 300)
                             .background(.gray)

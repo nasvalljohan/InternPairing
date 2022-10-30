@@ -3,13 +3,16 @@ import SwiftUI
 import PhotosUI
 
 struct UserDetailsView: View {
+    @EnvironmentObject var photosPickerModel: PhotosPickerModel
     @EnvironmentObject var databaseConnection: DatabaseConnection
     var body: some View {
-        
-        if databaseConnection.theUser?.role == "Recruiter" {
-            RecruiterDetailsView()
-        } else if databaseConnection.theUser?.role == "Intern" {
-            InternDetailsView()
+        ZStack {
+            
+            if databaseConnection.theUser?.role == "Recruiter" {
+                RecruiterDetailsView()
+            } else if databaseConnection.theUser?.role == "Intern" {
+                InternDetailsView(imageState: photosPickerModel.imageState)
+            }
         }
     }
 }
@@ -110,11 +113,11 @@ struct RecruiterDetailsView: View {
 
 //MARK: Intern View
 struct InternDetailsView: View {
+    let imageState: PhotosPickerModel.ImageState
     @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var photosPickerModel: PhotosPickerModel
     @StateObject var storageConnection = StorageConnection()
-    
-    @State private var selectedItem: PhotosPickerItem? = nil
-     @State private var selectedImageData: Data? = nil
+
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -122,14 +125,15 @@ struct InternDetailsView: View {
     @State var typeOfDeveloper = 0
     @State var typeOfPosition = 0
     @State var imageUrl = ""
+    
     var body: some View {
         ZStack {
-            VStack {
+            
+            ScrollView {
                 
                 ZStack {
-                    
-                    if let selectedImageData,
-                       let uiImage = UIImage(data: selectedImageData) {
+                    if let data = photosPickerModel.data,
+                       let uiImage = UIImage(data: data) {
                         Image(uiImage: uiImage).resizable()
                             .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
                         
@@ -140,29 +144,19 @@ struct InternDetailsView: View {
                     
                     VStack{
                         PhotosPicker(
-                            selection: $selectedItem,
+                            selection: $photosPickerModel.imageSelection,
                             matching: .images,
                             photoLibrary: .shared()) {
                                 Image(systemName: "camera.fill")
                                     .resizable()
                                     .frame(width: 20, height: 17)
-                            }            .onChange(of: selectedItem) { newItem in
-                                Task {
-                                    // Retrieve selected asset in the form of Data
-                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                        selectedImageData = data
-                                        
-                                        // Push to storage
-                                        storageConnection.uploadImage(image: data)
-                                    }
-                                }
                             }
-                        
-                    }  .foregroundColor(.black)
-                        .padding(12)
-                        .background(Color.gray)
-                        .clipShape(Circle())
-                        .offset(x: 65, y: 65)
+                    }
+                    .foregroundColor(.black)
+                    .padding(12)
+                    .background(Color.gray)
+                    .clipShape(Circle())
+                    .offset(x: 65, y: 65)
                 }
                 
                 VStack(alignment: .leading) {
@@ -251,11 +245,11 @@ struct InternDetailsView: View {
     }
 }
 
-struct UserDetailsView_Previews: PreviewProvider {
-
-    static var previews: some View {
-
-        InternDetailsView()
-        //RecruiterDetailsView()
-    }
-}
+//struct UserDetailsView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//
+//        InternDetailsView()
+//        //RecruiterDetailsView()
+//    }
+//}
