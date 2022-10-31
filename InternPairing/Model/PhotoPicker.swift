@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 import PhotosUI
 
-class PhotosPickerModel: ObservableObject {
+class PhotoPicker: ObservableObject {
     enum ImageState {
         case empty, loading(Progress), success(Data), failure(Error)
     }

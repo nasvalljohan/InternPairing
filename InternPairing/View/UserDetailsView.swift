@@ -3,8 +3,8 @@ import SwiftUI
 import PhotosUI
 
 struct UserDetailsView: View {
-    @EnvironmentObject var photosPickerModel: PhotosPickerModel
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var photosPickerModel: PhotoPicker
+    @EnvironmentObject var databaseConnection: DataManager
     var body: some View {
         ZStack {
             
@@ -20,7 +20,7 @@ struct UserDetailsView: View {
 
 // MARK: Recruiter view
 struct RecruiterDetailsView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DataManager
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -114,10 +114,10 @@ struct RecruiterDetailsView: View {
 
 //MARK: Intern View
 struct InternDetailsView: View {
-    let imageState: PhotosPickerModel.ImageState
-    @EnvironmentObject var databaseConnection: DatabaseConnection
-    @EnvironmentObject var photosPickerModel: PhotosPickerModel
-    @StateObject var storageConnection = StorageConnection()
+    let imageState: PhotoPicker.ImageState
+    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var photosPickerModel: PhotoPicker
+    @StateObject var storageConnection = StorageManager()
 
     @State var description = ""
     @State var linkedIn = ""

@@ -1,8 +1,7 @@
 import FirebaseStorage
-
 import Foundation
 
-class StorageConnection: ObservableObject, Identifiable {
+class StorageManager: ObservableObject, Identifiable {
     internal var id = UUID()
     
     private var storage = Storage.storage()

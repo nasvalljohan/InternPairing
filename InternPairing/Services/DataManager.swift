@@ -1,7 +1,7 @@
 import Foundation
 import Firebase
 
-class DatabaseConnection: ObservableObject {
+class DataManager: ObservableObject {
     var db = Firestore.firestore()
     
     // Published variables

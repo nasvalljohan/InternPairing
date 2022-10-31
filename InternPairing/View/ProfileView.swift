@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: ProfileView
 struct ProfileView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DataManager
     var body: some View {
         VStack{
             if databaseConnection.theUser?.role == "Recruiter" {
@@ -23,7 +23,7 @@ struct ProfileView: View {
 
 // MARK: RecruiterProfileView
 struct RecruiterProfileView: View {
-    @EnvironmentObject var db: DatabaseConnection
+    @EnvironmentObject var db: DataManager
     var typeOf = TypeOf()
     
     var body: some View {
@@ -70,7 +70,7 @@ struct RecruiterProfileView: View {
 
 // MARK: StudentProfileView
 struct StudentProfileView: View {
-    @EnvironmentObject var db: DatabaseConnection
+    @EnvironmentObject var db: DataManager
     var typeOf = TypeOf()
     
     var body: some View {

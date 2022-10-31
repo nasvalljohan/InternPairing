@@ -3,7 +3,7 @@ import Firebase
 
 // MARK: SignUpView
 struct SignUpView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DataManager
     
     var body: some View {
         
@@ -18,7 +18,7 @@ struct SignUpView: View {
 
 // MARK: RecruiterSignUp
 struct RecruiterSignUp: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DataManager
     
     @State var companyName = ""
     @State var companyEmail = ""
@@ -89,8 +89,8 @@ struct RecruiterSignUp: View {
 
 // MARK: StudentSignUp
 struct StudentSignUp: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
-    var formatter = DateOfBirthToAge()
+    @EnvironmentObject var databaseConnection: DataManager
+    var formatter = AgeConverter()
     
     @State var firstName = ""
     @State var lastName = ""

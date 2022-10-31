@@ -4,7 +4,7 @@ import Firebase
 
 // MARK: LoginView
 struct LoginView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DataManager
     @State var isNotAUser: Bool = false
     
     var body: some View {
@@ -25,7 +25,7 @@ struct LoginView: View {
 // MARK: AccountView
 struct AccountView: View {
     
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DataManager
     @State private var email = ""
     @State private var password = ""
     @Binding var isNotAUser: Bool
@@ -74,7 +74,7 @@ struct AccountView: View {
 
 // MARK: NoAccountView
 struct NoAccountView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var databaseConnection: DataManager
     
     @Binding var isNotAUser: Bool
 
@@ -129,7 +129,7 @@ struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
 //        LoginView()
         AccountView(isNotAUser: .constant(true))
-        .environmentObject(DatabaseConnection())
+        .environmentObject(DataManager())
 //        NoAccountView(isNotAUser: .constant(false))
 //            .environmentObject(DatabaseConnection())
     }
