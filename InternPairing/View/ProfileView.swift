@@ -71,6 +71,8 @@ struct RecruiterProfileView: View {
 // MARK: StudentProfileView
 struct StudentProfileView: View {
     @EnvironmentObject var db: DataManager
+    
+    var ageConverter = AgeConverter()
     var typeOf = TypeOf()
     
     var body: some View {
@@ -79,14 +81,17 @@ struct StudentProfileView: View {
                let lastName = db.theUser?.lastName,
                let dateOfBirth = db.theUser?.dateOfBirth,
                let location = db.theUser?.location,
-               let description = db.theUser?.description {
+               let description = db.theUser?.description,
+               let imageUrl = db.theUser?.imageUrl {
                 let typeOfPosition = typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)
                 let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
+                let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth)
+                let age = ageConverter.ageConverter(string: dateString)
                 VStack {
                     
                     VStack {
                         AsyncImage(
-                            url: URL(string: db.theUser?.imageUrl ?? ""),
+                            url: URL(string: imageUrl),
                             content: { image in
                                 
                                 image.resizable()
@@ -99,8 +104,11 @@ struct StudentProfileView: View {
                         })
                         .frame(width: UIScreen.main.bounds.width, height: 250)
                         .border(.black)
-                        Text("\(firstName) \(lastName), \(dateOfBirth) \(location)").font(.title3).bold()
-                        Text("\(typeOfPosition) \(typeOfDeveloper)  developer").font(.subheadline).bold()
+                        
+                        
+                        Text("\(firstName) \(lastName), \(age) \(location)").font(.title3).bold()
+                        Text("\(typeOfPosition) - \(typeOfDeveloper)  developer").font(.subheadline).bold()
+                        
                         HStack {
                             Image(systemName: "square").resizable().frame(width: 20, height: 20)
                             Image(systemName: "square").resizable().frame(width: 20, height: 20)
@@ -135,10 +143,18 @@ struct TypeOf {
         var str = ""
         
         switch int {
-        case 1: str = "Android"
-        case 2: str = "iOS"
-        case 3: str = "React Native"
-        default: str = "Not specified"
+        case 1:
+            str = "Android"
+            break
+        case 2:
+            str = "iOS"
+            break
+        case 3:
+            str = "React Native"
+            break
+        default:
+            str = "Not specified"
+            break
         }
         
         return str
@@ -148,10 +164,18 @@ struct TypeOf {
         var str = ""
         
         switch int {
-        case 1: str = "Backend"
-        case 2: str = "Frontend"
-        case 3: str = "Fullstack"
-        default: str = "Not specified"
+        case 1:
+            str = "Fullstack"
+            break
+        case 2:
+            str = "Frontend"
+            break
+        case 3:
+            str = "Backend"
+            break
+        default:
+            str = "Not specified"
+            break
         }
         
         return str
