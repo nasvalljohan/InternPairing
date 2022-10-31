@@ -86,7 +86,7 @@ struct StudentProfileView: View {
                     
                     VStack {
                         AsyncImage(
-                            url: URL(string: db.theUser?.imageURL ?? ""),
+                            url: URL(string: db.theUser?.imageUrl ?? ""),
                             content: { image in
                                 
                                 image.resizable()

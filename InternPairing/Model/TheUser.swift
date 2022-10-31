@@ -15,7 +15,7 @@ struct TheUser: Codable, Identifiable, Hashable {
     var location: String?
     var typeOfDeveloper: Int?
     var typeOfPosition: Int?
-    var imageURL: String?
+    var imageUrl: String?
     
     //MARK: Recruiter variables
     var companyName: String?

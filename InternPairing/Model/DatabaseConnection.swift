@@ -90,7 +90,7 @@ class DatabaseConnection: ObservableObject {
     }
     
     // MARK: AddUserDetails
-    func addUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String) {
+    func addUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String, imageUrl: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             
@@ -103,7 +103,8 @@ class DatabaseConnection: ObservableObject {
                     "otherLink": otherLink,
                     "typeOfDeveloper": typeOfDeveloper,
                     "typeOfPosition":typeOfPosition,
-                    "isUserComplete": true
+                    "isUserComplete": true,
+                    "imageUrl": imageUrl
                 ]) {
                     error in
                     if let error = error {

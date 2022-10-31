@@ -27,6 +27,7 @@ struct RecruiterDetailsView: View {
     @State var website = ""
     @State var typeOfDeveloper = 0
     @State var typeOfPosition = 0
+    @State var imageUrl = ""
     
     var body: some View {
         ZStack {
@@ -96,7 +97,7 @@ struct RecruiterDetailsView: View {
                 }
                 Button(action: {
                     print("Trying to update")
-                    databaseConnection.addUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website)
+                    databaseConnection.addUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website, imageUrl: imageUrl)
                 }, label: {
                     Text("Save")
                         .padding()
@@ -219,17 +220,25 @@ struct InternDetailsView: View {
                     }
                 }
                 Button(action: {
-                    databaseConnection.addUserDetails(
-                        description: description,
-                        linkedInLink: linkedIn,
-                        otherLink: "",
-                        location: location,
-                        githubLink: github,
-                        typeOfDeveloper: typeOfDeveloper,
-                        typeOfPosition: typeOfPosition,
-                        companyLink: "")
-
-                    databaseConnection.addImage(imageUrl: storageConnection.stringUrl)
+                    
+                    if let data = photosPickerModel.data {
+                        
+                        storageConnection.uploadImage(image: data) { urlString in
+                            databaseConnection.addUserDetails(
+                                description: description,
+                                linkedInLink: linkedIn,
+                                otherLink: "",
+                                location: location,
+                                githubLink: github,
+                                typeOfDeveloper: typeOfDeveloper,
+                                typeOfPosition: typeOfPosition,
+                                companyLink: "",
+                                imageUrl: urlString ?? "nil"
+                            )
+                        }
+                        }
+                        
+                        
                         
                         print("button has been pressed")
                 }, label: {
