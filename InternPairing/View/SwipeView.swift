@@ -47,16 +47,25 @@ struct CardView: View {
         VStack{
             GeometryReader { geometry in
 
-                VStack(alignment: .leading) {
-                    
-                    AsyncImage(url: URL(string: "https://media.istockphoto.com/vectors/man-silhouette-profile-picture-vector-id526947869?k=20&m=526947869&s=612x612&w=0&h=j528SMpxB1AOCNs-WUcuQjvNRVuO-0PO1djfq-Rq6dE="), content: {
-                        pic in
-                        pic.resizable()
-                    }, placeholder: {
-                        Text("Loading...")
-                    }).frame(width: geometry.size.width * 0.9, height: geometry.size.height * 0.75) // 3
-                        .clipped()
-                        .scaledToFit()
+                VStack(alignment: .center) {
+                    if user.imageUrl != "" || user.imageUrl != nil {
+                        AsyncImage(url: URL(string: user.imageUrl ?? ""), content: {
+                            pic in
+                            pic.resizable()
+                        }, placeholder: {
+                            Text("Loading...")
+                        }).frame(width: geometry.size.width * 0.9,
+                                 height: geometry.size.height * 0.75) // 3
+                            .clipped()
+                            .scaledToFit()
+                    } else {
+                        Image("profile-placeholder")
+                            .frame(width: geometry.size.width * 0.9,
+                                   height: geometry.size.height * 0.75) // 3
+                            .clipped()
+                            .scaledToFit()
+                    }
+
                     
                     HStack {
                         VStack(alignment: .leading, spacing: 6) {
@@ -111,7 +120,7 @@ struct SwipeView_Previews: PreviewProvider {
  
     static var previews: some View {
         
-        CardView(user: TheUser(role: "Intern", location: "Stockholm", firstName: "Johan", dateOfBirth: Date()), onRemove: {
+        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
             removedUser in
         })
         

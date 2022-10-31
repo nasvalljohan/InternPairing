@@ -152,8 +152,9 @@ class DataManager: ObservableObject {
     
     // MARK: fetchSwipeableStudents
     func fetchSwipeableStudents() {
+
         
-        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true && "role" != "Recruiter")
+        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true && "role" == "Intern" )
             .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
@@ -165,6 +166,7 @@ class DataManager: ObservableObject {
                         do {
                             let user = try document.data(as: TheUser.self)
                             self.fetchedArray.append(user)
+                            print(user)
                         } catch {
                             print(error.localizedDescription)
                         }
