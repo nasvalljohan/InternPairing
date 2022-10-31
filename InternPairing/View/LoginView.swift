@@ -4,7 +4,7 @@ import Firebase
 
 // MARK: LoginView
 struct LoginView: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     @State var isNotAUser: Bool = false
     
     var body: some View {
@@ -25,7 +25,7 @@ struct LoginView: View {
 // MARK: AccountView
 struct AccountView: View {
     
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     @State private var email = ""
     @State private var password = ""
     @Binding var isNotAUser: Bool
@@ -50,7 +50,7 @@ struct AccountView: View {
                 
                 //Login btn
                 Button(action: {
-                    databaseConnection.loginUser(email: email, password: password)
+                    db.loginUser(email: email, password: password)
                 }, label: {
                     Text("Login")
                         .padding()
@@ -74,7 +74,7 @@ struct AccountView: View {
 
 // MARK: NoAccountView
 struct NoAccountView: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     
     @Binding var isNotAUser: Bool
 
@@ -85,7 +85,7 @@ struct NoAccountView: View {
                 HStack {
                     Text("I'm a")
                     VStack {
-                        Picker(selection: $databaseConnection.selected, label: Text("Favorite Color")) {
+                        Picker(selection: $db.selected, label: Text("Favorite Color")) {
                             Text("Student").tag(1)
                             Text("Recruiter").tag(2)
                         }
@@ -111,7 +111,7 @@ struct NoAccountView: View {
                 HStack {
                     Text("Already an user?")
                     Button(action: {
-                        print(databaseConnection.selected)
+                        print(db.selected)
                         isNotAUser = false
                     }, label:{
                         Text("Login")

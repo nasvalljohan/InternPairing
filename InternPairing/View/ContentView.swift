@@ -5,24 +5,24 @@ import FirebaseAuth
 struct ContentView: View {
     
     @StateObject var photoViewModel: PhotoPicker
-    @StateObject var databaseConnection = DataManager()
+    @StateObject var db = DataManager()
     
     var body: some View {
         VStack {
-            if databaseConnection.userLoggedIn {
-                if databaseConnection.theUser?.role == "Recruiter" {
-                    if databaseConnection.theUser?.isUserComplete == false{
+            if db.userLoggedIn {
+                if db.theUser?.role == "Recruiter" {
+                    if db.theUser?.isUserComplete == false{
                         UserDetailsView()
                     }else {
-                        Text(databaseConnection.theUser?.companyName ?? "")
+                        Text(db.theUser?.companyName ?? "")
                         TabViewRecruiter()
                     }
                     
-                } else if databaseConnection.theUser?.role == "Intern" {
-                    if databaseConnection.theUser?.isUserComplete == false {
+                } else if db.theUser?.role == "Intern" {
+                    if db.theUser?.isUserComplete == false {
                         UserDetailsView()
                     } else {
-                        Text(databaseConnection.theUser?.firstName ?? "")
+                        Text(db.theUser?.firstName ?? "")
                         TabViewStudent()
                     }
                     
@@ -32,7 +32,7 @@ struct ContentView: View {
             }
                 
         }
-        .environmentObject(databaseConnection)
+        .environmentObject(db)
         .environmentObject(photoViewModel)
     }
 }
@@ -46,7 +46,7 @@ enum NavigationType: String, Hashable {
 
 // MARK: TabViewRecruiter
 struct TabViewRecruiter: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     @State var mainStack: [NavigationType] = []
     
     var body: some View {
@@ -78,7 +78,7 @@ struct TabViewRecruiter: View {
 
 // MARK: TabViewStudent
 struct TabViewStudent: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     @State var mainStack: [NavigationType] = []
     
     

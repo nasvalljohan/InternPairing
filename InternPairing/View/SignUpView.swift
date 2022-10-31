@@ -3,14 +3,14 @@ import Firebase
 
 // MARK: SignUpView
 struct SignUpView: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     
     var body: some View {
         
-        if databaseConnection.selected == 1 {
+        if db.selected == 1 {
             StudentSignUp()
         }
-        else if databaseConnection.selected == 2 {
+        else if db.selected == 2 {
             RecruiterSignUp()
         }
     }
@@ -18,7 +18,7 @@ struct SignUpView: View {
 
 // MARK: RecruiterSignUp
 struct RecruiterSignUp: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     
     @State var companyName = ""
     @State var companyEmail = ""
@@ -70,7 +70,7 @@ struct RecruiterSignUp: View {
                 Spacer()
                 
                 Button(action: {
-                    databaseConnection.registerTheUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: "", lastName: "", gender: "", companyName: companyName, isUserComplete: false)
+                    db.registerTheUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: "", lastName: "", gender: "", companyName: companyName, isUserComplete: false)
                 }, label: {
                     Text("Next")
                         .padding()
@@ -89,7 +89,7 @@ struct RecruiterSignUp: View {
 
 // MARK: StudentSignUp
 struct StudentSignUp: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     var formatter = AgeConverter()
     
     @State var firstName = ""
@@ -163,7 +163,7 @@ struct StudentSignUp: View {
                     Spacer()
                     Button(action: {
                         
-                        databaseConnection.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
+                        db.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
                         print(date)
                     }, label: {
                         Text("Next")

@@ -2,12 +2,12 @@ import SwiftUI
 
 // MARK: ProfileView
 struct ProfileView: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     var body: some View {
         VStack{
-            if databaseConnection.theUser?.role == "Recruiter" {
+            if db.theUser?.role == "Recruiter" {
                 RecruiterProfileView()
-            } else if databaseConnection.theUser?.role == "Intern" {
+            } else if db.theUser?.role == "Intern" {
                 StudentProfileView()
             }
         }

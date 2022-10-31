@@ -3,15 +3,15 @@ import SwiftUI
 import PhotosUI
 
 struct UserDetailsView: View {
-    @EnvironmentObject var photosPickerModel: PhotoPicker
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var photoViewModel: PhotoPicker
+    @EnvironmentObject var db: DataManager
     var body: some View {
         ZStack {
             
-            if databaseConnection.theUser?.role == "Recruiter" {
+            if db.theUser?.role == "Recruiter" {
                 RecruiterDetailsView()
-            } else if databaseConnection.theUser?.role == "Intern" {
-                InternDetailsView(imageState: photosPickerModel.imageState)
+            } else if db.theUser?.role == "Intern" {
+                InternDetailsView(imageState: photoViewModel.imageState)
             }
         }
     }
@@ -20,7 +20,7 @@ struct UserDetailsView: View {
 
 // MARK: Recruiter view
 struct RecruiterDetailsView: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -97,7 +97,7 @@ struct RecruiterDetailsView: View {
                 }
                 Button(action: {
                     print("Trying to update")
-                    databaseConnection.addUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website, imageUrl: imageUrl)
+                    db.addUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website, imageUrl: imageUrl)
                 }, label: {
                     Text("Save")
                         .padding()
@@ -115,8 +115,8 @@ struct RecruiterDetailsView: View {
 //MARK: Intern View
 struct InternDetailsView: View {
     let imageState: PhotoPicker.ImageState
-    @EnvironmentObject var databaseConnection: DataManager
-    @EnvironmentObject var photosPickerModel: PhotoPicker
+    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var photoViewModel: PhotoPicker
     @StateObject var storageConnection = StorageManager()
 
     @State var description = ""
@@ -133,7 +133,7 @@ struct InternDetailsView: View {
             ScrollView {
                 
                 ZStack {
-                    if let data = photosPickerModel.data,
+                    if let data = photoViewModel.data,
                        let uiImage = UIImage(data: data) {
                         Image(uiImage: uiImage).resizable()
                             .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
@@ -145,7 +145,7 @@ struct InternDetailsView: View {
                     
                     VStack{
                         PhotosPicker(
-                            selection: $photosPickerModel.imageSelection,
+                            selection: $photoViewModel.imageSelection,
                             matching: .images,
                             photoLibrary: .shared()) {
                                 Image(systemName: "camera.fill")
@@ -221,10 +221,10 @@ struct InternDetailsView: View {
                 }
                 Button(action: {
                     
-                    if let data = photosPickerModel.data {
+                    if let data = photoViewModel.data {
                         
                         storageConnection.uploadImage(image: data) { urlString in
-                            databaseConnection.addUserDetails(
+                            db.addUserDetails(
                                 description: description,
                                 linkedInLink: linkedIn,
                                 otherLink: "",

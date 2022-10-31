@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: SwipeView
 struct SwipeView: View {
-    @EnvironmentObject var databaseConnection: DataManager
+    @EnvironmentObject var db: DataManager
 
     var body: some View {
         
@@ -10,11 +10,11 @@ struct SwipeView: View {
             GeometryReader { geometry in
                 ZStack{
                     
-                    ForEach(databaseConnection.fetchedArray, id: \.self) { user in
+                    ForEach(db.fetchedArray, id: \.self) { user in
 
                         CardView(user: user, onRemove: { removedUser in
 //                            Remove that user from our array
-                            databaseConnection.fetchedArray.removeAll { $0.id == removedUser.id }
+                            db.fetchedArray.removeAll { $0.id == removedUser.id }
                           })
                         .animation(.spring(), value: 10)
 
