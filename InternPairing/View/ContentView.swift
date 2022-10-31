@@ -4,7 +4,7 @@ import FirebaseAuth
 // MARK: ContentView
 struct ContentView: View {
     
-    @StateObject var photoViewModel: PhotoPicker
+    @StateObject var photoViewModel = PhotoPicker()
     @StateObject var db = DataManager()
     
     var body: some View {

@@ -10,7 +10,7 @@ struct InternPairingApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(photoViewModel: PhotoPicker())
+            ContentView()
         }
     }
 }
