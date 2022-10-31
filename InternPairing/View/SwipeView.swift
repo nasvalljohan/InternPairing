@@ -53,12 +53,17 @@ struct CardView: View {
                             pic in
                             pic.resizable()
                         }, placeholder: {
-                            Text("Loading...")
+                            Image("profile-placeholder")
+                                .frame(width: geometry.size.width * 0.9,
+                                       height: geometry.size.height * 0.75) // 3
+                                .clipped()
+                                .scaledToFit()
                         }).frame(width: geometry.size.width * 0.9,
                                  height: geometry.size.height * 0.75) // 3
                             .clipped()
                             .scaledToFit()
                     } else {
+                        Text("Hallå")
                         Image("profile-placeholder")
                             .frame(width: geometry.size.width * 0.9,
                                    height: geometry.size.height * 0.75) // 3

@@ -19,6 +19,7 @@ class DataManager: ObservableObject {
         do {try Auth.auth().signOut() }
         catch { print("logged out") }
         
+        
         Auth.auth().addStateDidChangeListener {
             auth, user in
             
@@ -153,8 +154,9 @@ class DataManager: ObservableObject {
     // MARK: fetchSwipeableStudents
     func fetchSwipeableStudents() {
 
+        self.fetchedArray.removeAll()
         
-        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true && "role" == "Intern" )
+        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
             .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
