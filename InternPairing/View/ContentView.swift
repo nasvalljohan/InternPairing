@@ -14,7 +14,6 @@ struct ContentView: View {
                     if db.theUser?.isUserComplete == false{
                         UserDetailsView()
                     }else {
-                        Text(db.theUser?.companyName ?? "")
                         TabViewRecruiter()
                     }
                     
@@ -22,7 +21,6 @@ struct ContentView: View {
                     if db.theUser?.isUserComplete == false {
                         UserDetailsView()
                     } else {
-                        Text(db.theUser?.firstName ?? "")
                         TabViewStudent()
                     }
                     
