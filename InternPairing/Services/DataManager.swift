@@ -44,7 +44,7 @@ class DataManager: ObservableObject {
     }
     
     
-    // MARK: Register user
+    // MARK: registerUser
     func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
         var userRole = ""
         var newUser: TheUser?
@@ -80,7 +80,7 @@ class DataManager: ObservableObject {
         }
     }
     
-    // MARK: LoginUser
+    // MARK: loginUser
     func loginUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) {
             result, error in
@@ -90,7 +90,8 @@ class DataManager: ObservableObject {
         }
     }
     
-    // MARK: AddUserDetails
+    // MARK: pushUserDetails
+    // adds values from UserDetailsView to db
     func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String, imageUrl: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
@@ -131,7 +132,8 @@ class DataManager: ObservableObject {
         }
     }
     
-    // MARK: addToLikedInternArr
+    // MARK: pushLikedIntern
+    // adds intern uid to recruiter document
     func pushLikedIntern(intern: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
@@ -141,7 +143,8 @@ class DataManager: ObservableObject {
         }
     }
     
-    // MARK: fetchSwipeableStudents
+    // MARK: fetchInterns()
+    // fetches interns that recruiter hasn't matched with
     func fetchInterns() {
 
         self.fetchedArray.removeAll()
@@ -167,7 +170,8 @@ class DataManager: ObservableObject {
             }
     }
     
-    //MARK: fetchUser
+    //MARK: fetchCurrentUser()
+    // fetches the current user that's logged in
     func fetchCurrentUser() {
         if let currentUser = currentUser {
             userDocumentListener = self.db
