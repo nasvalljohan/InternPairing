@@ -26,8 +26,8 @@ class DataManager: ObservableObject {
             if let user = user {
                 self.userLoggedIn = true
                 self.currentUser = user
-                self.fetchTheUser()
-                self.fetchSwipeableStudents()
+                self.fetchCurrentUser()
+                self.fetchInterns()
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -45,7 +45,7 @@ class DataManager: ObservableObject {
     
     
     // MARK: Register user
-    func registerTheUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
+    func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
         var userRole = ""
         var newUser: TheUser?
         
@@ -91,7 +91,7 @@ class DataManager: ObservableObject {
     }
     
     // MARK: AddUserDetails
-    func addUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String, imageUrl: String) {
+    func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String, imageUrl: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             
@@ -131,18 +131,8 @@ class DataManager: ObservableObject {
         }
     }
     
-    // MARK: addImage
-    func addImage(imageUrl: String) {
-        if let currentUser = currentUser {
-            let reference = db.collection(collection).document(currentUser.uid)
-            reference.updateData([
-                "image": imageUrl
-            ])
-        }
-    }
-    
     // MARK: addToLikedInternArr
-    func addToLikedInternArr(intern: String) {
+    func pushLikedIntern(intern: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             reference.updateData([
@@ -152,7 +142,7 @@ class DataManager: ObservableObject {
     }
     
     // MARK: fetchSwipeableStudents
-    func fetchSwipeableStudents() {
+    func fetchInterns() {
 
         self.fetchedArray.removeAll()
         
@@ -178,7 +168,7 @@ class DataManager: ObservableObject {
     }
     
     //MARK: fetchUser
-    func fetchTheUser() {
+    func fetchCurrentUser() {
         if let currentUser = currentUser {
             userDocumentListener = self.db
                 .collection(collection)

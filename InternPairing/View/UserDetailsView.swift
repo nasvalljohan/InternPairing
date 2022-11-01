@@ -97,7 +97,7 @@ struct RecruiterDetailsView: View {
                 }
                 Button(action: {
                     print("Trying to update")
-                    db.addUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website, imageUrl: imageUrl)
+                    db.pushUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website, imageUrl: imageUrl)
                 }, label: {
                     Text("Save")
                         .padding()
@@ -224,7 +224,7 @@ struct InternDetailsView: View {
                     if let data = photoViewModel.data {
                         
                         storageConnection.uploadImage(image: data) { urlString in
-                            db.addUserDetails(
+                            db.pushUserDetails(
                                 description: description,
                                 linkedInLink: linkedIn,
                                 otherLink: "",

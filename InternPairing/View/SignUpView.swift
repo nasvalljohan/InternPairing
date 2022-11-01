@@ -71,7 +71,7 @@ struct RecruiterSignUp: View {
                 Spacer()
                 
                 Button(action: {
-                    db.registerTheUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: "", lastName: "", gender: "", companyName: companyName, isUserComplete: false)
+                    db.registerUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: "", lastName: "", gender: "", companyName: companyName, isUserComplete: false)
                 }, label: {
                     Text("Next")
                         .padding()
@@ -130,7 +130,7 @@ struct StudentSignUp: View {
 
                     Button(action: {
                         
-                        db.registerTheUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
+                        db.registerUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
                         print(date)
                     }, label: {
                         Text("Next")

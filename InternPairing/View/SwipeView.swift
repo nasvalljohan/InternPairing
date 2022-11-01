@@ -133,7 +133,7 @@ struct PopUpCardView: View {
             ZStack {
                 Button(action: {
                     showingSheet.toggle()
-                    db.addToLikedInternArr(intern: currentIntern.id ?? "0")
+                    db.pushLikedIntern(intern: currentIntern.id ?? "0")
                 }, label: {
                     Text("I like this one..")
                         .padding()
