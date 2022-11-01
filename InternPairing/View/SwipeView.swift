@@ -3,6 +3,7 @@ import SwiftUI
 // MARK: SwipeView
 struct SwipeView: View {
     @EnvironmentObject var db: DataManager
+    @State private var showingSheet: Bool = false
 
     var body: some View {
         
@@ -13,12 +14,18 @@ struct SwipeView: View {
                     ForEach(db.fetchedArray, id: \.self) { user in
 
                         CardView(user: user, onRemove: { removedUser in
-//                            Remove that user from our array
+                            // Remove that user from our array
                             db.fetchedArray.removeAll { $0.id == removedUser.id }
                           })
+                        .onTapGesture {
+                            showingSheet.toggle()
+                        }
                         .animation(.spring(), value: 10)
                     }
+                }.sheet(isPresented: $showingSheet) {
+                    PopUpCardView()
                 }
+            
             }
 
         }
@@ -60,7 +67,7 @@ struct CardView: View {
                                 .scaledToFill()
                             
                         }).frame(width: geometry.size.width * 0.8,
-                                 height: geometry.size.height * 0.8) // 3
+                                 height: geometry.size.height * 0.8)
                         
                         VStack (alignment: .leading){
                             VStack(alignment: .leading, spacing: 6) {
@@ -108,10 +115,9 @@ struct CardView: View {
 
 
 
-struct EnlargedCardView: View {
+struct PopUpCardView: View {
     var body: some View {
-        
-        Text("Tjena")
+      Text("i")
     }
 }
 
