@@ -19,7 +19,6 @@ struct SwipeView: View {
                     ForEach(db.fetchedArray, id: \.self) { user in
                         
                         CardView(user: user, onRemove: { removedUser in
-                            // Remove that user from our array
                             db.fetchedArray.removeAll { $0.id == removedUser.id }
                           })
                         .onTapGesture {
@@ -212,10 +211,10 @@ struct SwipeView_Previews: PreviewProvider {
  
     static var previews: some View {
         
-        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
-            removedUser in
-        })
-//        PopUpCardView(showingSheet: .constant(true), currentIntern: .constant(TheUser(id: "ID", isUserComplete: true, role: "Intern", description: "I am a student at STI and i want to be a good programmer and make loads of moneys :))", linkedInLink: "linkedin.com/janne", githubLink: "github.com/janne", otherLink: "facebook.com/janne", location: "Stockholm", typeOfDeveloper: 1, typeOfPosition: 1, imageUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y", firstName: "Johan", lastName: "Näsvall", dateOfBirth: Date(), gender: "Male")))
+//        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
+//            removedUser in
+//        })
+        PopUpCardView(showingSheet: .constant(true), currentIntern: .constant(TheUser(id: "ID", isUserComplete: true, role: "Intern", description: "I am a student at STI and i want to be a good programmer and make loads of moneys :))", linkedInLink: "linkedin.com/janne", githubLink: "github.com/janne", otherLink: "facebook.com/janne", location: "Stockholm", typeOfDeveloper: 1, typeOfPosition: 1, imageUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y", firstName: "Johan", lastName: "Näsvall", dateOfBirth: Date(), gender: "Male")))
         
     }
 }

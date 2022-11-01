@@ -251,10 +251,6 @@ struct RegisterStudentCardView: View {
                 height: UIScreen.main.bounds.height * 0.65
             )
             .shadow(radius: 0.1, x: 0.3, y: 0.3)
-            
-            
-            
-            
         }
         .background(Color("secondaryColor"))
         .cornerRadius(30)

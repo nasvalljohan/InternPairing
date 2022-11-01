@@ -9,6 +9,9 @@ struct LoginView: View {
     
     var body: some View {
         ZStack{
+            Rectangle()
+                .fill(Color("tertiaryColor"))
+                .ignoresSafeArea()
             VStack {
                 if !isNotAUser {
                     AccountView(isNotAUser: $isNotAUser)
@@ -31,20 +34,34 @@ struct AccountView: View {
 
     var body: some View {
         VStack {
-            Text("Login").font(.largeTitle)
+            ZStack{
+                Circle().fill(Color("tertiaryColor")).frame(width: 100).offset(y: -30)
+                Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
+                Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
+            }
             VStack {
                 VStack (alignment: .leading) {
                     //Email
-                    Text("E-mail:")
-                    TextField("", text: $email)
-                        .keyboardType(.emailAddress)
-                        .textFieldStyle(.roundedBorder)
+
+                    VStack {
+                        TextField("Email", text: $email)
+                        Divider()
+                            .frame(width: 300)
+                            .padding(.horizontal)
+                            .background(Color.black)
+                    }
+                     .padding()
+                    
                     //PW
-                    Text("Password:")
-                    SecureField("", text: $password)
-                        .textFieldStyle(.roundedBorder)
-                }
-                .padding()
+                    VStack{
+                        SecureField("Password", text: $password)
+                        Divider()
+                            .frame(width: 300)
+                            .padding(.horizontal)
+                            .background(Color.black)
+                    }
+                     .padding()
+                }.padding()
                 
                 
                 //Login btn
@@ -54,10 +71,10 @@ struct AccountView: View {
                     Text("Login")
                         .padding()
                         .frame(width: 300)
-                        .background(.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(3)
-                })
+                        .background(Color("primaryColor"))
+                        .foregroundColor(Color("secondaryColor"))
+                        .cornerRadius(10)
+                }).shadow(radius: 4, x: 2, y: 2)
                 HStack {
                     Text("Not an user?")
                     Button(action: {
