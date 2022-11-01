@@ -98,8 +98,9 @@ struct StudentSignUp: View {
     @State var studentEmail = ""
     @State var studentPassword = ""
     @State var confirmStudentPassword = ""
-    @State private var date = Date()
+    @State var date = Date()
     @State var showSheet = false
+    @State var isDateSelected = false
     var body: some View {
         
         ZStack(alignment: .top) {
@@ -117,14 +118,17 @@ struct StudentSignUp: View {
                 Spacer()
                 
                 VStack {
-                    Text("Jobbig Tinder").bold()
+                    Text("Jobbig Tinder")
+                        .bold()
+                        .foregroundColor(Color("tertiaryColor"))
                 }
                 .background(Color("primaryColor"))
                 .foregroundColor(.white)
                 
                 Spacer().frame(height: 30)
                 
-                RegisterStudentCardView(firstName: $firstName, lastName: $lastName, studentEmail: $studentEmail, studentPassword: $studentPassword, confirmStudentPassword: $confirmStudentPassword, showSheet: $showSheet)
+                RegisterStudentCardView(firstName: $firstName, lastName: $lastName, studentEmail: $studentEmail, studentPassword: $studentPassword, confirmStudentPassword: $confirmStudentPassword, showSheet: $showSheet, isDateSelected: $isDateSelected, date: $date
+                )
                 
                 Spacer()
                 
@@ -145,7 +149,8 @@ struct StudentSignUp: View {
                 }
                 Spacer()
             }.sheet(isPresented: $showSheet) {
-                DateOfBirthView(date: $date)
+                DateOfBirthView(date: $date, showSheet: $showSheet, isDateSelected: $isDateSelected)
+                    .presentationDetents([.fraction(0.5)])
                 
             }
         }.ignoresSafeArea()
@@ -159,6 +164,8 @@ struct RegisterStudentCardView: View {
     @Binding var studentPassword: String
     @Binding var confirmStudentPassword: String
     @Binding var showSheet: Bool
+    @Binding var isDateSelected: Bool
+    @Binding var date: Date
     var body: some View {
         ZStack(alignment: .topLeading) {
            
@@ -173,13 +180,12 @@ struct RegisterStudentCardView: View {
                         VStack(alignment: .leading, spacing: 5){
                             Text(" Firstname:")
                             TextField("", text: $firstName)
-                                .textFieldStyle(.roundedBorder)
-                                
+                                .textFieldModifier(backgroundColor: Color("tertiaryColor"))
                         }
                         VStack(alignment: .leading, spacing: 5) {
                             Text(" Lastname:")
                             TextField("", text: $lastName)
-                                .textFieldStyle(.roundedBorder)
+                                .textFieldModifier(backgroundColor: Color("tertiaryColor"))
                         }
                     }
                     Spacer().frame(height: 15)
@@ -187,7 +193,7 @@ struct RegisterStudentCardView: View {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(" Email:")
                         TextField("", text: $studentEmail)
-                            .textFieldStyle(.roundedBorder)
+                            .textFieldModifier(backgroundColor: Color("tertiaryColor"))
                     }
                 }
                 Spacer().frame(height: 20)
@@ -203,10 +209,16 @@ struct RegisterStudentCardView: View {
                             Button(action: {
                                 showSheet.toggle()
                             }, label: {
-                                Text("YYYY-MM-DD")
-                                    .padding(8)
-                                    .foregroundColor(Color("primaryColor"))
-                                    
+                                
+                                if !isDateSelected {
+                                    Text("YYYY-MM-DD")
+                                        .padding(8)
+                                        .foregroundColor(Color("primaryColor"))
+                                } else {
+                                    Text("\(date)")
+                                        .padding(8)
+                                        .foregroundColor(Color("primaryColor"))
+                                }
                                     
                             })
                         }
@@ -220,15 +232,15 @@ struct RegisterStudentCardView: View {
                     //TV Password & Input för lösenord
                     VStack(alignment: .leading, spacing: 5) {
                         Text(" Password:")
-                        SecureField("Password", text: $studentPassword)
-                            .textFieldStyle(.roundedBorder)
+                        SecureField("", text: $studentPassword)
+                            .textFieldModifier(backgroundColor: Color("tertiaryColor"))
                     }
                     Spacer().frame(height: 15)
                     //TV Confirm password & input
                     VStack(alignment: .leading, spacing: 5) {
                         Text(" Confirm password")
-                        SecureField("Password", text: $confirmStudentPassword)
-                            .textFieldStyle(.roundedBorder)
+                        SecureField("", text: $confirmStudentPassword)
+                            .textFieldModifier(backgroundColor: Color("tertiaryColor"))
                     }
                 }
                 Spacer()
@@ -254,14 +266,58 @@ struct RegisterStudentCardView: View {
 // MARK: DateOfBirthView
 struct DateOfBirthView: View {
     @Binding var date: Date
+    @Binding var showSheet: Bool
+    @Binding var isDateSelected: Bool
     var body: some View {
-        VStack {
-            Text("Choose your date of birth:")
+        VStack() {
+            Spacer()
+            Text("Date of birth:")
+                .font(.title)
+                .foregroundColor(Color("primaryColor"))
+            Spacer()
             DatePicker("", selection: $date,
                        displayedComponents: [.date])
             .datePickerStyle(.wheel)
             .labelsHidden()
+//            .colorInvert()
+            .colorMultiply(Color("primaryColor"))
+            .frame(height: 80)
+            .clipped()
+            Spacer()
+            Button(action: {
+                showSheet.toggle()
+                isDateSelected.toggle()
+            }, label: {
+                Text("Choose")
+                    .padding()
+                    .bold()
+                    .frame(width: 300)
+                    .background(Color("primaryColor"))
+                    .foregroundColor(Color("secondaryColor"))
+                    .cornerRadius(10)
+            })
+            Spacer()
         }
+    }
+}
+
+struct TextFieldModifier: ViewModifier {
+    let fontSize: CGFloat
+    let backgroundColor: Color
+    let textColor: Color
+
+    func body(content: Content) -> some View {
+        content
+            .font(Font.system(size: fontSize))
+            .padding(8)
+            .background(RoundedRectangle(cornerRadius: 5).fill(backgroundColor))
+            .foregroundColor(textColor)
+    }
+}
+
+extension View {
+    func textFieldModifier(fontSize: CGFloat = 14, backgroundColor: Color = .blue, textColor: Color = .white) -> some View {
+        self.modifier(TextFieldModifier(fontSize: fontSize, backgroundColor: backgroundColor, textColor: textColor))
     }
 }
 
