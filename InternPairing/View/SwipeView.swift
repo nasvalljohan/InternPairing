@@ -28,9 +28,9 @@ struct SwipeView: View {
                         }
                         .animation(.spring(), value: 10)
                     }
-                }.sheet(isPresented: $showingSheet) {
+                }.fullScreenCover(isPresented: $showingSheet) {
                     PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern)
-                    
+                                                
                 }
                 
             }
@@ -131,17 +131,75 @@ struct PopUpCardView: View {
         if let currentIntern = currentIntern{
 
             ZStack {
-                Button(action: {
-                    showingSheet.toggle()
-                    db.pushLikedIntern(intern: currentIntern.id ?? "0")
-                }, label: {
-                    Text("I like this one..")
-                        .padding()
-                        .frame(width: 300)
-                        .background(.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(3)
-                })
+                Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
+            
+                VStack {
+                    Spacer()
+                    HStack {
+                        ZStack {
+                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                            Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                                .rotationEffect(.degrees(-90))
+                                .fixedSize()
+                                .frame(width: 20, height: 180)
+                        }.offset(x: -10)
+                        
+                        Spacer()
+                        
+                        AsyncImage(url: URL(string: currentIntern.imageUrl ?? ""), content: {
+                            pic in
+                            pic
+                                .resizable()
+                                .scaledToFill()
+                        }, placeholder: {
+                            Image("profile-placeholder")
+                                .resizable()
+                                .scaledToFill()
+                        }).frame(width: 220, height: 360)
+                            .cornerRadius(20)
+                            .clipped()
+                        
+                        Spacer()
+                        ZStack {
+                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                            Text("Resume").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                                .rotationEffect(.degrees(-90))
+                                .fixedSize()
+                                .frame(width: 20, height: 180)
+                        }.offset(x: 10)
+                    }
+                    VStack {
+                        
+                            Text("\(currentIntern.firstName ?? "") \(currentIntern.lastName ?? "")").font(.title).bold()
+                            Text("Android Developer").font(.title3).fontWeight(.light)
+                        
+                        ScrollView {
+                            Text(currentIntern.description ?? "Go add description!").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
+                        }
+                            
+                        
+                        
+                        HStack (spacing: 0){
+                            Image(systemName: "mappin").foregroundColor(.gray)
+                            Text(currentIntern.location ?? "Location unknown").font(.subheadline).fontWeight(.light)
+                        }
+                        
+                    }
+                    Spacer()
+                    
+                    Button(action: {
+                        showingSheet.toggle()
+                        db.pushLikedIntern(intern: currentIntern.id ?? "0")
+                    }, label: {
+                        Text("Make contact")
+                            .padding()
+                            .frame(width: 300)
+                            .background(Color("primaryColor"))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }).padding()
+                    Spacer()
+                }
             }
         }
     }
@@ -152,9 +210,10 @@ struct SwipeView_Previews: PreviewProvider {
  
     static var previews: some View {
         
-        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
-            removedUser in
-        })
+//        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
+//            removedUser in
+//        })
+        PopUpCardView(showingSheet: .constant(true), currentIntern: .constant(TheUser(id: "ID", isUserComplete: true, role: "Intern", description: "I am a student at STI and i want to be a good programmer and make loads of moneys :))", linkedInLink: "linkedin.com/janne", githubLink: "github.com/janne", otherLink: "facebook.com/janne", location: "Stockholm", typeOfDeveloper: 1, typeOfPosition: 1, imageUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y", firstName: "Johan", lastName: "Näsvall", dateOfBirth: Date(), gender: "Male")))
         
     }
 }
