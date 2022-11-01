@@ -34,7 +34,7 @@ struct RecruiterSignUp: View {
                 
                 //TW Register as recruiter
                 VStack {
-                    Text("Register as Recruiter").font(.title).bold()
+                    Text("Jinder").font(.title).bold()
                 }
                 
                 Spacer()
@@ -99,6 +99,7 @@ struct StudentSignUp: View {
     @State var studentPassword = ""
     @State var confirmStudentPassword = ""
     @State private var date = Date()
+    @State var showSheet = false
     var body: some View {
         
         ZStack(alignment: .top) {
@@ -106,23 +107,24 @@ struct StudentSignUp: View {
                 .fill(Color("tertiaryColor"))
                 .ignoresSafeArea()
             RoundedRectangle(cornerRadius: 50)
-                .fill(Color(.blue))
+                .fill(Color("primaryColor"))
                 .ignoresSafeArea()
                 .offset(y: -100)
                 .frame(height: UIScreen.main.bounds.height * 0.5)
+                .shadow(radius: 4, x: 2, y: 2)
             
             VStack(spacing: 0) {
                 Spacer()
                 
                 VStack {
-                    Text("Register as Student").font(.title).bold()
+                    Text("Jobbig Tinder").bold()
                 }
-                .background(Color(.blue))
+                .background(Color("primaryColor"))
                 .foregroundColor(.white)
                 
-                Spacer()
+                Spacer().frame(height: 30)
                 
-                RegisterStudentCardView(firstName: $firstName, lastName: $lastName, studentEmail: $studentEmail, studentPassword: $studentPassword, confirmStudentPassword: $confirmStudentPassword)
+                RegisterStudentCardView(firstName: $firstName, lastName: $lastName, studentEmail: $studentEmail, studentPassword: $studentPassword, confirmStudentPassword: $confirmStudentPassword, showSheet: $showSheet)
                 
                 Spacer()
                 
@@ -136,12 +138,15 @@ struct StudentSignUp: View {
                         Text("Next")
                             .padding()
                             .frame(width: 300)
-                            .background(.gray)
-                            .foregroundColor(.white)
-                            .cornerRadius(3)
-                    })
+                            .background(Color("primaryColor"))
+                            .foregroundColor(Color("secondaryColor"))
+                            .cornerRadius(10)
+                    }).shadow(radius: 4, x: 2, y: 2)
                 }
                 Spacer()
+            }.sheet(isPresented: $showSheet) {
+                DateOfBirthView(date: $date)
+                
             }
         }.ignoresSafeArea()
     }
@@ -153,36 +158,39 @@ struct RegisterStudentCardView: View {
     @Binding var studentEmail: String
     @Binding var studentPassword: String
     @Binding var confirmStudentPassword: String
-    @ScaledMetric var width: CGFloat = 60
-    @ScaledMetric var height: CGFloat = 40
-    
+    @Binding var showSheet: Bool
     var body: some View {
         ZStack(alignment: .topLeading) {
            
             VStack {
-                
-                //TV Firstname - Lastname HStack
-                //Input first-lastname hstack
-                HStack {
-                    VStack(alignment: .leading, spacing: 5){
-                        Text(" Firstname:")
-                        TextField("", text: $firstName)
-                            .textFieldStyle(.roundedBorder)
+                Spacer()
+                Text("Register as Student")
+                    .font(.title)
+                    .foregroundColor(Color("primaryColor"))
+                Spacer().frame(height: 30)
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5){
+                            Text(" Firstname:")
+                            TextField("", text: $firstName)
+                                .textFieldStyle(.roundedBorder)
+                                
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(" Lastname:")
+                            TextField("", text: $lastName)
+                                .textFieldStyle(.roundedBorder)
+                        }
                     }
+                    Spacer().frame(height: 15)
+                    
                     VStack(alignment: .leading, spacing: 5) {
-                        Text(" Lastname:")
-                        TextField("", text: $lastName)
+                        Text(" Email:")
+                        TextField("", text: $studentEmail)
                             .textFieldStyle(.roundedBorder)
                     }
                 }
-                Spacer().frame(height: 15)
-
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(" Email:")
-                    TextField("", text: $studentEmail)
-                        .textFieldStyle(.roundedBorder)
-                }
-                Spacer().frame(height: 15)
+                Spacer().frame(height: 20)
                 
                 VStack {
                     HStack {
@@ -193,19 +201,21 @@ struct RegisterStudentCardView: View {
                         Spacer()
                         VStack {
                             Button(action: {
-                                
+                                showSheet.toggle()
                             }, label: {
-                                Text("Select")
-                                    .padding(10)
-                                    .background(.gray)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(3)
-                        })
+                                Text("YYYY-MM-DD")
+                                    .padding(8)
+                                    .foregroundColor(Color("primaryColor"))
+                                    
+                                    
+                            })
                         }
+                        Spacer()
+                        
                     }
                 }
                 
-                Spacer().frame(height: 15)
+                Spacer().frame(height: 20)
                 VStack {
                     //TV Password & Input för lösenord
                     VStack(alignment: .leading, spacing: 5) {
@@ -221,11 +231,12 @@ struct RegisterStudentCardView: View {
                             .textFieldStyle(.roundedBorder)
                     }
                 }
+                Spacer()
             }
             .padding(25)
             .frame(
                 width: UIScreen.main.bounds.width * 0.9,
-                height: UIScreen.main.bounds.height * 0.6
+                height: UIScreen.main.bounds.height * 0.65
             )
             .shadow(radius: 0.1, x: 0.3, y: 0.3)
             
@@ -233,8 +244,8 @@ struct RegisterStudentCardView: View {
             
             
         }
-        .background(.white)
-        .cornerRadius(40)
+        .background(Color("secondaryColor"))
+        .cornerRadius(30)
         .shadow(radius: 4, x: 2, y: 2)
         
     }
@@ -245,6 +256,7 @@ struct DateOfBirthView: View {
     @Binding var date: Date
     var body: some View {
         VStack {
+            Text("Choose your date of birth:")
             DatePicker("", selection: $date,
                        displayedComponents: [.date])
             .datePickerStyle(.wheel)
