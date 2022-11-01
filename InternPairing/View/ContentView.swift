@@ -8,6 +8,7 @@ struct ContentView: View {
     @StateObject var db = DataManager()
     
     var body: some View {
+        
         VStack {
             if db.userLoggedIn {
                 if db.theUser?.role == "Recruiter" {
