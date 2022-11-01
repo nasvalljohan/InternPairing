@@ -28,13 +28,12 @@ struct SwipeView: View {
                         }
                         .animation(.spring(), value: 10)
                     }
-                }.fullScreenCover(isPresented: $showingSheet) {
+                }.sheet(isPresented: $showingSheet) {
                     PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern)
                                                 
                 }
                 
             }
-
         }
     }
 }
@@ -73,16 +72,19 @@ struct CardView: View {
                                 .resizable()
                                 .scaledToFill()
                             
-                        }).frame(width: geometry.size.width * 0.8,
-                                 height: geometry.size.height * 0.8)
+                        }).overlay(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.01), Color.black]), startPoint: .center, endPoint: .bottom))
+                            .frame(width: geometry.size.width * 0.8,
+                                 height: geometry.size.height * 0.9)
                         
                         VStack (alignment: .leading){
                             VStack(alignment: .leading, spacing: 6) {
                                 Text("\(user.firstName ?? "not specified"), 29")
                                     .font(.title)
+                                    .foregroundColor(Color("tertiaryColor"))
                                     .bold()
                                 Text("Frontend Android Developer")
                                     .font(.subheadline)
+                                    .foregroundColor(Color("tertiaryColor"))
                                     .bold()
                             }
                             HStack {
@@ -210,10 +212,10 @@ struct SwipeView_Previews: PreviewProvider {
  
     static var previews: some View {
         
-//        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
-//            removedUser in
-//        })
-        PopUpCardView(showingSheet: .constant(true), currentIntern: .constant(TheUser(id: "ID", isUserComplete: true, role: "Intern", description: "I am a student at STI and i want to be a good programmer and make loads of moneys :))", linkedInLink: "linkedin.com/janne", githubLink: "github.com/janne", otherLink: "facebook.com/janne", location: "Stockholm", typeOfDeveloper: 1, typeOfPosition: 1, imageUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y", firstName: "Johan", lastName: "Näsvall", dateOfBirth: Date(), gender: "Male")))
+        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
+            removedUser in
+        })
+//        PopUpCardView(showingSheet: .constant(true), currentIntern: .constant(TheUser(id: "ID", isUserComplete: true, role: "Intern", description: "I am a student at STI and i want to be a good programmer and make loads of moneys :))", linkedInLink: "linkedin.com/janne", githubLink: "github.com/janne", otherLink: "facebook.com/janne", location: "Stockholm", typeOfDeveloper: 1, typeOfPosition: 1, imageUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y", firstName: "Johan", lastName: "Näsvall", dateOfBirth: Date(), gender: "Male")))
         
     }
 }
