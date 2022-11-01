@@ -4,6 +4,11 @@ import SwiftUI
 struct SwipeView: View {
     @EnvironmentObject var db: DataManager
     @State private var showingSheet: Bool = false
+    @State var currentIntern: TheUser?
+    
+    func pickCurrentIntern(intern: TheUser){
+        currentIntern = intern
+    }
 
     var body: some View {
         
@@ -12,20 +17,22 @@ struct SwipeView: View {
                 ZStack{
                     
                     ForEach(db.fetchedArray, id: \.self) { user in
-
+                        
                         CardView(user: user, onRemove: { removedUser in
                             // Remove that user from our array
                             db.fetchedArray.removeAll { $0.id == removedUser.id }
                           })
                         .onTapGesture {
                             showingSheet.toggle()
+                            pickCurrentIntern(intern: user)
                         }
                         .animation(.spring(), value: 10)
                     }
                 }.sheet(isPresented: $showingSheet) {
-                    PopUpCardView()
+                    PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern)
+                    
                 }
-            
+                
             }
 
         }
@@ -116,8 +123,27 @@ struct CardView: View {
 
 
 struct PopUpCardView: View {
+    @EnvironmentObject var db: DataManager
+    @Binding var showingSheet: Bool
+    @Binding var currentIntern: TheUser?
+    
     var body: some View {
-      Text("i")
+        if let currentIntern = currentIntern{
+
+            ZStack {
+                Button(action: {
+                    showingSheet.toggle()
+                    db.addToLikedInternArr(intern: currentIntern.id ?? "0")
+                }, label: {
+                    Text("I like this one..")
+                        .padding()
+                        .frame(width: 300)
+                        .background(.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(3)
+                })
+            }
+        }
     }
 }
 

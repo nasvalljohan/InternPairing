@@ -142,7 +142,7 @@ class DataManager: ObservableObject {
     }
     
     // MARK: addToLikedInternArr
-    func addToLikedInternArr(intern: Any) {
+    func addToLikedInternArr(intern: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             reference.updateData([
