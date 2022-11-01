@@ -17,14 +17,15 @@ struct SwipeView: View {
                             db.fetchedArray.removeAll { $0.id == removedUser.id }
                           })
                         .animation(.spring(), value: 10)
-
                     }
                 }
             }
+
         }
     }
 }
 
+// MARK: CardView
 struct CardView: View {
     @State private var translation: CGSize = .zero
     private var user: TheUser
@@ -37,64 +38,54 @@ struct CardView: View {
         self.onRemove = onRemove
     }
     
-
     private func getGesturePercentage(_ geometry: GeometryProxy, from gesture: DragGesture.Value) -> CGFloat {
         gesture.translation.width / geometry.size.width
     }
     
-    
     var body: some View {
         VStack{
             GeometryReader { geometry in
-
-                VStack(alignment: .center) {
-                    if user.imageUrl != "" || user.imageUrl != nil {
+                
+                VStack {
+                    ZStack (alignment: .bottomLeading) {
+                        
                         AsyncImage(url: URL(string: user.imageUrl ?? ""), content: {
                             pic in
-                            pic.resizable()
+                            pic
+                                .resizable()
+                                .scaledToFill()
                         }, placeholder: {
                             Image("profile-placeholder")
-                                .frame(width: geometry.size.width * 0.9,
-                                       height: geometry.size.height * 0.75) // 3
-                                .clipped()
-                                .scaledToFit()
-                        }).frame(width: geometry.size.width * 0.9,
-                                 height: geometry.size.height * 0.75) // 3
-                            .clipped()
-                            .scaledToFit()
-                    } else {
-                        Text("Hallå")
-                        Image("profile-placeholder")
-                            .frame(width: geometry.size.width * 0.9,
-                                   height: geometry.size.height * 0.75) // 3
-                            .clipped()
-                            .scaledToFit()
-                    }
-
-                    
-                    HStack {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("\(user.firstName ?? "not specified"), \(user.dateOfBirth ?? Date())")
-                                .font(.title)
-                                .bold()
-                            Text("\(user.role ?? "not specified")")
-                                .font(.subheadline)
-                                .bold()
-                            Text("\(user.location ?? "not specified")")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        Spacer()
+                                .resizable()
+                                .scaledToFill()
+                            
+                        }).frame(width: geometry.size.width * 0.8,
+                                 height: geometry.size.height * 0.8) // 3
                         
-                        Image(systemName: "info.circle")
-                            .foregroundColor(.gray)
+                        VStack (alignment: .leading){
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("\(user.firstName ?? "not specified"), 29")
+                                    .font(.title)
+                                    .bold()
+                                Text("Frontend Android Developer")
+                                    .font(.subheadline)
+                                    .bold()
+                            }
+                            HStack {
+                                Text("\(user.location ?? "not specified")")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                Image(systemName: "info.circle")
+                                    .foregroundColor(.gray)
+                            }
+                        }.padding(5)
                     }.padding(.horizontal)
                 }
-                .padding(.bottom)
-                .padding(.top)
                 .background(Color.white)
                 .cornerRadius(10)
                 .shadow(radius: 2)
+                .padding(.bottom)
+                .padding(.top)
                 .offset(x: self.translation.width, y: self.translation.height/4)
                 .gesture(
                     DragGesture()
@@ -108,10 +99,14 @@ struct CardView: View {
                             }
                         }
                 )
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             }
+            
         }
     }
 }
+
+
 
 struct EnlargedCardView: View {
     var body: some View {
