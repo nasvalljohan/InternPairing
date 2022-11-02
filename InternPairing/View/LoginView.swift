@@ -4,11 +4,14 @@ import Firebase
 
 // MARK: LoginView
 struct LoginView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var db: DataManager
     @State var isNotAUser: Bool = false
     
     var body: some View {
         ZStack{
+            Rectangle()
+                .fill(Color("tertiaryColor"))
+                .ignoresSafeArea()
             VStack {
                 if !isNotAUser {
                     AccountView(isNotAUser: $isNotAUser)
@@ -17,7 +20,6 @@ struct LoginView: View {
                 }
 
             }
-            .padding()
         }
     }
 }
@@ -25,40 +27,54 @@ struct LoginView: View {
 // MARK: AccountView
 struct AccountView: View {
     
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var db: DataManager
     @State private var email = ""
     @State private var password = ""
     @Binding var isNotAUser: Bool
 
     var body: some View {
         VStack {
-            Text("Login").font(.largeTitle)
+            ZStack{
+                Circle().fill(Color("tertiaryColor")).frame(width: 100).offset(y: -30)
+                Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
+                Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
+            }
             VStack {
                 VStack (alignment: .leading) {
                     //Email
-                    Text("E-mail:")
-                    TextField("", text: $email)
-                        .keyboardType(.emailAddress)
-                        .textFieldStyle(.roundedBorder)
+
+                    VStack {
+                        TextField("Email", text: $email)
+                        Divider()
+                            .frame(width: 300)
+                            .padding(.horizontal)
+                            .background(Color.black)
+                    }
+                     .padding()
+                    
                     //PW
-                    Text("Password:")
-                    SecureField("", text: $password)
-                        .textFieldStyle(.roundedBorder)
-                }
-                .padding()
+                    VStack{
+                        SecureField("Password", text: $password)
+                        Divider()
+                            .frame(width: 300)
+                            .padding(.horizontal)
+                            .background(Color.black)
+                    }
+                     .padding()
+                }.padding()
                 
                 
                 //Login btn
                 Button(action: {
-                    databaseConnection.loginUser(email: email, password: password)
+                    db.loginUser(email: email, password: password)
                 }, label: {
                     Text("Login")
                         .padding()
                         .frame(width: 300)
-                        .background(.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(3)
-                })
+                        .background(Color("primaryColor"))
+                        .foregroundColor(Color("secondaryColor"))
+                        .cornerRadius(10)
+                }).shadow(radius: 4, x: 2, y: 2)
                 HStack {
                     Text("Not an user?")
                     Button(action: {
@@ -74,7 +90,7 @@ struct AccountView: View {
 
 // MARK: NoAccountView
 struct NoAccountView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var db: DataManager
     
     @Binding var isNotAUser: Bool
 
@@ -85,7 +101,7 @@ struct NoAccountView: View {
                 HStack {
                     Text("I'm a")
                     VStack {
-                        Picker(selection: $databaseConnection.selected, label: Text("Favorite Color")) {
+                        Picker(selection: $db.selected, label: Text("Favorite Color")) {
                             Text("Student").tag(1)
                             Text("Recruiter").tag(2)
                         }
@@ -111,7 +127,7 @@ struct NoAccountView: View {
                 HStack {
                     Text("Already an user?")
                     Button(action: {
-                        print(databaseConnection.selected)
+                        print(db.selected)
                         isNotAUser = false
                     }, label:{
                         Text("Login")
@@ -129,7 +145,7 @@ struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
 //        LoginView()
         AccountView(isNotAUser: .constant(true))
-        .environmentObject(DatabaseConnection())
+        .environmentObject(DataManager())
 //        NoAccountView(isNotAUser: .constant(false))
 //            .environmentObject(DatabaseConnection())
     }

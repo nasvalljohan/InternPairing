@@ -2,7 +2,13 @@ import SwiftUI
 
 // MARK: SwipeView
 struct SwipeView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var db: DataManager
+    @State private var showingSheet: Bool = false
+    @State var currentIntern: TheUser?
+    
+    func pickCurrentIntern(intern: TheUser){
+        currentIntern = intern
+    }
 
     var body: some View {
         
@@ -10,21 +16,28 @@ struct SwipeView: View {
             GeometryReader { geometry in
                 ZStack{
                     
-                    ForEach(databaseConnection.fetchedArray, id: \.self) { user in
-
+                    ForEach(db.fetchedArray, id: \.self) { user in
+                        
                         CardView(user: user, onRemove: { removedUser in
-//                            Remove that user from our array
-                            databaseConnection.fetchedArray.removeAll { $0.id == removedUser.id }
+                            db.fetchedArray.removeAll { $0.id == removedUser.id }
                           })
+                        .onTapGesture {
+                            showingSheet.toggle()
+                            pickCurrentIntern(intern: user)
+                        }
                         .animation(.spring(), value: 10)
-
                     }
+                }.sheet(isPresented: $showingSheet) {
+                    PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern)
+                                                
                 }
+                
             }
         }
     }
 }
 
+// MARK: CardView
 struct CardView: View {
     @State private var translation: CGSize = .zero
     private var user: TheUser
@@ -37,50 +50,57 @@ struct CardView: View {
         self.onRemove = onRemove
     }
     
-
     private func getGesturePercentage(_ geometry: GeometryProxy, from gesture: DragGesture.Value) -> CGFloat {
         gesture.translation.width / geometry.size.width
     }
     
-    
     var body: some View {
         VStack{
             GeometryReader { geometry in
-
-                VStack(alignment: .leading) {
-                    
-                    AsyncImage(url: URL(string: "https://media.istockphoto.com/vectors/man-silhouette-profile-picture-vector-id526947869?k=20&m=526947869&s=612x612&w=0&h=j528SMpxB1AOCNs-WUcuQjvNRVuO-0PO1djfq-Rq6dE="), content: {
-                        pic in
-                        pic.resizable()
-                    }, placeholder: {
-                        Text("Loading...")
-                    }).frame(width: geometry.size.width * 0.9, height: geometry.size.height * 0.75) // 3
-                        .clipped()
-                        .scaledToFit()
-                    
-                    HStack {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("\(user.firstName ?? "not specified"), \(user.dateOfBirth ?? Date())")
-                                .font(.title)
-                                .bold()
-                            Text("\(user.role ?? "not specified")")
-                                .font(.subheadline)
-                                .bold()
-                            Text("\(user.location ?? "not specified")")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        Spacer()
+                
+                VStack {
+                    ZStack (alignment: .bottomLeading) {
                         
-                        Image(systemName: "info.circle")
-                            .foregroundColor(.gray)
+                        AsyncImage(url: URL(string: user.imageUrl ?? ""), content: {
+                            pic in
+                            pic
+                                .resizable()
+                                .scaledToFill()
+                        }, placeholder: {
+                            Image("profile-placeholder")
+                                .resizable()
+                                .scaledToFill()
+                            
+                        }).overlay(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.01), Color.black]), startPoint: .center, endPoint: .bottom))
+                            .frame(width: geometry.size.width * 0.8,
+                                 height: geometry.size.height * 0.9)
+                        
+                        VStack (alignment: .leading){
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("\(user.firstName ?? "not specified"), 29")
+                                    .font(.title)
+                                    .foregroundColor(Color("tertiaryColor"))
+                                    .bold()
+                                Text("Frontend Android Developer")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color("tertiaryColor"))
+                                    .bold()
+                            }
+                            HStack {
+                                Text("\(user.location ?? "not specified")")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                Image(systemName: "info.circle")
+                                    .foregroundColor(.gray)
+                            }
+                        }.padding(5)
                     }.padding(.horizontal)
                 }
-                .padding(.bottom)
-                .padding(.top)
                 .background(Color.white)
                 .cornerRadius(10)
                 .shadow(radius: 2)
+                .padding(.bottom)
+                .padding(.top)
                 .offset(x: self.translation.width, y: self.translation.height/4)
                 .gesture(
                     DragGesture()
@@ -94,15 +114,95 @@ struct CardView: View {
                             }
                         }
                 )
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             }
+            
         }
     }
 }
 
-struct EnlargedCardView: View {
+
+
+struct PopUpCardView: View {
+    @EnvironmentObject var db: DataManager
+    @Binding var showingSheet: Bool
+    @Binding var currentIntern: TheUser?
+    
     var body: some View {
-        
-        Text("Tjena")
+        if let currentIntern = currentIntern{
+
+            ZStack {
+                Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
+            
+                VStack {
+                    Spacer()
+                    HStack {
+                        ZStack {
+                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                            Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                                .rotationEffect(.degrees(-90))
+                                .fixedSize()
+                                .frame(width: 20, height: 180)
+                        }.offset(x: -10)
+                        
+                        Spacer()
+                        
+                        AsyncImage(url: URL(string: currentIntern.imageUrl ?? ""), content: {
+                            pic in
+                            pic
+                                .resizable()
+                                .scaledToFill()
+                        }, placeholder: {
+                            Image("profile-placeholder")
+                                .resizable()
+                                .scaledToFill()
+                        }).frame(width: 220, height: 360)
+                            .cornerRadius(20)
+                            .clipped()
+                        
+                        Spacer()
+                        ZStack {
+                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                            Text("Resume").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                                .rotationEffect(.degrees(-90))
+                                .fixedSize()
+                                .frame(width: 20, height: 180)
+                        }.offset(x: 10)
+                    }
+                    VStack {
+                        
+                            Text("\(currentIntern.firstName ?? "") \(currentIntern.lastName ?? "")").font(.title).bold()
+                            Text("Android Developer").font(.title3).fontWeight(.light)
+                        
+                        ScrollView {
+                            Text(currentIntern.description ?? "Go add description!").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
+                        }
+                            
+                        
+                        
+                        HStack (spacing: 0){
+                            Image(systemName: "mappin").foregroundColor(.gray)
+                            Text(currentIntern.location ?? "Location unknown").font(.subheadline).fontWeight(.light)
+                        }
+                        
+                    }
+                    Spacer()
+                    
+                    Button(action: {
+                        showingSheet.toggle()
+                        db.pushLikedIntern(intern: currentIntern.id ?? "0")
+                    }, label: {
+                        Text("Make contact")
+                            .padding()
+                            .frame(width: 300)
+                            .background(Color("primaryColor"))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }).padding()
+                    Spacer()
+                }
+            }
+        }
     }
 }
 
@@ -111,9 +211,10 @@ struct SwipeView_Previews: PreviewProvider {
  
     static var previews: some View {
         
-        CardView(user: TheUser(role: "Intern", location: "Stockholm", firstName: "Johan", dateOfBirth: Date()), onRemove: {
-            removedUser in
-        })
+//        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
+//            removedUser in
+//        })
+        PopUpCardView(showingSheet: .constant(true), currentIntern: .constant(TheUser(id: "ID", isUserComplete: true, role: "Intern", description: "I am a student at STI and i want to be a good programmer and make loads of moneys :))", linkedInLink: "linkedin.com/janne", githubLink: "github.com/janne", otherLink: "facebook.com/janne", location: "Stockholm", typeOfDeveloper: 1, typeOfPosition: 1, imageUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y", firstName: "Johan", lastName: "Näsvall", dateOfBirth: Date(), gender: "Male")))
         
     }
 }

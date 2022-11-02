@@ -3,24 +3,25 @@ import FirebaseAuth
 
 // MARK: ContentView
 struct ContentView: View {
-    @StateObject var databaseConnection: DatabaseConnection = DatabaseConnection()
+    
+    @StateObject var photoViewModel = PhotoPicker()
+    @StateObject var db = DataManager()
     
     var body: some View {
+        
         VStack {
-            if databaseConnection.userLoggedIn {
-                if databaseConnection.theUser?.role == "Recruiter" {
-                    if databaseConnection.theUser?.isUserComplete == false{
+            if db.userLoggedIn {
+                if db.theUser?.role == "Recruiter" {
+                    if db.theUser?.isUserComplete == false{
                         UserDetailsView()
                     }else {
-                        Text(databaseConnection.theUser?.companyName ?? "")
                         TabViewRecruiter()
                     }
                     
-                } else if databaseConnection.theUser?.role == "Intern" {
-                    if databaseConnection.theUser?.isUserComplete == false {
+                } else if db.theUser?.role == "Intern" {
+                    if db.theUser?.isUserComplete == false {
                         UserDetailsView()
                     } else {
-                        Text(databaseConnection.theUser?.firstName ?? "")
                         TabViewStudent()
                     }
                     
@@ -29,7 +30,9 @@ struct ContentView: View {
                 LoginView()
             }
                 
-        }.environmentObject(databaseConnection)
+        }
+        .environmentObject(db)
+        .environmentObject(photoViewModel)
     }
 }
 
@@ -42,7 +45,7 @@ enum NavigationType: String, Hashable {
 
 // MARK: TabViewRecruiter
 struct TabViewRecruiter: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var db: DataManager
     @State var mainStack: [NavigationType] = []
     
     var body: some View {
@@ -74,8 +77,9 @@ struct TabViewRecruiter: View {
 
 // MARK: TabViewStudent
 struct TabViewStudent: View {
+    @EnvironmentObject var db: DataManager
     @State var mainStack: [NavigationType] = []
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    
     
     var body: some View {
         NavigationStack(path: $mainStack){
@@ -101,8 +105,9 @@ struct TabViewStudent: View {
 
 // MARK: Preview
 struct ContentView_Previews: PreviewProvider {
+   
     static var previews: some View {
-        ContentView()
+        ContentView(photoViewModel: PhotoPicker())
     }
 }
 

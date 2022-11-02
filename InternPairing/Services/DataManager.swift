@@ -1,8 +1,8 @@
 import Foundation
 import Firebase
 
-class DatabaseConnection: ObservableObject {
-    private var db = Firestore.firestore()
+class DataManager: ObservableObject {
+    var db = Firestore.firestore()
     
     // Published variables
     private let collection = "Users"
@@ -19,14 +19,15 @@ class DatabaseConnection: ObservableObject {
         do {try Auth.auth().signOut() }
         catch { print("logged out") }
         
+        
         Auth.auth().addStateDidChangeListener {
             auth, user in
             
             if let user = user {
                 self.userLoggedIn = true
                 self.currentUser = user
-                self.fetchTheUser()
-                self.fetchSwipeableStudents()
+                self.fetchCurrentUser()
+                self.fetchInterns()
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -43,8 +44,8 @@ class DatabaseConnection: ObservableObject {
     }
     
     
-    // MARK: Register user
-    func registerTheUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
+    // MARK: registerUser
+    func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
         var userRole = ""
         var newUser: TheUser?
         
@@ -79,7 +80,7 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    // MARK: Login User
+    // MARK: loginUser
     func loginUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) {
             result, error in
@@ -89,12 +90,13 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    // MARK: Add user details
-    func addUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String) {
+    // MARK: pushUserDetails
+    // adds values from UserDetailsView to db
+    func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String, imageUrl: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             
-            if selected == 1{
+            if selected == 1 {
                 reference.updateData([
                     "description": description,
                     "githubLink": githubLink,
@@ -103,7 +105,8 @@ class DatabaseConnection: ObservableObject {
                     "otherLink": otherLink,
                     "typeOfDeveloper": typeOfDeveloper,
                     "typeOfPosition":typeOfPosition,
-                    "isUserComplete": true
+                    "isUserComplete": true,
+                    "imageUrl": imageUrl
                 ]) {
                     error in
                     if let error = error {
@@ -129,8 +132,9 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    // MARK: addToLikedInternArr
-    func addToLikedInternArr(intern: Any) {
+    // MARK: pushLikedIntern
+    // adds intern uid to recruiter document
+    func pushLikedIntern(intern: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             reference.updateData([
@@ -139,10 +143,13 @@ class DatabaseConnection: ObservableObject {
         }
     }
     
-    // MARK: fetchSwipeableStudents
-    func fetchSwipeableStudents() {
+    // MARK: fetchInterns()
+    // fetches interns that recruiter hasn't matched with
+    func fetchInterns() {
+
+        self.fetchedArray.removeAll()
         
-        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true && "role" != "Recruiter")
+        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
             .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
@@ -154,6 +161,7 @@ class DatabaseConnection: ObservableObject {
                         do {
                             let user = try document.data(as: TheUser.self)
                             self.fetchedArray.append(user)
+                            print(user)
                         } catch {
                             print(error.localizedDescription)
                         }
@@ -162,8 +170,9 @@ class DatabaseConnection: ObservableObject {
             }
     }
     
-    //MARK: fetchUser
-    func fetchTheUser() {
+    //MARK: fetchCurrentUser()
+    // fetches the current user that's logged in
+    func fetchCurrentUser() {
         if let currentUser = currentUser {
             userDocumentListener = self.db
                 .collection(collection)

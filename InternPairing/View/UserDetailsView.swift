@@ -3,13 +3,16 @@ import SwiftUI
 import PhotosUI
 
 struct UserDetailsView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var photoViewModel: PhotoPicker
+    @EnvironmentObject var db: DataManager
     var body: some View {
-        
-        if databaseConnection.theUser?.role == "Recruiter" {
-            RecruiterDetailsView()
-        } else if databaseConnection.theUser?.role == "Intern" {
-            InternDetailsView()
+        ZStack {
+            
+            if db.theUser?.role == "Recruiter" {
+                RecruiterDetailsView()
+            } else if db.theUser?.role == "Intern" {
+                InternDetailsView(imageState: photoViewModel.imageState)
+            }
         }
     }
 }
@@ -17,13 +20,14 @@ struct UserDetailsView: View {
 
 // MARK: Recruiter view
 struct RecruiterDetailsView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
+    @EnvironmentObject var db: DataManager
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
     @State var website = ""
     @State var typeOfDeveloper = 0
     @State var typeOfPosition = 0
+    @State var imageUrl = ""
     
     var body: some View {
         ZStack {
@@ -93,7 +97,7 @@ struct RecruiterDetailsView: View {
                 }
                 Button(action: {
                     print("Trying to update")
-                    databaseConnection.addUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website)
+                    db.pushUserDetails(description: description, linkedInLink: linkedIn, otherLink: "", location: location, githubLink: "", typeOfDeveloper: typeOfDeveloper, typeOfPosition: typeOfPosition, companyLink: website, imageUrl: imageUrl)
                 }, label: {
                     Text("Save")
                         .padding()
@@ -110,24 +114,27 @@ struct RecruiterDetailsView: View {
 
 //MARK: Intern View
 struct InternDetailsView: View {
-    @EnvironmentObject var databaseConnection: DatabaseConnection
-    
-    @State private var selectedItem: PhotosPickerItem? = nil
-     @State private var selectedImageData: Data? = nil
+    let imageState: PhotoPicker.ImageState
+    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var photoViewModel: PhotoPicker
+    @StateObject var storageConnection = StorageManager()
+
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
     @State var github = ""
     @State var typeOfDeveloper = 0
     @State var typeOfPosition = 0
+    @State var imageUrl = ""
+    
     var body: some View {
         ZStack {
-            VStack {
+            
+            ScrollView {
                 
                 ZStack {
-                    
-                    if let selectedImageData,
-                       let uiImage = UIImage(data: selectedImageData) {
+                    if let data = photoViewModel.data,
+                       let uiImage = UIImage(data: data) {
                         Image(uiImage: uiImage).resizable()
                             .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
                         
@@ -138,26 +145,19 @@ struct InternDetailsView: View {
                     
                     VStack{
                         PhotosPicker(
-                            selection: $selectedItem,
+                            selection: $photoViewModel.imageSelection,
                             matching: .images,
                             photoLibrary: .shared()) {
                                 Image(systemName: "camera.fill")
                                     .resizable()
                                     .frame(width: 20, height: 17)
-                            }            .onChange(of: selectedItem) { newItem in
-                                Task {
-                                    // Retrieve selected asset in the form of Data
-                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                        selectedImageData = data
-                                    }
-                                }
                             }
-                        
-                    }  .foregroundColor(.black)
-                        .padding(12)
-                        .background(Color.gray)
-                        .clipShape(Circle())
-                        .offset(x: 65, y: 65)
+                    }
+                    .foregroundColor(.black)
+                    .padding(12)
+                    .background(Color.gray)
+                    .clipShape(Circle())
+                    .offset(x: 65, y: 65)
                 }
                 
                 VStack(alignment: .leading) {
@@ -220,15 +220,27 @@ struct InternDetailsView: View {
                     }
                 }
                 Button(action: {
-                    databaseConnection.addUserDetails(
-                        description: description,
-                        linkedInLink: linkedIn,
-                        otherLink: "",
-                        location: location,
-                        githubLink: github,
-                        typeOfDeveloper: typeOfDeveloper,
-                        typeOfPosition: typeOfPosition,
-                        companyLink: "")
+                    
+                    if let data = photoViewModel.data {
+                        
+                        storageConnection.uploadImage(image: data) { urlString in
+                            db.pushUserDetails(
+                                description: description,
+                                linkedInLink: linkedIn,
+                                otherLink: "",
+                                location: location,
+                                githubLink: github,
+                                typeOfDeveloper: typeOfDeveloper,
+                                typeOfPosition: typeOfPosition,
+                                companyLink: "",
+                                imageUrl: urlString ?? "nil"
+                            )
+                        }
+                        }
+                        
+                        
+                        
+                        print("button has been pressed")
                 }, label: {
                     Text("Save")
                         .padding()
@@ -242,11 +254,11 @@ struct InternDetailsView: View {
     }
 }
 
-struct UserDetailsView_Previews: PreviewProvider {
-
-    static var previews: some View {
-
-        InternDetailsView()
-        //RecruiterDetailsView()
-    }
-}
+//struct UserDetailsView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//
+//        InternDetailsView()
+//        //RecruiterDetailsView()
+//    }
+//}
