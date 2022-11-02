@@ -33,56 +33,56 @@ struct AccountView: View {
     @Binding var isNotAUser: Bool
 
     var body: some View {
-        VStack {
-            ZStack{
-                Circle().fill(Color("tertiaryColor")).frame(width: 100).offset(y: -30)
-                Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
-                Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
-            }
+        ZStack {
+            Color("tertiaryColor").ignoresSafeArea()
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color("secondaryColor"))
+                .frame(height: UIScreen.main.bounds.height * 0.3)
+                .shadow(radius: 4, x: 2, y: 2).padding()
             VStack {
-                VStack (alignment: .leading) {
-                    //Email
-
-                    VStack {
-                        TextField("Email", text: $email)
-                        Divider()
-                            .frame(width: 300)
-                            .padding(.horizontal)
-                            .background(Color.black)
-                    }
-                     .padding()
-                    
-                    //PW
-                    VStack{
-                        SecureField("Password", text: $password)
-                        Divider()
-                            .frame(width: 300)
-                            .padding(.horizontal)
-                            .background(Color.black)
-                    }
-                     .padding()
-                }.padding()
-                
-                
-                //Login btn
-                Button(action: {
-                    db.loginUser(email: email, password: password)
-                }, label: {
-                    Text("Login")
-                        .padding()
-                        .frame(width: 300)
-                        .background(Color("primaryColor"))
-                        .foregroundColor(Color("secondaryColor"))
-                        .cornerRadius(10)
-                }).shadow(radius: 4, x: 2, y: 2)
-                HStack {
-                    Text("Not an user?")
-                    Button(action: {
-                        isNotAUser = true
-                    }, label: {
-                        Text("Sign up")
-                    })
+                Spacer()
+                ZStack{
+                    Circle().fill(Color("secondaryColor")).frame(width: 100).offset(y: -40)
+                    Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
+                    Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
                 }
+                
+                VStack{
+                    VStack(alignment: .leading) {
+                        Text(" Email:").foregroundColor(Color(.lightGray))
+                        
+                        TextField("", text: $email)
+                            .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                    }.padding()
+                    VStack(alignment: .leading){
+                        Text(" Password:").foregroundColor(Color(.lightGray))
+                        SecureField("", text: $password).textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                    }.padding()
+                }.frame(width: UIScreen.main.bounds.width * 0.9, height: 200).padding().offset(y: -10)
+                
+                
+                Spacer()
+                //Login btn
+                VStack{
+                    Button(action: {
+                        db.loginUser(email: email, password: password)
+                    }, label: {
+                        Text("Login")
+                            .padding()
+                            .frame(width: 300)
+                            .background(Color("primaryColor"))
+                            .foregroundColor(Color("secondaryColor"))
+                            .cornerRadius(10)
+                    }).shadow(radius: 4, x: 2, y: 2)
+                    HStack {
+                        Text("Not an user?")
+                        Button(action: {
+                            isNotAUser = true
+                        }, label: {
+                            Text("Sign up")
+                        })
+                    }
+                }.padding()
             }
         }
     }
@@ -90,53 +90,64 @@ struct AccountView: View {
 
 // MARK: NoAccountView
 struct NoAccountView: View {
-    @EnvironmentObject var db: DataManager
     
+    @EnvironmentObject var db: DataManager
     @Binding var isNotAUser: Bool
-
+    
     var body: some View {
-        NavigationView{
-            VStack() {
-                Text("Sign up").font(.largeTitle)
-                HStack {
-                    Text("I'm a")
-                    VStack {
-                        Picker(selection: $db.selected, label: Text("Favorite Color")) {
-                            Text("Student").tag(1)
-                            Text("Recruiter").tag(2)
-                        }
-                        .pickerStyle(.wheel)
-                        .frame(width: 150)
-                        .offset(x: -20)
+        NavigationView {
+            ZStack {
+                Color("tertiaryColor").ignoresSafeArea()
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color("secondaryColor"))
+                    .frame(height: UIScreen.main.bounds.height * 0.3)
+                    .shadow(radius: 4, x: 2, y: 2).padding()
+                VStack {
+                    Spacer()
+                    ZStack{
+                        Circle().fill(Color("secondaryColor")).frame(width: 100).offset(y: -40)
+                        Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
+                        Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
                     }
-                }
-                
-                //Signup btn
-                NavigationLink(destination:{
-                    SignUpView().navigationBarBackButtonHidden(true)
-                }, label: {
-                    Text("Sign up")
-                        .padding()
-                        .frame(width: 300)
-                        .background(.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(3)
-                })
-                
-                
-                HStack {
-                    Text("Already an user?")
-                    Button(action: {
-                        print(db.selected)
-                        isNotAUser = false
-                    }, label:{
-                        Text("Login")
-                    })
+                    VStack {
+                        Text("I'm a").font(.title3).fontWeight(.light)
+                            Picker(selection: $db.selected, label: Text("Favorite Color")) {
+                                Text("Student").tag(1)
+                                Text("Recruiter").tag(2)
+                            }
+                            .pickerStyle(.wheel)
+                            .frame(width: 150, height: 50)
+                            .offset(x: -10)
+                    }.frame(width: UIScreen.main.bounds.width * 0.9, height: 200).padding().offset(y: -10)
+                    Spacer()
+                    //Signup btn
+                    VStack {NavigationLink(destination:{
+                        SignUpView()
+                    }, label: {
+                        Text("Sign up")
+                            .padding()
+                            .frame(width: 300)
+                            .background(Color("primaryColor"))
+                            .foregroundColor(Color("secondaryColor"))
+                            .cornerRadius(10)
+                    }).shadow(radius: 4, x: 2, y: 2)
+                        
+                        HStack {
+                            Text("Already an user?")
+                            Button(action: {
+                                print(db.selected)
+                                isNotAUser = false
+                            }, label:{
+                                Text("Login")
+                            })
+                        }
+                    }.padding()
                 }
             }
         }
     }
 }
+
 
 
 
@@ -147,6 +158,6 @@ struct LoginView_Previews: PreviewProvider {
         AccountView(isNotAUser: .constant(true))
         .environmentObject(DataManager())
 //        NoAccountView(isNotAUser: .constant(false))
-//            .environmentObject(DatabaseConnection())
+//            .environmentObject(DataManager())
     }
 }
