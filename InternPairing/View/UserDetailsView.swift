@@ -169,23 +169,27 @@ struct InternDetailsView: View {
                 
                 ZStack {
                     Color("secondaryColor")
-                    ScrollView {
+                    ScrollView(showsIndicators: false){
                         VStack(alignment: .leading) {
-                            Text("Description:")
-                            TextEditor(text: $description)
-                                .frame(
-                                    height: UIScreen.main.bounds.height * 0.2
-                                ).border(.teal)
                             
-                            Text("LinkedIn:")
+                            
+                            Text("Description").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $description, axis: .vertical)
+                                .onChange(of: description, perform: { value in
+                                   description=String(description.prefix(200))
+                                })
+                                .lineLimit(2...4)
+                                .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                            
+                            Text("LinkedIn").font(.subheadline).fontWeight(.light).offset(y: 10)
                             TextField("", text: $linkedIn)
                                 .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             
-                            Text("Github:")
+                            Text("Github").font(.subheadline).fontWeight(.light).offset(y: 10)
                             TextField("", text: $github)
                                 .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             
-                            Text("Location:")
+                            Text("Location").font(.subheadline).fontWeight(.light).offset(y: 10)
                             TextField("", text: $location)
                                 .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                         }
@@ -194,6 +198,7 @@ struct InternDetailsView: View {
                             GeometryReader { geometry in
                                 
                                 HStack(spacing: 0) {
+                                    Spacer()
                                     Picker(
                                         selection: $typeOfDeveloper, label: Text("I am")) {
                                             Text("I am a..").tag(0)
@@ -202,13 +207,9 @@ struct InternDetailsView: View {
                                             Text("React Native Dev").tag(3)
                                         }
                                         .pickerStyle(.menu)
-                                        .frame(
-                                            width: geometry.size.width/2,
-                                            height: geometry.size.height,
-                                            alignment: .center)
                                         .compositingGroup()
-                                        .clipped()
-                                    
+
+                                    Spacer()
                                     Picker(
                                         selection: $typeOfPosition,
                                         label: Text("Looking for:")) {
@@ -218,15 +219,11 @@ struct InternDetailsView: View {
                                             Text("BackEnd").tag(3)
                                         }
                                         .pickerStyle(.menu)
-                                        .frame(
-                                            width: geometry.size.width/2,
-                                            height: geometry.size.height,
-                                            alignment: .center)
                                         .compositingGroup()
-                                        .clipped()
+                                    Spacer()
                                 }
                             }
-                        }
+                        }.padding()
                     }
                     .padding(25)
                     .shadow(radius: 0.1, x: 0.3, y: 0.3)
