@@ -63,7 +63,7 @@ struct RecruiterSignUp: View {
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" Company name:").foregroundColor(Color(.lightGray))
                                 TextField("", text: $companyName)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                             
                             Spacer()
@@ -71,19 +71,19 @@ struct RecruiterSignUp: View {
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" E-mail:").foregroundColor(Color(.lightGray))
                                 TextField("", text: $companyEmail)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                             Spacer()
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" Password:").foregroundColor(Color(.lightGray))
                                 SecureField("", text: $companyPassword)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                             Spacer()
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" Confirm password:").foregroundColor(Color(.lightGray))
                                 SecureField("", text: $confirmCompanyPassword)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                             Spacer()
                         }
@@ -187,19 +187,19 @@ struct StudentSignUp: View {
                                 VStack(alignment: .leading, spacing: 5){
                                     Text(" Firstname:").foregroundColor(Color(.lightGray))
                                     TextField("", text: $firstName)
-                                        .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                        .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                                 }
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(" Lastname:").foregroundColor(Color(.lightGray))
                                     TextField("", text: $lastName)
-                                        .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                        .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                                 }
                             }
                             
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" Email:").foregroundColor(Color(.lightGray))
                                 TextField("", text: $studentEmail)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                         }
                         Spacer()
@@ -237,14 +237,14 @@ struct StudentSignUp: View {
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" Password:").foregroundColor(Color(.lightGray))
                                 SecureField("", text: $studentPassword)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                             Spacer().frame(height: 15)
                             //TV Confirm password & input
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" Confirm password").foregroundColor(Color(.lightGray))
                                 SecureField("", text: $confirmStudentPassword)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                         }
                         Spacer()
