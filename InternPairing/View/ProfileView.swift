@@ -72,7 +72,7 @@ struct RecruiterProfileView: View {
 struct StudentProfileView: View {
     @EnvironmentObject var db: DataManager
     
-    var ageConverter = AgeConverter()
+    var ageConverter = DateFormatting()
     var typeOf = TypeOf()
     
     var body: some View {

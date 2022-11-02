@@ -1,10 +1,10 @@
 import Foundation
 
-class AgeConverter: DateFormatter {
+class DateFormatting: DateFormatter {
     var formatter = DateFormatter()
     
     func dateToString(dateOfBirth: Date) -> String {
-        formatter.dateFormat = "dd/MM/yyyy"
+        formatter.dateFormat = "yyyy-MM-dd"
         
         return formatter.string(from: dateOfBirth)
     }
