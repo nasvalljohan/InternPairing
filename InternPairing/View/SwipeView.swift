@@ -22,7 +22,7 @@ struct SwipeView: View {
                             let tempUser = removedUser
                             db.fetchedArray.removeAll { $0.id == removedUser.id }
                             db.fetchedArray.insert(tempUser, at: 0)
-                          })
+                        })
                         .onTapGesture {
                             showingSheet.toggle()
                             pickCurrentIntern(intern: user)
@@ -30,8 +30,14 @@ struct SwipeView: View {
                         .animation(.spring(), value: 10)
                     }
                 }.sheet(isPresented: $showingSheet) {
-                    PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern)
-                                                
+                    
+                    //                    PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern)
+                    PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern, makeContact: {
+                        currentIntern in
+                        db.fetchedArray.removeAll { $0.id == currentIntern.id }
+                    })
+                    
+                    
                 }
                 
             }
@@ -45,7 +51,7 @@ struct CardView: View {
     private var user: TheUser
     private var onRemove: (_ user: TheUser) -> Void
     private var thresholdPercentage: CGFloat = 0.5 // when the user has draged 50% the width of the screen in either direction
-   
+    
     
     init(user: TheUser, onRemove: @escaping (_ user: TheUser) -> Void){
         self.user = user
@@ -75,7 +81,7 @@ struct CardView: View {
                             
                         }).overlay(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.01), Color.black]), startPoint: .center, endPoint: .bottom))
                             .frame(width: geometry.size.width * 0.8,
-                                 height: geometry.size.height * 0.9)
+                                   height: geometry.size.height * 0.9)
                         
                         VStack (alignment: .leading){
                             VStack(alignment: .leading, spacing: 6) {
@@ -130,13 +136,15 @@ struct PopUpCardView: View {
     @EnvironmentObject var db: DataManager
     @Binding var showingSheet: Bool
     @Binding var currentIntern: TheUser?
+    var makeContact: (_ currentIntern: TheUser) -> Void
+    
     
     var body: some View {
-        if let currentIntern = currentIntern{
-
+        if let currentIntern = currentIntern {
+            
             ZStack {
                 Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
-            
+                
                 VStack {
                     Spacer()
                     HStack {
@@ -174,13 +182,13 @@ struct PopUpCardView: View {
                     }
                     VStack {
                         
-                            Text("\(currentIntern.firstName ?? "") \(currentIntern.lastName ?? "")").font(.title).bold()
-                            Text("Android Developer").font(.title3).fontWeight(.light)
+                        Text("\(currentIntern.firstName ?? "") \(currentIntern.lastName ?? "")").font(.title).bold()
+                        Text("Android Developer").font(.title3).fontWeight(.light)
                         
                         ScrollView {
                             Text(currentIntern.description ?? "Go add description!").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
                         }
-                            
+                        
                         
                         
                         HStack (spacing: 0){
@@ -193,6 +201,7 @@ struct PopUpCardView: View {
                     
                     Button(action: {
                         showingSheet.toggle()
+                        self.makeContact(currentIntern)
                         db.pushLikedIntern(intern: currentIntern.id ?? "0")
                     }, label: {
                         Text("Make contact")
@@ -207,6 +216,7 @@ struct PopUpCardView: View {
             }
         }
     }
+    
 }
 
 // MARK: Preview
@@ -214,10 +224,10 @@ struct SwipeView_Previews: PreviewProvider {
  
     static var previews: some View {
         
-//        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
-//            removedUser in
-//        })
-        PopUpCardView(showingSheet: .constant(true), currentIntern: .constant(TheUser(id: "ID", isUserComplete: true, role: "Intern", description: "I am a student at STI and i want to be a good programmer and make loads of moneys :))", linkedInLink: "linkedin.com/janne", githubLink: "github.com/janne", otherLink: "facebook.com/janne", location: "Stockholm", typeOfDeveloper: 1, typeOfPosition: 1, imageUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y", firstName: "Johan", lastName: "Näsvall", dateOfBirth: Date(), gender: "Male")))
+        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
+            removedUser in
+        })
+//        PopUpCardView(showingSheet: .constant(true), currentIntern: .constant(TheUser(id: "ID", isUserComplete: true, role: "Intern", description: "I am a student at STI and i want to be a good programmer and make loads of moneys :))", linkedInLink: "linkedin.com/janne", githubLink: "github.com/janne", otherLink: "facebook.com/janne", location: "Stockholm", typeOfDeveloper: 1, typeOfPosition: 1, imageUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y", firstName: "Johan", lastName: "Näsvall", dateOfBirth: Date(), gender: "Male")))
         
     }
 }
