@@ -19,6 +19,9 @@ struct SignUpView: View {
 
 // MARK: RecruiterSignUp
 struct RecruiterSignUp: View {
+    // navigate back
+    @Environment(\.dismiss) var dismiss
+    
     @EnvironmentObject var db: DataManager
     
     @State var companyName = ""
@@ -42,48 +45,54 @@ struct RecruiterSignUp: View {
                 
                 Spacer()
                 
-                //TW Register as recruiter
-                VStack {
-                    Text("Jinder").font(.title).bold()
-                }
+                Text("Jinder")
                 
                 Spacer()
                 
-                //TW Company Name & Input för company name
-                ZStack {
-                    Color("secondaryColor")
+                ZStack(alignment: .topLeading) {
+                    
                     VStack {
-                        VStack(alignment: .leading) {
-                            Text("Company name:")
-                            TextField("Tjena", text: $companyName)
-                                .textFieldStyle(.roundedBorder)
+                        Spacer()
+                        VStack {
+                            Text("Register as Recruiter")
+                                .font(.title)
+                                .foregroundColor(Color("primaryColor"))
+                            
+                            Spacer()
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(" Company name:").foregroundColor(Color(.lightGray))
+                                TextField("", text: $companyName)
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                            }
+                            
+                            Spacer()
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(" E-mail:").foregroundColor(Color(.lightGray))
+                                TextField("", text: $companyEmail)
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                            }
+                            Spacer()
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(" Password:").foregroundColor(Color(.lightGray))
+                                SecureField("", text: $companyPassword)
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                            }
+                            Spacer()
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(" Confirm password:").foregroundColor(Color(.lightGray))
+                                SecureField("", text: $confirmCompanyPassword)
+                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"))
+                            }
+                            Spacer()
                         }
-                        
-                        //TW Email & Input för email
-                        VStack(alignment: .leading) {
-                            Text("Email:")
-                            TextField("Email", text: $companyEmail)
-                                .textFieldStyle(.roundedBorder)
-                        }
-                        
-                        //TW Password & Input för lösenord
-                        VStack(alignment: .leading) {
-                            Text("Password:")
-                            SecureField("Password", text: $companyPassword)
-                                .textFieldStyle(.roundedBorder)
-                        }
-                        
-                        //TW Confirm password & input
-                        VStack(alignment: .leading) {
-                            Text("Confirm password:")
-                            SecureField("Password", text: $confirmCompanyPassword)
-                                .textFieldStyle(.roundedBorder)
-                        }
+                        Spacer()
                     }
                     .padding(25)
                     .frame(
                         width: UIScreen.main.bounds.width * 0.9,
-                        height: UIScreen.main.bounds.height * 0.65
+                        height: UIScreen.main.bounds.height * 0.50
                     )
                     .shadow(radius: 0.1, x: 0.3, y: 0.3)
                 }
@@ -93,26 +102,40 @@ struct RecruiterSignUp: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    db.registerUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: "", lastName: "", gender: "", companyName: companyName, isUserComplete: false)
-                }, label: {
-                    Text("Next")
-                        .padding()
-                        .frame(width: 300)
-                        .background(.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(3)
-                })
-                
+                HStack {
+                    
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Text(Image(systemName: "arrow.uturn.backward"))
+                            .padding()
+                            .frame(width: 60)
+                            .background(Color("primaryColor"))
+                            .foregroundColor(Color("secondaryColor"))
+                            .cornerRadius(10)
+                    }).shadow(radius: 4, x: 2, y: 2)
+                    
+                    
+                    Button(action: {
+                        db.registerUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: "", lastName: "", gender: "", companyName: companyName, isUserComplete: false)
+                    }, label: {
+                        Text("Next")
+                            .padding()
+                            .frame(width: 250)
+                            .background(Color("primaryColor"))
+                            .foregroundColor(Color("secondaryColor"))
+                            .cornerRadius(10)
+                    }).shadow(radius: 4, x: 2, y: 2)
+                }
                 Spacer()
             }
-            
         }
     }
 }
 
 // MARK: StudentSignUp
 struct StudentSignUp: View {
+    // navigate back
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var db: DataManager
     var formatter = DateFormatting()
@@ -158,7 +181,7 @@ struct StudentSignUp: View {
                         Text("Register as Student")
                             .font(.title)
                             .foregroundColor(Color("primaryColor"))
-                        Spacer().frame(height: 30)
+                        Spacer()
                         VStack {
                             HStack {
                                 VStack(alignment: .leading, spacing: 5){
@@ -172,7 +195,6 @@ struct StudentSignUp: View {
                                         .textFieldModifier(backgroundColor: Color("tertiaryColor"))
                                 }
                             }
-                            Spacer().frame(height: 15)
                             
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" Email:").foregroundColor(Color(.lightGray))
@@ -180,12 +202,12 @@ struct StudentSignUp: View {
                                     .textFieldModifier(backgroundColor: Color("tertiaryColor"))
                             }
                         }
-                        Spacer().frame(height: 20)
+                        Spacer()
                         
                         VStack {
                             HStack {
                                 VStack {
-                                    Text(" Date of Birth:").foregroundColor(Color(.lightGray))
+                                    Text(" Date of Birth:")
                                 }
                                 Spacer()
                                 VStack {
@@ -209,7 +231,7 @@ struct StudentSignUp: View {
                             }
                         }
                         
-                        Spacer().frame(height: 20)
+                        Spacer()
                         VStack {
                             //TV Password & Input för lösenord
                             VStack(alignment: .leading, spacing: 5) {
