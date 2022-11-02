@@ -9,10 +9,18 @@ struct SwipeView: View {
     func pickCurrentIntern(intern: TheUser){
         currentIntern = intern
     }
-
+    
     var body: some View {
         
+        ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color("primaryColor"))
+                .ignoresSafeArea()
+                .offset(y: -100)
+                .frame(height: UIScreen.main.bounds.height * 0.5)
+                .shadow(radius: 4, x: 2, y: 2)
         VStack {
+            
             GeometryReader { geometry in
                 ZStack{
                     
@@ -28,10 +36,9 @@ struct SwipeView: View {
                             pickCurrentIntern(intern: user)
                         }
                         .animation(.spring(), value: 10)
+                        .offset(y: -20)
                     }
                 }.sheet(isPresented: $showingSheet) {
-                    
-                    //                    PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern)
                     PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern, makeContact: {
                         currentIntern in
                         db.fetchedArray.removeAll { $0.id == currentIntern.id }
@@ -41,8 +48,11 @@ struct SwipeView: View {
                 }
                 
             }
+            
         }
+        
     }
+}
 }
 
 // MARK: CardView
