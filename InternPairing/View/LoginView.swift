@@ -49,13 +49,13 @@ struct AccountView: View {
                 
                 VStack{
                     VStack(alignment: .leading) {
-                        Text(" Email:").foregroundColor(Color(.lightGray))
+                        Text(" Email:").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
                         
                         TextField("", text: $email)
                             .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                     }.padding()
                     VStack(alignment: .leading){
-                        Text(" Password:").foregroundColor(Color(.lightGray))
+                        Text(" Password:").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
                         SecureField("", text: $password).textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                     }.padding()
                 }.frame(width: UIScreen.main.bounds.width * 0.9, height: 200).padding().offset(y: -10)
@@ -75,11 +75,11 @@ struct AccountView: View {
                             .cornerRadius(10)
                     }).shadow(radius: 4, x: 2, y: 2)
                     HStack {
-                        Text("Not an user?")
+                        Text("Not registered?").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
                         Button(action: {
                             isNotAUser = true
                         }, label: {
-                            Text("Sign up")
+                            Text("Sign up").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.semibold).offset(y: 10)
                         })
                     }
                 }.padding()
@@ -133,12 +133,12 @@ struct NoAccountView: View {
                     }).shadow(radius: 4, x: 2, y: 2)
                         
                         HStack {
-                            Text("Already an user?")
+                            Text("Already an user?").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
                             Button(action: {
                                 print(db.selected)
                                 isNotAUser = false
                             }, label:{
-                                Text("Login")
+                                Text("Login").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.semibold).offset(y: 10)
                             })
                         }
                     }.padding()
