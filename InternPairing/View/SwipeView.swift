@@ -19,7 +19,9 @@ struct SwipeView: View {
                     ForEach(db.fetchedArray, id: \.self) { user in
                         
                         CardView(user: user, onRemove: { removedUser in
+                            let tempUser = removedUser
                             db.fetchedArray.removeAll { $0.id == removedUser.id }
+                            db.fetchedArray.insert(tempUser, at: 0)
                           })
                         .onTapGesture {
                             showingSheet.toggle()
@@ -109,6 +111,7 @@ struct CardView: View {
                         }.onEnded { value in
                             if abs(self.getGesturePercentage(geometry, from: value)) > self.thresholdPercentage {
                                 self.onRemove(self.user)
+                                self.translation = .zero
                             } else {
                                 self.translation = .zero
                             }
