@@ -6,7 +6,7 @@ struct ContentView: View {
     
     @StateObject var photoViewModel = PhotoPicker()
     @StateObject var db = DataManager()
-    
+    @StateObject var storageManager = StorageManager()
     var body: some View {
         
         VStack {
@@ -33,6 +33,7 @@ struct ContentView: View {
         }
         .environmentObject(db)
         .environmentObject(photoViewModel)
+        .environmentObject(storageManager)
     }
 }
 
