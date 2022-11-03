@@ -24,12 +24,12 @@ struct SwipeView: View {
             GeometryReader { geometry in
                 ZStack{
                     
-                    ForEach(db.fetchedArray, id: \.self) { user in
+                    ForEach(db.swipeableInternsArray, id: \.self) { user in
                         
                         CardView(user: user, onRemove: { removedUser in
                             let tempUser = removedUser
-                            db.fetchedArray.removeAll { $0.id == removedUser.id }
-                            db.fetchedArray.insert(tempUser, at: 0)
+                            db.swipeableInternsArray.removeAll { $0.id == removedUser.id }
+                            db.swipeableInternsArray.insert(tempUser, at: 0)
                         })
                         .onTapGesture {
                             showingSheet.toggle()
@@ -41,7 +41,7 @@ struct SwipeView: View {
                 }.sheet(isPresented: $showingSheet) {
                     PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern, makeContact: {
                         currentIntern in
-                        db.fetchedArray.removeAll { $0.id == currentIntern.id }
+                        db.swipeableInternsArray.removeAll { $0.id == currentIntern.id }
                     })
                     
                     
