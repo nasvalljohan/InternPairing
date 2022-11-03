@@ -51,15 +51,12 @@ struct TabViewRecruiter: View {
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
-                Text("this is the home page")
-                    .tabItem {
-                        Image(systemName: "house.fill")
-                    }
                 SwipeView()
                     .tabItem {
                         Image(systemName: "suit.heart.fill")
                     }
                 Text("Contacts").tabItem{
+                    //Contacts view here
                     Image(systemName: "message.fill")
                 }
                 ProfileView()
@@ -68,9 +65,6 @@ struct TabViewRecruiter: View {
                 }
                 
             }
-            .navigationTitle("Jinder")
-            .navigationBarTitleDisplayMode(.inline)
-
         }
     }
 }
@@ -84,21 +78,17 @@ struct TabViewStudent: View {
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
-                Text("Home")
-                    .tabItem {
-                        Image(systemName: "house.fill")
-                    }
                 ProfileView()
                     .tabItem{
                         Image(systemName: "person.circle")
                     }
                 Text("Contacts")
+                //Contacts view here
                     .tabItem{
                         Image(systemName: "message.fill")
                     }
             }
-            .navigationTitle("Jinder")
-            .navigationBarTitleDisplayMode(.inline)
+
         }
     }
 }
@@ -107,7 +97,7 @@ struct TabViewStudent: View {
 struct ContentView_Previews: PreviewProvider {
    
     static var previews: some View {
-        ContentView(photoViewModel: PhotoPicker())
+        ContentView()
     }
 }
 

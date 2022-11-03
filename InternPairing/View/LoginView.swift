@@ -122,7 +122,7 @@ struct NoAccountView: View {
                     Spacer()
                     //Signup btn
                     VStack {NavigationLink(destination:{
-                        SignUpView()
+                        SignUpView().navigationBarBackButtonHidden(true)
                     }, label: {
                         Text("Sign up")
                             .padding()
