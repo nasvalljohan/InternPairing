@@ -6,7 +6,9 @@ class DataManager: ObservableObject {
     
     // Published variables
     private let collection = "Users"
-    @Published var fetchedArray: Array<TheUser> = []
+    @Published var swipeableInternsArray: Array<TheUser> = []
+    @Published var likedInternsUIDArray: Array<String> = []
+    @Published var likedInternsArray: Array<TheUser> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
@@ -28,6 +30,7 @@ class DataManager: ObservableObject {
                 self.currentUser = user
                 self.fetchCurrentUser()
                 self.fetchInterns()
+                self.fetchLikedInterns()
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -143,11 +146,40 @@ class DataManager: ObservableObject {
         }
     }
     
+    // MARK: fetchLikedInterns()
+    func fetchLikedInterns() {
+        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
+            .getDocuments() { (querySnapshot, error) in
+                
+                if let error = error {
+                    print("\(error) getting documents: (err)")
+                } else {
+                    
+                    // convert the querySnapshots to TheUser format
+                    for uid in self.likedInternsUIDArray {
+                        for document in querySnapshot!.documents {
+                            if uid == document.documentID {
+                                do {
+                                    let user = try document.data(as: TheUser.self)
+                                    self.likedInternsArray.append(user)
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                        }
+                    }
+                    print("---------------------------------------------")
+                    print("likedInternsArray: \(self.likedInternsArray)")
+                    print("---------------------------------------------")
+                }
+            }
+    }
+    
     // MARK: fetchInterns()
     // fetches interns that recruiter hasn't matched with
     func fetchInterns() {
 
-        self.fetchedArray.removeAll()
+        self.swipeableInternsArray.removeAll()
         
         db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
             .getDocuments() { (querySnapshot, error) in
@@ -160,8 +192,7 @@ class DataManager: ObservableObject {
                     for document in querySnapshot!.documents {
                         do {
                             let user = try document.data(as: TheUser.self)
-                            self.fetchedArray.append(user)
-                            print(user)
+                            self.swipeableInternsArray.append(user)
                         } catch {
                             print(error.localizedDescription)
                         }
@@ -193,6 +224,12 @@ class DataManager: ObservableObject {
                     switch result {
                     case .success(let theUser):
                         self.theUser = theUser
+                        
+                        if theUser.role == "Recruiter" {
+                            self.likedInternsUIDArray = theUser.likedInterns ?? [""]
+                            print("LIKED_INTERNS: \(self.likedInternsUIDArray)")
+                        }
+                        
                         break
                     case .failure(let error):
                         print(error.localizedDescription)
