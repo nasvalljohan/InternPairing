@@ -145,6 +145,8 @@ class DataManager: ObservableObject {
         }
     }
     
+    // TODO: Add function to push recruiter to matched intern
+    
     // MARK: fetchLikedInterns()
     func fetchLikedInterns() {
         db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
@@ -238,3 +240,4 @@ class DataManager: ObservableObject {
         }
     }
 }
+
