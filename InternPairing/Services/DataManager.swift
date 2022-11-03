@@ -46,7 +46,9 @@ class DataManager: ObservableObject {
     }
     
     
-    // MARK: registerUser
+    // MARK: Auth functions
+    
+    // Register
     func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
         var userRole = ""
         var newUser: TheUser?
@@ -82,7 +84,7 @@ class DataManager: ObservableObject {
         }
     }
     
-    // MARK: loginUser
+    // Login
     func loginUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) {
             result, error in
@@ -92,8 +94,9 @@ class DataManager: ObservableObject {
         }
     }
     
-    // MARK: pushUserDetails
-    // adds values from UserDetailsView to db
+    // MARK: Push to db functions
+    
+    // Adds values from UserDetailsView to db
     func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String, imageUrl: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
@@ -134,8 +137,7 @@ class DataManager: ObservableObject {
         }
     }
     
-    // MARK: pushLikedIntern
-    // adds intern uid to recruiter document
+    // Adds intern uid to recruiter document
     func pushLikedIntern(intern: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
@@ -147,7 +149,9 @@ class DataManager: ObservableObject {
     
     // TODO: Add function to push recruiter to matched intern
     
-    // MARK: fetchLikedInterns()
+    // MARK: Fetch from db functions
+    
+    // Fetching liked interns
     func fetchLikedInterns() {
         db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
             .getDocuments() { (querySnapshot, error) in
@@ -176,7 +180,6 @@ class DataManager: ObservableObject {
             }
     }
     
-    // MARK: fetchInterns()
     // fetches interns that recruiter hasn't matched with
     func fetchInterns() {
 
@@ -202,7 +205,6 @@ class DataManager: ObservableObject {
             }
     }
     
-    //MARK: fetchCurrentUser()
     // fetches the current user that's logged in
     func fetchCurrentUser() {
         if let currentUser = currentUser {
