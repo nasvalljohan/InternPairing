@@ -118,7 +118,7 @@ struct InternDetailsView: View {
     @EnvironmentObject var db: DataManager
     @EnvironmentObject var photoViewModel: PhotoPicker
     @StateObject var storageConnection = StorageManager()
-
+    
     @State var description = ""
     @State var linkedIn = ""
     @State var location = ""
@@ -129,8 +129,12 @@ struct InternDetailsView: View {
     
     var body: some View {
         ZStack {
+            Color("tertiaryColor").ignoresSafeArea()
             
-            ScrollView {
+            
+            VStack {
+                
+                Spacer()
                 
                 ZStack {
                     if let data = photoViewModel.data,
@@ -139,8 +143,9 @@ struct InternDetailsView: View {
                             .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
                         
                     } else {
-                        Image("profile-placeholder").resizable()
-                            .frame(width: 200, height: 200).clipShape(Circle())
+                        Image(systemName: "person.crop.circle").resizable()
+                            .frame(width: 200, height: 200)
+                            .foregroundColor(Color("secondaryColor"))
                     }
                     
                     VStack{
@@ -153,76 +158,89 @@ struct InternDetailsView: View {
                                     .frame(width: 20, height: 17)
                             }
                     }
-                    .foregroundColor(.black)
+                    .foregroundColor(Color("secondaryColor"))
                     .padding(12)
-                    .background(Color.gray)
+                    .background(Color("primaryColor"))
                     .clipShape(Circle())
                     .offset(x: 65, y: 65)
                 }
                 
-                VStack(alignment: .leading) {
-                    Text("Description:")
-                    TextEditor(text: $description)
-                        .frame(
-                            height: UIScreen.main.bounds.height * 0.25
-                        ).border(.teal)
-                    
-                    Text("LinkedIn:")
-                    TextField("", text: $linkedIn)
-                        .textFieldStyle(.roundedBorder)
-                    
-                    Text("Github:")
-                    TextField("", text: $github)
-                        .textFieldStyle(.roundedBorder)
-                    
-                    Text("Location:")
-                    TextField("", text: $location)
-                        .textFieldStyle(.roundedBorder)
+                Spacer()
+                
+                ZStack {
+                    Color("secondaryColor")
+                    ScrollView(showsIndicators: false){
+                        VStack(alignment: .leading) {
+                            
+                            
+                            Text("Description").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $description, axis: .vertical)
+                                .onChange(of: description, perform: { value in
+                                   description=String(description.prefix(200))
+                                })
+                                .lineLimit(2...4)
+                                .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                            
+                            Text("LinkedIn").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $linkedIn)
+                                .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                            
+                            Text("Github").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $github)
+                                .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                            
+                            Text("Location").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $location)
+                                .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack {
+                            GeometryReader { geometry in
+                                
+                                HStack(spacing: 0) {
+                                    Spacer()
+                                    Picker(
+                                        selection: $typeOfDeveloper, label: Text("I am")) {
+                                            Text("I am a..").tag(0)
+                                            Text("Android Dev").tag(1)
+                                            Text("iOS Dev").tag(2)
+                                            Text("React Native Dev").tag(3)
+                                        }
+                                        .pickerStyle(.menu)
+                                        .compositingGroup()
+
+                                    Spacer()
+                                    Picker(
+                                        selection: $typeOfPosition,
+                                        label: Text("Looking for:")) {
+                                            Text("looking for..").tag(0)
+                                            Text("Fullstack").tag(1)
+                                            Text("FrontEnd").tag(2)
+                                            Text("BackEnd").tag(3)
+                                        }
+                                        .pickerStyle(.menu)
+                                        .compositingGroup()
+                                    Spacer()
+                                }
+                            }
+                        }.padding()
+                    }
+                    .padding(25)
+                    .shadow(radius: 0.1, x: 0.3, y: 0.3)
                 }
+                .background(Color("secondaryColor"))
+                .cornerRadius(30)
+                .shadow(radius: 4, x: 2, y: 2)
+                .frame(
+                    width: UIScreen.main.bounds.width * 0.9,
+                    height: UIScreen.main.bounds.height * 0.5
+                )
                 
                 Spacer()
                 
-                VStack {
-                    GeometryReader { geometry in
-                        
-                        HStack(spacing: 0) {
-                            Picker(
-                                selection: $typeOfDeveloper, label: Text("I am")) {
-                                    Text("I am a..").tag(0)
-                                    Text("Android Dev").tag(1)
-                                    Text("iOS Dev").tag(2)
-                                    Text("React Native Dev").tag(3)
-                                }
-                                .pickerStyle(.menu)
-                                .frame(
-                                    width: geometry.size.width/2,
-                                    height: geometry.size.height,
-                                    alignment: .center)
-                                .compositingGroup()
-                                .clipped()
-                            
-                            Picker(
-                                selection: $typeOfPosition,
-                                label: Text("Looking for:")) {
-                                    Text("looking for..").tag(0)
-                                    Text("Fullstack").tag(1)
-                                    Text("FrontEnd").tag(2)
-                                    Text("BackEnd").tag(3)
-                                }
-                                .pickerStyle(.menu)
-                                .frame(
-                                    width: geometry.size.width/2,
-                                    height: geometry.size.height,
-                                    alignment: .center)
-                                .compositingGroup()
-                                .clipped()
-                        }
-                    }
-                }
                 Button(action: {
                     
                     if let data = photoViewModel.data {
-                        
                         storageConnection.uploadImage(image: data) { urlString in
                             db.pushUserDetails(
                                 description: description,
@@ -236,20 +254,18 @@ struct InternDetailsView: View {
                                 imageUrl: urlString ?? "nil"
                             )
                         }
-                        }
-                        
-                        
-                        
-                        print("button has been pressed")
+                    }
                 }, label: {
                     Text("Save")
                         .padding()
-                        .frame(width: 300)
-                        .background(.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(3)
-                })
-            }.padding()
+                        .frame(width: 250)
+                        .background(Color("primaryColor"))
+                        .foregroundColor(Color("secondaryColor"))
+                        .cornerRadius(10)
+                }).shadow(radius: 4, x: 2, y: 2)
+                
+                Spacer()
+            }
         }
     }
 }
