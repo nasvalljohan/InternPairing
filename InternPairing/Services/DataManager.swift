@@ -22,7 +22,6 @@ class DataManager: ObservableObject {
         
         Auth.auth().addStateDidChangeListener {
             auth, user in
-            
             if let user = user {
                 self.userLoggedIn = true
                 self.currentUser = user

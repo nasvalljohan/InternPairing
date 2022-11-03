@@ -155,9 +155,9 @@ struct NoAccountView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
 //        LoginView()
-        AccountView(isNotAUser: .constant(true))
-        .environmentObject(DataManager())
-//        NoAccountView(isNotAUser: .constant(false))
-//            .environmentObject(DataManager())
+//        AccountView(isNotAUser: .constant(true))
+//        .environmentObject(DataManager())
+        NoAccountView(isNotAUser: .constant(false))
+            .environmentObject(DataManager())
     }
 }

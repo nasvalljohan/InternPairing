@@ -17,7 +17,6 @@ struct UserDetailsView: View {
     }
 }
 
-
 // MARK: Recruiter view
 struct RecruiterDetailsView: View {
     @EnvironmentObject var db: DataManager
@@ -128,9 +127,15 @@ struct InternDetailsView: View {
     @State var imageUrl = ""
     
     var body: some View {
-        ZStack {
+        ZStack (alignment: .top) {
             Color("tertiaryColor").ignoresSafeArea()
-            
+
+            RoundedRectangle(cornerRadius: 50)
+                .fill(Color("primaryColor"))
+                .ignoresSafeArea()
+                .offset(y: -100)
+                .frame(height: UIScreen.main.bounds.height * 0.5)
+                .shadow(radius: 4, x: 2, y: 2)
             
             VStack {
                 
@@ -144,8 +149,8 @@ struct InternDetailsView: View {
                         
                     } else {
                         Image(systemName: "person.crop.circle").resizable()
-                            .frame(width: 200, height: 200)
-                            .foregroundColor(Color("secondaryColor"))
+                            .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
+                            .foregroundColor(Color("tertiaryColor"))
                     }
                     
                     VStack{
@@ -156,6 +161,7 @@ struct InternDetailsView: View {
                                 Image(systemName: "camera.fill")
                                     .resizable()
                                     .frame(width: 20, height: 17)
+                                    .shadow(radius: 4, x: 2, y: 2)
                             }
                     }
                     .foregroundColor(Color("secondaryColor"))
@@ -163,6 +169,7 @@ struct InternDetailsView: View {
                     .background(Color("primaryColor"))
                     .clipShape(Circle())
                     .offset(x: 65, y: 65)
+                    .shadow(radius: 4, x: 2, y: 2)
                 }
                 
                 Spacer()
@@ -275,6 +282,6 @@ struct InternDetailsView: View {
 //    static var previews: some View {
 //
 //        InternDetailsView()
-//        //RecruiterDetailsView()
+//        RecruiterDetailsView()
 //    }
 //}
