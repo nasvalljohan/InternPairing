@@ -13,15 +13,12 @@ class DataManager: ObservableObject {
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
     @Published var currentUser: User?
+    var userDocumentListener: ListenerRegistration? // nil as long as user is logged out
     
-    // nil as long as user is logged out
-    var userDocumentListener: ListenerRegistration?
-    
+    // Init - listening for changes in authstate
     init() {
         do {try Auth.auth().signOut() }
         catch { print("logged out") }
-        
-        
         Auth.auth().addStateDidChangeListener {
             auth, user in
             if let user = user {
