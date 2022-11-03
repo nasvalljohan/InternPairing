@@ -194,6 +194,7 @@ struct PopUpCardView: View {
                     VStack {
                         
                         Text("\(currentIntern.firstName ?? "") \(currentIntern.lastName ?? "")").font(.title).bold()
+                        //TODO: add functionality to translate db-int to android dev/hybrid/ios etc
                         Text("Android Developer").font(.title3).fontWeight(.light)
                         
                         ScrollView {
