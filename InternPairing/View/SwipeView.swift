@@ -97,11 +97,11 @@ struct CardView: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text("\(user.firstName ?? "not specified"), 29")
                                     .font(.title)
-                                    .foregroundColor(Color("tertiaryColor"))
+                                    .foregroundColor(Color(.white))
                                     .bold()
                                 Text("Frontend Android Developer")
                                     .font(.subheadline)
-                                    .foregroundColor(Color("tertiaryColor"))
+                                    .foregroundColor(Color(.white))
                                     .bold()
                             }
                             HStack {
@@ -164,7 +164,7 @@ struct PopUpCardView: View {
                                 .rotationEffect(.degrees(-90))
                                 .fixedSize()
                                 .frame(width: 20, height: 180)
-                        }.offset(x: -10)
+                        }.offset(x: -10).shadow(radius: 4, x: 2, y: 2)
                         
                         Spacer()
                         
@@ -180,6 +180,7 @@ struct PopUpCardView: View {
                         }).frame(width: 220, height: 360)
                             .cornerRadius(20)
                             .clipped()
+                            .shadow(radius: 4, x: 2, y: 2)
                         
                         Spacer()
                         ZStack {
@@ -188,7 +189,7 @@ struct PopUpCardView: View {
                                 .rotationEffect(.degrees(-90))
                                 .fixedSize()
                                 .frame(width: 20, height: 180)
-                        }.offset(x: 10)
+                        }.offset(x: 10).shadow(radius: 4, x: 2, y: 2)
                     }
                     VStack {
                         
@@ -220,7 +221,7 @@ struct PopUpCardView: View {
                             .background(Color("primaryColor"))
                             .foregroundColor(.white)
                             .cornerRadius(10)
-                    }).padding()
+                    }).padding().shadow(radius: 4, x: 2, y: 2)
                     Spacer()
                 }
             }
@@ -234,6 +235,7 @@ struct SwipeView_Previews: PreviewProvider {
  
     static var previews: some View {
         
+//
 //        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
 //            removedUser in
 //        })

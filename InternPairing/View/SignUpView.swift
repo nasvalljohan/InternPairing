@@ -205,9 +205,10 @@ struct StudentSignUp: View {
                         Spacer()
                         
                         VStack {
+                            
                             HStack {
                                 VStack {
-                                    Text(" Date of Birth:")
+                                    Text(" Date of Birth:").foregroundColor(Color(.lightGray))
                                 }
                                 Spacer()
                                 VStack {
@@ -226,8 +227,8 @@ struct StudentSignUp: View {
                                                 .bold()
                                         }
                                     })
-                                }
-                                Spacer()
+                                }.frame(width: 150).background(Color("tertiaryColor")).cornerRadius(5)
+                                
                             }
                         }
                         
@@ -361,6 +362,7 @@ extension View {
 struct SignUpView_Previews: PreviewProvider {
     
     static var previews: some View {
-        RecruiterSignUp()
+//        RecruiterSignUp()
+        StudentSignUp()
     }
 }
