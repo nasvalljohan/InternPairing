@@ -56,6 +56,7 @@ struct SwipeView: View {
 }
 
 // MARK: CardView
+// TODO: design a view when there is no interns to swipe
 struct CardView: View {
     @State private var translation: CGSize = .zero
     private var user: TheUser
@@ -212,9 +213,11 @@ struct PopUpCardView: View {
                     Spacer()
                     
                     Button(action: {
-                        showingSheet.toggle()
-                        self.makeContact(currentIntern)
-                        db.pushLikedIntern(intern: currentIntern.id ?? "0")
+                        if let currentUser = db.currentUser {
+                            showingSheet.toggle()
+                            self.makeContact(currentIntern)
+                            db.pushToContactsArray(intern: currentIntern.id ?? "", recruiter: currentUser.uid)
+                        }
                     }, label: {
                         Text("Make contact")
                             .padding()

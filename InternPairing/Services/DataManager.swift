@@ -7,8 +7,8 @@ class DataManager: ObservableObject {
     // Published variables
     private let collection = "Users"
     @Published var swipeableInternsArray: Array<TheUser> = []
-    @Published var likedInternsUIDArray: Array<String> = []
-    @Published var likedInternsArray: Array<TheUser> = []
+    @Published var contactsUidArray: Array<String> = []
+    @Published var contactsArray: Array<TheUser> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
@@ -65,7 +65,7 @@ class DataManager: ObservableObject {
                     newUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, gender: gender)
                 } else if self.selected == 2 {
                     userRole = "Recruiter"
-                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName, likedInterns: [])
+                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName, contacts: [])
                 }
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
@@ -135,13 +135,19 @@ class DataManager: ObservableObject {
     }
     
     // Adds intern uid to recruiter document
-    func pushLikedIntern(intern: String) {
-        if let currentUser = currentUser {
-            let reference = db.collection(collection).document(currentUser.uid)
-            reference.updateData([
-                "likedInterns": FieldValue.arrayUnion([intern])
-            ])
-        }
+    func pushToContactsArray(intern: String, recruiter: String) {
+
+        let referenceRecruiter = db.collection(collection).document(recruiter)
+        let referenceIntern = db.collection(collection).document(intern)
+        
+        referenceRecruiter.updateData([
+            "likedInterns": FieldValue.arrayUnion([intern])
+        ])
+        
+        referenceIntern.updateData([
+            "likedInterns": FieldValue.arrayUnion([recruiter])
+        ])
+
     }
     
     // TODO: Add function to push recruiter to matched intern
@@ -158,12 +164,12 @@ class DataManager: ObservableObject {
                 } else {
                     
                     // convert the querySnapshots to TheUser format
-                    for uid in self.likedInternsUIDArray {
+                    for uid in self.contactsUidArray {
                         for document in querySnapshot!.documents {
                             if uid == document.documentID {
                                 do {
                                     let user = try document.data(as: TheUser.self)
-                                    self.likedInternsArray.append(user)
+                                    self.contactsArray.append(user)
                                 } catch {
                                     print(error.localizedDescription)
                                 }
@@ -171,7 +177,7 @@ class DataManager: ObservableObject {
                         }
                     }
                     print("---------------------------------------------")
-                    print("likedInternsArray: \(self.likedInternsArray)")
+                    print("likedInternsArray: \(self.contactsArray)")
                     print("---------------------------------------------")
                 }
             }
@@ -226,8 +232,8 @@ class DataManager: ObservableObject {
                         self.theUser = theUser
                         
                         if theUser.role == "Recruiter" {
-                            self.likedInternsUIDArray = theUser.likedInterns ?? [""]
-                            print("LIKED_INTERNS: \(self.likedInternsUIDArray)")
+                            self.contactsUidArray = theUser.contacts ?? [""]
+                            print("LIKED_INTERNS: \(self.contactsUidArray)")
                         }
                         
                         break
