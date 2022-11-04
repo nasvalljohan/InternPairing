@@ -1,4 +1,5 @@
 import SwiftUI
+import _PhotosUI_SwiftUI
 
 // MARK: ProfileView
 struct ProfileView: View {
@@ -27,91 +28,88 @@ struct RecruiterProfileView: View {
         //               let description = db.theUser?.description {
         //                let typeOfPosition = typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)
         //                let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
-        ZStack {
-            Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
-            
-            VStack (alignment: .trailing) {
-                NavigationLink(destination: {
-                    //TODO: GO SOMEWHERE
-                }, label: {
-                    Image(systemName: "gearshape.fill").resizable()
-                        .frame(width: 25, height: 25)
-                        .shadow(radius: 1, x: 1, y: 1)
-                        .foregroundColor(Color("primaryColor"))
-                        .padding(.horizontal)
-                }).padding(.horizontal)
+        let imageUrl = db.theUser?.imageUrl
+            ZStack {
+                Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
                 
-                Spacer()
-                
-                HStack {
-                    ZStack {
-                        Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
-                        Text("About us").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
-                            .rotationEffect(.degrees(-90))
-                            .fixedSize()
-                            .frame(width: 20, height: 180)
-                    }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
-
-                    ZStack{
-                        AsyncImage(url: URL(string: "https://thumbs.dreamstime.com/b/welcome-to-team-job-hiring-employment-new-professional-career-beginning-recruiter-boss-holding-out-hand-117640101.jpg"), content: {
-                            pic in
-                            pic
-                                .resizable()
-                                .scaledToFill()
-                        }, placeholder: {
-                            Image("profile-placeholder")
-                                .resizable()
-                                .scaledToFill()
-                        }).frame(width: 220, height: 360)
-                            .cornerRadius(20)
-                            .clipped()
-                            .shadow(radius: 4, x: 2, y: 2)
-                        VStack {
-                            Image(systemName: "camera.fill")
-                                .resizable()
-                                .frame(width: 20, height: 17)
-                                .shadow(radius: 4, x: 2, y: 2)
+                VStack (alignment: .trailing) {
+                    NavigationLink(destination: {
+                        //TODO: GO SOMEWHERE
+                    }, label: {
+                        Image(systemName: "gearshape.fill").resizable()
+                            .frame(width: 25, height: 25)
+                            .shadow(radius: 1, x: 1, y: 1)
+                            .foregroundColor(Color("primaryColor"))
+                            .padding(.horizontal)
+                    }).padding(.horizontal)
+                    
+                    Spacer()
+                    
+                    HStack {
+                        ZStack {
+                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                            Text("About us").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                                .rotationEffect(.degrees(-90))
+                                .fixedSize()
+                                .frame(width: 20, height: 180)
+                        }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
+                        
+                        ZStack{
+                            if let imageUrl = imageUrl {
+                                AsyncImage(url: URL(string: imageUrl), content: {
+                                    pic in
+                                    pic
+                                        .resizable()
+                                        .scaledToFill()
+                                }, placeholder: {
+                                    Image("profile-placeholder")
+                                        .resizable()
+                                        .scaledToFill()
+                                }).frame(width: 220, height: 360)
+                                    .cornerRadius(20)
+                                    .clipped()
+                                    .shadow(radius: 4, x: 2, y: 2)
+                                
+                            }
+                            ProfilePhotosPickerView()
                             //TODO: Add photos picker
-                        }   .foregroundColor(Color("secondaryColor"))
-                            .padding(12)
-                            .background(Color("primaryColor"))
-                            .clipShape(Circle())
-                            .offset(x: 100, y: 165)
-                            .shadow(radius: 4, x: 2, y: 2)
+                        }
+                        
+                        ZStack {
+                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                            Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                                .rotationEffect(.degrees(-90))
+                                .fixedSize()
+                                .frame(width: 20, height: 180)
+                        }.offset(x: 10).shadow(radius: 4, x: 2, y: 2).padding()
+                        
                     }
                     
-                    ZStack {
-                        Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
-                        Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
-                            .rotationEffect(.degrees(-90))
-                            .fixedSize()
-                            .frame(width: 20, height: 180)
-                    }.offset(x: 10).shadow(radius: 4, x: 2, y: 2).padding()
+                    VStack {
+                        VStack {
+                            Text("Mr. Johnson").font(.title).fontWeight(.semibold)
+                            Text("Mobile Interaction").font(.title3).fontWeight(.light)
+                            Text("Stockholm").font(.subheadline).fontWeight(.light)
+                        }
+                        VStack {
+                            Text("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec qu").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                        }.padding()
+                    }.padding(.horizontal)
+                    
+                    Spacer()
                     
                 }
-                
-                VStack {
-                    VStack {
-                        Text("Mr. Johnson").font(.title).fontWeight(.semibold)
-                        Text("Mobile Interraction").font(.title3).fontWeight(.light)
-                        Text("Stockholm").font(.subheadline).fontWeight(.light)
-                    }
-                    VStack {
-                        Text("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec qu").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
-                    }.padding()
-                }.padding(.horizontal)
-                
-                Spacer()
- 
             }
         }
-        }
+        
     }
 
 
 // MARK: StudentProfileView
 struct StudentProfileView: View {
     @EnvironmentObject var db: DataManager
+    @EnvironmentObject var photoViewModel: PhotoPicker
+    @EnvironmentObject var storageManager: StorageManager
     
     var ageConverter = DateFormatting()
     var typeOf = TypeOf()
@@ -124,13 +122,13 @@ struct StudentProfileView: View {
         //   let dateOfBirth = db.theUser?.dateOfBirth,
         //   let location = db.theUser?.location,
         //   let description = db.theUser?.description,
-        //   let imageUrl = db.theUser?.imageUrl {
+           let imageUrl = db.theUser?.imageUrl
         //    let typeOfPosition = typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)
         //    let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
         //    let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth)
         //    let age = ageConverter.ageConverter(string: dateString)
         ZStack {
-            Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
+            Color("tertiaryColor").ignoresSafeArea()
             
             VStack (alignment: .trailing) {
                 NavigationLink(destination: {
@@ -157,31 +155,22 @@ struct StudentProfileView: View {
                     }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
 
                     ZStack{
-                        AsyncImage(url: URL(string: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y"), content: {
-                            pic in
-                            pic
-                                .resizable()
-                                .scaledToFill()
-                        }, placeholder: {
-                            Image("profile-placeholder")
-                                .resizable()
-                                .scaledToFill()
-                        }).frame(width: 220, height: 360)
-                            .cornerRadius(20)
-                            .clipped()
-                            .shadow(radius: 4, x: 2, y: 2)
-                        VStack {
-                            Image(systemName: "camera.fill")
-                                .resizable()
-                                .frame(width: 20, height: 17)
+                        if let imageUrl = imageUrl {
+                            AsyncImage(url: URL(string: imageUrl), content: {
+                                pic in
+                                pic
+                                    .resizable()
+                                    .scaledToFill()
+                            }, placeholder: {
+                                Image("profile-placeholder")
+                                    .resizable()
+                                    .scaledToFill()
+                            }).frame(width: 220, height: 360)
+                                .cornerRadius(20)
+                                .clipped()
                                 .shadow(radius: 4, x: 2, y: 2)
-                            //TODO: Add photos picker
-                        }   .foregroundColor(Color("secondaryColor"))
-                            .padding(12)
-                            .background(Color("primaryColor"))
-                            .clipShape(Circle())
-                            .offset(x: 100, y: 165)
-                            .shadow(radius: 4, x: 2, y: 2)
+                        }
+                        ProfilePhotosPickerView()
                     }
                     
                     ZStack {
@@ -222,6 +211,39 @@ struct ProfileView_Previews: PreviewProvider {
     }
 }
 
+struct ProfilePhotosPickerView: View {
+    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var photoViewModel: PhotoPicker
+    @EnvironmentObject var storageManager: StorageManager
+    
+    var body: some View {
+        VStack {
+            //TODO: Add photos picker
+            PhotosPicker(
+                selection: $photoViewModel.imageSelection,
+                matching: .images,
+                photoLibrary: .shared()) {
+                    Image(systemName: "camera.fill")
+                        .resizable()
+                        .frame(width: 20, height: 17)
+                        .shadow(radius: 4, x: 2, y: 2)
+                }.onChange(of: photoViewModel.data) { _ in
+                    if let data = photoViewModel.data {
+                        storageManager.uploadImage(image: data) { urlString in
+                            
+                            db.pushImage(imageUrl: urlString ?? "nil")
+                        }
+                    }
+                }
+        }
+        .foregroundColor(Color("secondaryColor"))
+        .padding(12)
+        .background(Color("primaryColor"))
+        .clipShape(Circle())
+        .offset(x: 100, y: 165)
+        .shadow(radius: 4, x: 2, y: 2)
+    }
+}
 
 struct TypeOf {
     func typeOfDev(int: Int) -> String {

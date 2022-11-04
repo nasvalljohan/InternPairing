@@ -9,7 +9,7 @@ class PhotoPicker: ObservableObject {
     
     var data: Data?
 
-    @Published private(set) var imageState: ImageState = .empty
+    @Published var imageState: ImageState = .empty
 
     @Published var imageSelection: PhotosPickerItem? {
         didSet {

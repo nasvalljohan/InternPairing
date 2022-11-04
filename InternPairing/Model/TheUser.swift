@@ -8,6 +8,8 @@ struct TheUser: Codable, Identifiable, Hashable {
     @DocumentID var id: String?
     var isUserComplete = false
     var role: String?
+    var firstName: String?
+    var lastName: String?
     var description: String?
     var linkedInLink: String?
     var githubLink: String?
@@ -16,15 +18,14 @@ struct TheUser: Codable, Identifiable, Hashable {
     var typeOfDeveloper: Int?
     var typeOfPosition: Int?
     var imageUrl: String?
+    var contacts: Array<String>?
     
     //MARK: Recruiter variables
     var companyName: String?
     var companyLink: String?
-    var likedInterns: Array<String>?
+    
     
     //MARK: Student variables
-    var firstName: String?
-    var lastName: String?
     var dateOfBirth: Date?
     var gender: String?
     
