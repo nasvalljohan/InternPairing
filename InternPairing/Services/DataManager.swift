@@ -177,8 +177,6 @@ class DataManager: ObservableObject {
         
     }
     
-    // TODO: Add function to push recruiter to matched intern
-    
     // MARK: Fetch from db functions
     
     // Fetching liked interns
