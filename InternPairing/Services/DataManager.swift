@@ -159,19 +159,22 @@ class DataManager: ObservableObject {
     }
     
     // Adds intern uid to recruiter document
-    func pushToContactsArray(intern: String, recruiter: String) {
-
-        let referenceRecruiter = db.collection(collection).document(recruiter)
-        let referenceIntern = db.collection(collection).document(intern)
+    func pushToContactsArray(intern: String) {
+        if let currentUser = currentUser {
+            
+            let referenceRecruiter = db.collection(collection).document(currentUser.uid)
+            let referenceIntern = db.collection(collection).document(intern)
+            
+            referenceRecruiter.updateData([
+                "contacts": FieldValue.arrayUnion([intern])
+            ])
+            
+            referenceIntern.updateData([
+                "contacts": FieldValue.arrayUnion([currentUser.uid])
+            ])
+            
+        }
         
-        referenceRecruiter.updateData([
-            "contacts": FieldValue.arrayUnion([intern])
-        ])
-        
-        referenceIntern.updateData([
-            "contacts": FieldValue.arrayUnion([recruiter])
-        ])
-
     }
     
     // TODO: Add function to push recruiter to matched intern
