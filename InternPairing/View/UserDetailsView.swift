@@ -45,7 +45,7 @@ struct RecruiterDetailsView: View {
                 
                 Spacer()
                 
-                PhotosPickerView()
+                DetailsPhotosPickerView()
                 
                 Spacer()
                 
@@ -174,7 +174,7 @@ struct InternDetailsView: View {
                 
                 Spacer()
                 
-                PhotosPickerView()
+                DetailsPhotosPickerView()
                 
                 Spacer()
                 
@@ -274,8 +274,7 @@ struct InternDetailsView: View {
 }
 
 // MARK: PhotosPickerView
-struct PhotosPickerView: View {
-//    let imageState: PhotoPicker.ImageState
+struct DetailsPhotosPickerView: View {
     @EnvironmentObject var photoViewModel: PhotoPicker
     
     var body: some View {
@@ -322,7 +321,7 @@ struct PhotosPickerView: View {
 //
 //    static var previews: some View {
 //
-//        InternDetailsView()
+////        InternDetailsView()
 //        RecruiterDetailsView()
 //    }
 //}
