@@ -150,6 +150,16 @@ class DataManager: ObservableObject {
         }
     }
     
+    func pushImage(imageUrl: String) {
+        if let currentUser = currentUser {
+            let reference = db.collection(collection).document(currentUser.uid)
+            
+            reference.updateData([
+                "imageUrl": imageUrl
+            ])
+        }
+    }
+    
     // Adds intern uid to recruiter document
     func pushToContactsArray(intern: String, recruiter: String) {
 

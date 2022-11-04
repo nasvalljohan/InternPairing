@@ -1,4 +1,5 @@
 import SwiftUI
+import _PhotosUI_SwiftUI
 
 // MARK: ProfileView
 struct ProfileView: View {
@@ -112,6 +113,8 @@ struct RecruiterProfileView: View {
 // MARK: StudentProfileView
 struct StudentProfileView: View {
     @EnvironmentObject var db: DataManager
+    @EnvironmentObject var photoViewModel: PhotoPicker
+    @EnvironmentObject var storageManager: StorageManager
     
     var ageConverter = DateFormatting()
     var typeOf = TypeOf()
@@ -124,7 +127,7 @@ struct StudentProfileView: View {
         //   let dateOfBirth = db.theUser?.dateOfBirth,
         //   let location = db.theUser?.location,
         //   let description = db.theUser?.description,
-        //   let imageUrl = db.theUser?.imageUrl {
+           let imageUrl = db.theUser?.imageUrl
         //    let typeOfPosition = typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)
         //    let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
         //    let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth)
@@ -157,31 +160,46 @@ struct StudentProfileView: View {
                     }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
 
                     ZStack{
-                        AsyncImage(url: URL(string: "https://media-exp1.licdn.com/dms/image/C4E03AQEZZ2_wjw8flA/profile-displayphoto-shrink_800_800/0/1650979115801?e=2147483647&v=beta&t=xLL0WDLmZr9UNGoRRBZU6T6JAvAJrFGd9IwelBSpC1Y"), content: {
-                            pic in
-                            pic
-                                .resizable()
-                                .scaledToFill()
-                        }, placeholder: {
-                            Image("profile-placeholder")
-                                .resizable()
-                                .scaledToFill()
-                        }).frame(width: 220, height: 360)
-                            .cornerRadius(20)
-                            .clipped()
-                            .shadow(radius: 4, x: 2, y: 2)
-                        VStack {
-                            Image(systemName: "camera.fill")
-                                .resizable()
-                                .frame(width: 20, height: 17)
+                        if let imageUrl = imageUrl {
+                            AsyncImage(url: URL(string: imageUrl), content: {
+                                pic in
+                                pic
+                                    .resizable()
+                                    .scaledToFill()
+                            }, placeholder: {
+                                Image("profile-placeholder")
+                                    .resizable()
+                                    .scaledToFill()
+                            }).frame(width: 220, height: 360)
+                                .cornerRadius(20)
+                                .clipped()
                                 .shadow(radius: 4, x: 2, y: 2)
+                        }
+                        VStack {
                             //TODO: Add photos picker
-                        }   .foregroundColor(Color("secondaryColor"))
-                            .padding(12)
-                            .background(Color("primaryColor"))
-                            .clipShape(Circle())
-                            .offset(x: 100, y: 165)
-                            .shadow(radius: 4, x: 2, y: 2)
+                            PhotosPicker(
+                                selection: $photoViewModel.imageSelection,
+                                matching: .images,
+                                photoLibrary: .shared()) {
+                                    Image(systemName: "camera.fill")
+                                        .resizable()
+                                        .frame(width: 20, height: 17)
+                                        .shadow(radius: 4, x: 2, y: 2)
+                                }.onChange(of: photoViewModel.data) { _ in
+                                    if let data = photoViewModel.data {
+                                        storageManager.uploadImage(image: data) { urlString in
+                                            
+                                            db.pushImage(imageUrl: urlString ?? "nil")
+                                        }
+                                    }
+                                }
+                        }
+                        .foregroundColor(Color("secondaryColor"))
+                        .padding(12)
+                        .background(Color("primaryColor"))
+                        .clipShape(Circle())
+                        .offset(x: 100, y: 165)
+                        .shadow(radius: 4, x: 2, y: 2)
                     }
                     
                     ZStack {
