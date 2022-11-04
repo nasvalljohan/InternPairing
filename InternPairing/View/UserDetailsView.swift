@@ -112,8 +112,6 @@ struct RecruiterDetailsView: View {
                 
                 Button(action: {
                     
-                    // TODO: upload urlString to recruiter user
-                    
                     if let data = photoViewModel.data {
                         storageManager.uploadImage(image: data) { urlString in
                             db.pushUserDetails(

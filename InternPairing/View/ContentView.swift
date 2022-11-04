@@ -49,6 +49,10 @@ struct TabViewRecruiter: View {
     @EnvironmentObject var db: DataManager
     @State var mainStack: [NavigationType] = []
     
+    init() {
+        UITabBar.appearance().barTintColor = UIColor(Color("primaryColor"))
+    }
+    
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
@@ -65,7 +69,8 @@ struct TabViewRecruiter: View {
                     Image(systemName: "person.circle")
                 }
                 
-            }
+            }.accentColor(Color("primaryColor"))
+            
         }
     }
 }
@@ -88,7 +93,7 @@ struct TabViewStudent: View {
                     .tabItem{
                         Image(systemName: "message.fill")
                     }
-            }
+            }.accentColor(Color("primaryColor"))
 
         }
     }
