@@ -16,7 +16,7 @@ struct ContactsView: View {
                         .bold()
                     ScrollView (.horizontal, showsIndicators: false) {
                         HStack{
-                            ForEach(userList, id: \.self) { user in
+                            ForEach(db.contactsArray, id: \.self) { user in
                                 MatchesCard()
                             }.clipped()
                         }

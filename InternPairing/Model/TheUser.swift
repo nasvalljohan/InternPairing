@@ -16,7 +16,6 @@ struct TheUser: Codable, Identifiable, Hashable {
     var otherLink: String?
     var location: String?
     var typeOfDeveloper: Int?
-    var typeOfPosition: Int?
     var imageUrl: String?
     var contacts: Array<String>?
     

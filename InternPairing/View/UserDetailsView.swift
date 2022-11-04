@@ -27,7 +27,6 @@ struct RecruiterDetailsView: View {
     @State var location = ""
     @State var companyLink = ""
     @State var typeOfDeveloper = 1
-    @State var typeOfPosition = 1
     @State var imageUrl = ""
     
     var body: some View {
@@ -121,7 +120,6 @@ struct RecruiterDetailsView: View {
                                 location: location,
                                 githubLink: "",
                                 typeOfDeveloper: typeOfDeveloper,
-                                typeOfPosition: typeOfPosition,
                                 companyLink: companyLink,
                                 imageUrl: urlString ?? "nil"
                             )
@@ -156,7 +154,6 @@ struct InternDetailsView: View {
     @State var location = ""
     @State var github = ""
     @State var typeOfDeveloper = 1
-    @State var typeOfPosition = 1
     @State var imageUrl = ""
     
     var body: some View {
@@ -252,7 +249,6 @@ struct InternDetailsView: View {
                                 location: location,
                                 githubLink: github,
                                 typeOfDeveloper: typeOfDeveloper,
-                                typeOfPosition: typeOfPosition,
                                 companyLink: "",
                                 imageUrl: urlString ?? "nil"
                             )
