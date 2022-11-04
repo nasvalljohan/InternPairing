@@ -184,12 +184,16 @@ struct StudentProfileView: View {
                     
                     VStack {
                         VStack {
-                            Text("Johan Näsvall").font(.title).fontWeight(.semibold)
+                            HStack {
+                                Text("\(firstName)").font(.title).fontWeight(.semibold)
+                                Text("\(lastName)").font(.title).fontWeight(.semibold)
+                            }
+                            
                             Text("Android Developer").font(.title3).fontWeight(.light)
-                            Text("Stockholm").font(.subheadline).fontWeight(.light)
+                            Text("\(location)").font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec qu").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text("\(description)").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     

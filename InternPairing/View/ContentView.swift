@@ -48,11 +48,7 @@ enum NavigationType: String, Hashable {
 struct TabViewRecruiter: View {
     @EnvironmentObject var db: DataManager
     @State var mainStack: [NavigationType] = []
-    
-    init() {
-        UITabBar.appearance().barTintColor = UIColor(Color("primaryColor"))
-    }
-    
+
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
@@ -60,8 +56,8 @@ struct TabViewRecruiter: View {
                     .tabItem {
                         Image(systemName: "suit.heart.fill")
                     }
-                Text("Contacts").tabItem{
-                    //Contacts view here
+                ContactsView()
+                    .tabItem{
                     Image(systemName: "message.fill")
                 }
                 ProfileView()
@@ -88,8 +84,7 @@ struct TabViewStudent: View {
                     .tabItem{
                         Image(systemName: "person.circle")
                     }
-                Text("Contacts")
-                //Contacts view here
+                ContactsView()
                     .tabItem{
                         Image(systemName: "message.fill")
                     }

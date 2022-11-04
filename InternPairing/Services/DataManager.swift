@@ -109,7 +109,7 @@ class DataManager: ObservableObject {
     // MARK: Push to db functions
     
     // Adds values from UserDetailsView to db
-    func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, typeOfPosition: Int, companyLink: String, imageUrl: String) {
+    func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String, imageUrl: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             
@@ -121,7 +121,6 @@ class DataManager: ObservableObject {
                     "location": location,
                     "otherLink": otherLink,
                     "typeOfDeveloper": typeOfDeveloper,
-                    "typeOfPosition":typeOfPosition,
                     "isUserComplete": true,
                     "imageUrl": imageUrl
                 ]) {
@@ -138,7 +137,6 @@ class DataManager: ObservableObject {
                     "linkedInLink": linkedInLink,
                     "location": location,
                     "typeOfDeveloper": typeOfDeveloper,
-                    "typeOfPosition": typeOfPosition,
                     "imageUrl": imageUrl
                 ]) {
                     error in
