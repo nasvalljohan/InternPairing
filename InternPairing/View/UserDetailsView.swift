@@ -145,49 +145,6 @@ struct RecruiterDetailsView: View {
     }
 }
 
-struct PhotosPickerView: View {
-    let imageState: PhotoPicker.ImageState
-    @EnvironmentObject var photoViewModel: PhotoPicker
-    
-    var body: some View {
-        ZStack {
-            if let data = photoViewModel.data,
-               let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .frame(width: 200, height: 200)
-                    .scaledToFit()
-                    .clipShape(Circle())
-                    .shadow(radius: 4, x: 2, y: 2)
-                
-            } else {
-                Image(systemName: "person.crop.circle").resizable()
-                    .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
-                    .foregroundColor(Color("tertiaryColor"))
-                    .shadow(radius: 4, x: 2, y: 2)
-            }
-            
-            VStack{
-                PhotosPicker(
-                    selection: $photoViewModel.imageSelection,
-                    matching: .images,
-                    photoLibrary: .shared()) {
-                        Image(systemName: "camera.fill")
-                            .resizable()
-                            .frame(width: 20, height: 17)
-                            .shadow(radius: 4, x: 2, y: 2)
-                    }
-            }
-            .foregroundColor(Color("secondaryColor"))
-            .padding(12)
-            .background(Color("primaryColor"))
-            .clipShape(Circle())
-            .offset(x: 65, y: 65)
-            .shadow(radius: 4, x: 2, y: 2)
-        }
-        
-    }
-}
 
 //MARK: Intern View
 struct InternDetailsView: View {
@@ -317,6 +274,51 @@ struct InternDetailsView: View {
         }
     }
 }
+
+// MARK: PhotosPickerView
+struct PhotosPickerView: View {
+    let imageState: PhotoPicker.ImageState
+    @EnvironmentObject var photoViewModel: PhotoPicker
+    
+    var body: some View {
+        ZStack {
+            if let data = photoViewModel.data,
+               let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                    .scaledToFit()
+                    .clipShape(Circle())
+                    .shadow(radius: 4, x: 2, y: 2)
+                
+            } else {
+                Image(systemName: "person.crop.circle").resizable()
+                    .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
+                    .foregroundColor(Color("tertiaryColor"))
+                    .shadow(radius: 4, x: 2, y: 2)
+            }
+            
+            VStack{
+                PhotosPicker(
+                    selection: $photoViewModel.imageSelection,
+                    matching: .images,
+                    photoLibrary: .shared()) {
+                        Image(systemName: "camera.fill")
+                            .resizable()
+                            .frame(width: 20, height: 17)
+                            .shadow(radius: 4, x: 2, y: 2)
+                    }
+            }
+            .foregroundColor(Color("secondaryColor"))
+            .padding(12)
+            .background(Color("primaryColor"))
+            .clipShape(Circle())
+            .offset(x: 65, y: 65)
+            .shadow(radius: 4, x: 2, y: 2)
+        }
+    }
+}
+
 
 //struct UserDetailsView_Previews: PreviewProvider {
 //

@@ -62,10 +62,25 @@ class DataManager: ObservableObject {
                 
                 if self.selected == 1 {
                     userRole = "Intern"
-                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, gender: gender)
+
+                    newUser = TheUser(
+                        id: authDataResult.user.uid,
+                        role: userRole,
+                        firstName: firstName,
+                        lastName: lastName,
+                        dateOfBirth: dateOfBirth
+                    )
                 } else if self.selected == 2 {
                     userRole = "Recruiter"
-                    newUser = TheUser(id: authDataResult.user.uid, role: userRole, companyName: companyName, contacts: [])
+
+                    newUser = TheUser(
+                        id: authDataResult.user.uid,
+                        role: userRole,
+                        firstName: firstName,
+                        lastName: lastName,
+                        contacts: [],
+                        companyName: companyName
+                    )
                 }
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
@@ -124,6 +139,7 @@ class DataManager: ObservableObject {
                     "location": location,
                     "typeOfDeveloper": typeOfDeveloper,
                     "typeOfPosition": typeOfPosition,
+                    "imageUrl": imageUrl
                 ]) {
                     error in
                     if let error = error {
