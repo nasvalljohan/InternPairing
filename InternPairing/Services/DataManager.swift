@@ -167,11 +167,11 @@ class DataManager: ObservableObject {
         let referenceIntern = db.collection(collection).document(intern)
         
         referenceRecruiter.updateData([
-            "likedInterns": FieldValue.arrayUnion([intern])
+            "contacts": FieldValue.arrayUnion([intern])
         ])
         
         referenceIntern.updateData([
-            "likedInterns": FieldValue.arrayUnion([recruiter])
+            "contacts": FieldValue.arrayUnion([recruiter])
         ])
 
     }
@@ -203,7 +203,7 @@ class DataManager: ObservableObject {
                         }
                     }
                     print("---------------------------------------------")
-                    print("likedInternsArray: \(self.contactsArray)")
+                    print("contactsArray: \(self.contactsArray)")
                     print("---------------------------------------------")
                 }
             }

@@ -117,85 +117,85 @@ struct StudentProfileView: View {
     var body: some View {
         //TODO: Implement
         
-        //if let firstName = db.theUser?.firstName,
-        //   let lastName = db.theUser?.lastName,
-        //   let dateOfBirth = db.theUser?.dateOfBirth,
-        //   let location = db.theUser?.location,
-        //   let description = db.theUser?.description,
-           let imageUrl = db.theUser?.imageUrl
-        //    let typeOfPosition = typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)
-        //    let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
-        //    let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth)
-        //    let age = ageConverter.ageConverter(string: dateString)
-        ZStack {
-            Color("tertiaryColor").ignoresSafeArea()
-            
-            VStack (alignment: .trailing) {
-                NavigationLink(destination: {
-                    //TODO: GO SOMEWHERE
-                }, label: {
-                    Image(systemName: "gearshape.fill").resizable()
-                        .frame(width: 25, height: 25)
-                        .shadow(radius: 1, x: 1, y: 1)
-                        .foregroundColor(Color("primaryColor"))
-                        .padding(.horizontal)
-                }).padding(.horizontal)
+        if let firstName = db.theUser?.firstName,
+           let lastName = db.theUser?.lastName,
+           let dateOfBirth = db.theUser?.dateOfBirth,
+           let location = db.theUser?.location,
+           let description = db.theUser?.description,
+           let imageUrl = db.theUser?.imageUrl {
+//           let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0),
+//           let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth),
+//           let age = ageConverter.ageConverter(string: dateString)
+            ZStack {
+                Color("tertiaryColor").ignoresSafeArea()
                 
-                
-                Spacer()
-                
-                
-                HStack {
-                    ZStack {
-                        Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
-                        Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
-                            .rotationEffect(.degrees(-90))
-                            .fixedSize()
-                            .frame(width: 20, height: 180)
-                    }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
-
-                    ZStack{
-                        if let imageUrl = imageUrl {
-                            AsyncImage(url: URL(string: imageUrl), content: {
-                                pic in
-                                pic
-                                    .resizable()
-                                    .scaledToFill()
-                            }, placeholder: {
-                                Image("profile-placeholder")
-                                    .resizable()
-                                    .scaledToFill()
-                            }).frame(width: 220, height: 360)
-                                .cornerRadius(20)
-                                .clipped()
-                                .shadow(radius: 4, x: 2, y: 2)
+                VStack (alignment: .trailing) {
+                    NavigationLink(destination: {
+                        //TODO: GO SOMEWHERE
+                    }, label: {
+                        Image(systemName: "gearshape.fill").resizable()
+                            .frame(width: 25, height: 25)
+                            .shadow(radius: 1, x: 1, y: 1)
+                            .foregroundColor(Color("primaryColor"))
+                            .padding(.horizontal)
+                    }).padding(.horizontal)
+                    
+                    
+                    Spacer()
+                    
+                    
+                    HStack {
+                        ZStack {
+                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                            Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                                .rotationEffect(.degrees(-90))
+                                .fixedSize()
+                                .frame(width: 20, height: 180)
+                        }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
+                        
+                        ZStack{
+                            
+                                AsyncImage(url: URL(string: imageUrl), content: {
+                                    pic in
+                                    pic
+                                        .resizable()
+                                        .scaledToFill()
+                                }, placeholder: {
+                                    Image("profile-placeholder")
+                                        .resizable()
+                                        .scaledToFill()
+                                }).frame(width: 220, height: 360)
+                                    .cornerRadius(20)
+                                    .clipped()
+                                    .shadow(radius: 4, x: 2, y: 2)
+                            
+                            ProfilePhotosPickerView()
                         }
-                        ProfilePhotosPickerView()
+                        
+                        ZStack {
+                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                            Text("Resume").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                                .rotationEffect(.degrees(-90))
+                                .fixedSize()
+                                .frame(width: 20, height: 180)
+                        }.offset(x: 10).shadow(radius: 4, x: 2, y: 2).padding()
+                        
                     }
                     
-                    ZStack {
-                        Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
-                        Text("Resume").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
-                            .rotationEffect(.degrees(-90))
-                            .fixedSize()
-                            .frame(width: 20, height: 180)
-                    }.offset(x: 10).shadow(radius: 4, x: 2, y: 2).padding()
+                    VStack {
+                        VStack {
+                            Text("Johan Näsvall").font(.title).fontWeight(.semibold)
+                            Text("Android Developer").font(.title3).fontWeight(.light)
+                            Text("Stockholm").font(.subheadline).fontWeight(.light)
+                        }
+                        VStack {
+                            Text("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec qu").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                        }.padding()
+                    }.padding(.horizontal)
+                    
+                    Spacer()
                     
                 }
-                
-                VStack {
-                    VStack {
-                        Text("Johan Näsvall").font(.title).fontWeight(.semibold)
-                        Text("Android Developer").font(.title3).fontWeight(.light)
-                        Text("Stockholm").font(.subheadline).fontWeight(.light)
-                    }
-                    VStack {
-                        Text("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec qu").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
-                    }.padding()
-                }.padding(.horizontal)
-                
-                Spacer()
- 
             }
         }
     }
