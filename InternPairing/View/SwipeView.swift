@@ -101,7 +101,8 @@ struct CardView: View {
                         
                         VStack (alignment: .leading){
                             VStack(alignment: .leading, spacing: 6) {
-                                Text("\(user.firstName ?? "not specified"), 29")
+                                //TODO: Add age
+                                Text("\(user.firstName ?? ""), 29")
                                     .font(.title)
                                     .foregroundColor(Color(.white))
                                     .bold()
@@ -111,7 +112,7 @@ struct CardView: View {
                                     .bold()
                             }
                             HStack {
-                                Text("\(user.location ?? "not specified")")
+                                Text("\(user.location ?? "")")
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                                 Image(systemName: "info.circle")
@@ -147,7 +148,7 @@ struct CardView: View {
 }
 
 
-
+// MARK: Popup Card
 struct PopUpCardView: View {
     @EnvironmentObject var db: DataManager
     @Binding var showingSheet: Bool
@@ -204,14 +205,14 @@ struct PopUpCardView: View {
                         Text("Android Developer").font(.title3).fontWeight(.light)
                         
                         ScrollView {
-                            Text(currentIntern.description ?? "Go add description!").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
+                            Text(currentIntern.description ?? "").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
                         }
                         
                         
                         
                         HStack (spacing: 0){
                             Image(systemName: "mappin").foregroundColor(.gray)
-                            Text(currentIntern.location ?? "Location unknown").font(.subheadline).fontWeight(.light)
+                            Text(currentIntern.location ?? "").font(.subheadline).fontWeight(.light)
                         }
                         
                     }
