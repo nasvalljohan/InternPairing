@@ -61,7 +61,6 @@ struct SwipeView: View {
 
 
 // MARK: CardView
-// TODO: design a view when there is no interns to swipe
 struct CardView: View {
     @State private var translation: CGSize = .zero
     private var user: TheUser
