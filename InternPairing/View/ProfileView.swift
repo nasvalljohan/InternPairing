@@ -72,7 +72,6 @@ struct RecruiterProfileView: View {
                                 
                             }
                             ProfilePhotosPickerView()
-                            //TODO: Add photos picker
                         }
                         
                         ZStack {
@@ -222,7 +221,6 @@ struct ProfilePhotosPickerView: View {
     
     var body: some View {
         VStack {
-            //TODO: Add photos picker
             PhotosPicker(
                 selection: $photoViewModel.imageSelection,
                 matching: .images,
