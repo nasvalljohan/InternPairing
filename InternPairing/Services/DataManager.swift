@@ -26,7 +26,6 @@ class DataManager: ObservableObject {
                 self.currentUser = user
                 self.fetchCurrentUser()
                 self.fetchInterns()
-                self.fetchLikedInterns()
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -180,7 +179,8 @@ class DataManager: ObservableObject {
     // MARK: Fetch from db functions
     
     // Fetching liked interns
-    func fetchLikedInterns() {
+    func fetchContacts() {
+        self.contactsArray.removeAll()
         db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
             .getDocuments() { (querySnapshot, error) in
                 
@@ -202,8 +202,7 @@ class DataManager: ObservableObject {
                         }
                     }
                     print("---------------------------------------------")
-                    print("contactsArray: \(self.contactsArray)")
-                    print("---------------------------------------------")
+                    print("contactsArray: \(self.contactsArray.count)")
                 }
             }
     }
@@ -235,6 +234,7 @@ class DataManager: ObservableObject {
     
     // fetches the current user that's logged in
     func fetchCurrentUser() {
+        self.contactsUidArray.removeAll()
         if let currentUser = currentUser {
             userDocumentListener = self.db
                 .collection(collection)
@@ -258,9 +258,11 @@ class DataManager: ObservableObject {
                         
                         if theUser.role == "Recruiter" {
                             self.contactsUidArray = theUser.contacts ?? [""]
-                            print("LIKED_INTERNS: \(self.contactsUidArray)")
+                            print("LIKED_INTERNS: \(self.contactsUidArray.count)")
                         }
                         
+                        //MARK: FUN CALL INSIDE FUN
+                        self.fetchContacts()
                         break
                     case .failure(let error):
                         print(error.localizedDescription)
