@@ -247,6 +247,7 @@ struct ProfilePhotosPickerView: View {
     }
 }
 
+// TODO: Move to own file
 struct TypeOf {
     func typeOfDev(int: Int) -> String {
         var str = ""
@@ -260,27 +261,6 @@ struct TypeOf {
             break
         case 3:
             str = "React Native"
-            break
-        default:
-            str = "Not specified"
-            break
-        }
-        
-        return str
-    }
-    
-    func typeOfPos(int: Int) -> String {
-        var str = ""
-        
-        switch int {
-        case 1:
-            str = "Fullstack"
-            break
-        case 2:
-            str = "Frontend"
-            break
-        case 3:
-            str = "Backend"
             break
         default:
             str = "Not specified"

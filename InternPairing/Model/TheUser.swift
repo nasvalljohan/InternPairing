@@ -29,8 +29,7 @@ struct TheUser: Codable, Identifiable, Hashable {
     var gender: String?
     
     
-    //TODO: Add variable for recruiter-persons name
+    //TODO: collect recruitername to show on profile.
     
-    //TODO: Check for unused variables, check also in db-calls - remove the same variables
     
 }

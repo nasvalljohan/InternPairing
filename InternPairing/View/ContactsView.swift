@@ -6,40 +6,39 @@ struct ContactsView: View {
     var userList = ["Erik", "Jonas", "Peter", "Adam", "Oskar", "1"]
     
     var body: some View {
-
-        VStack {
+        ZStack {
+            Color("tertiaryColor").ignoresSafeArea()
             if let contacts = db.contactsArray {
-                ZStack {
-                    Color("tertiaryColor").ignoresSafeArea()
-                    VStack (alignment: .leading){
-                        
-                        Text("NEW MATCHES").font(.title2)
-                            .foregroundColor(Color("primaryColor"))
-                            .bold()
-                        ScrollView (.horizontal, showsIndicators: false) {
-                            HStack{
-                                ForEach(contacts, id: \.self) { user in
-                                    MatchesCard(user: user)
-                                }.clipped()
+                
+                
+                VStack (alignment: .leading){
+                    
+                    Text("NEW MATCHES").font(.title2)
+                        .foregroundColor(Color("primaryColor"))
+                        .bold()
+                    ScrollView (.horizontal, showsIndicators: false) {
+                        HStack{
+                            ForEach(contacts, id: \.self) { user in
+                                MatchesCard(user: user)
+                            }.clipped()
+                        }
+                    }
+                    
+                    //TODO: Messaging
+                    Text("MESSAGES").font(.title2)
+                        .foregroundColor(Color("primaryColor"))
+                        .bold()
+                    ScrollView (showsIndicators: false) {
+                        VStack (spacing: 5) {
+                            ForEach(userList, id: \.self) {
+                                user in
+                                ChatCards()
+                                
                             }
                         }
-                        
-                        //TODO: Messaging 
-                        Text("MESSAGES").font(.title2)
-                            .foregroundColor(Color("primaryColor"))
-                            .bold()
-                        ScrollView (showsIndicators: false) {
-                            VStack (spacing: 5) {
-                                ForEach(userList, id: \.self) {
-                                    user in
-                                    ChatCards()
-                                    
-                                }
-                            }
-                        }
-                        
-                    }.padding(.horizontal)
-                }
+                    }
+                    
+                }.padding(.horizontal).padding(.top)
             }
         }
     }
