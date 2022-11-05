@@ -176,35 +176,47 @@ class DataManager: ObservableObject {
         
     }
     
-    // MARK: Fetch from db functions
     
-    // Fetching liked interns
-    func fetchContacts() {
-        self.contactsArray.removeAll()
-        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
-            .getDocuments() { (querySnapshot, error) in
-                
-                if let error = error {
-                    print("\(error) getting documents: (err)")
-                } else {
-                    
-                    // convert the querySnapshots to TheUser format
-                    for uid in self.contactsUidArray {
-                        for document in querySnapshot!.documents {
-                            if uid == document.documentID {
-                                do {
-                                    let user = try document.data(as: TheUser.self)
-                                    self.contactsArray.append(user)
-                                } catch {
-                                    print(error.localizedDescription)
-                                }
-                            }
-                        }
+    // MARK: Fetch from db functions
+        
+    // fetches the current user that's logged in
+    func fetchCurrentUser() {
+        self.contactsUidArray.removeAll()
+        if let currentUser = currentUser {
+            userDocumentListener = self.db
+                .collection(collection)
+                .document(currentUser.uid)
+                .addSnapshotListener {
+                    snapshot, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
                     }
-                    print("---------------------------------------------")
-                    print("contactsArray: \(self.contactsArray.count)")
+                    
+                    guard let snapshot = snapshot else { return }
+                    
+                    let result = Result {
+                        try snapshot.data(as: TheUser.self)
+                    }
+                    
+                    switch result {
+                    case .success(let theUser):
+                        self.theUser = theUser
+                        
+                        if theUser.role == "Recruiter" {
+                            self.contactsUidArray = theUser.contacts ?? [""]
+                            print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
+                        }
+                        
+                        //MARK: FUN CALL INSIDE FUN
+                        self.fetchContacts()
+                        break
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        break
+                    }
                 }
-            }
+        }
     }
     
     // fetches interns that recruiter hasn't matched with
@@ -232,44 +244,33 @@ class DataManager: ObservableObject {
             }
     }
     
-    // fetches the current user that's logged in
-    func fetchCurrentUser() {
-        self.contactsUidArray.removeAll()
-        if let currentUser = currentUser {
-            userDocumentListener = self.db
-                .collection(collection)
-                .document(currentUser.uid)
-                .addSnapshotListener {
-                    snapshot, error in
-                    if let error = error {
-                        print(error.localizedDescription)
-                        return
-                    }
+    // Fetching contacts for both recruiter and intern
+    func fetchContacts() {
+        self.contactsArray.removeAll()
+        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true)
+            .getDocuments() { (querySnapshot, error) in
+                
+                if let error = error {
+                    print("\(error) getting documents: (err)")
+                } else {
                     
-                    guard let snapshot = snapshot else { return }
-                    
-                    let result = Result {
-                        try snapshot.data(as: TheUser.self)
-                    }
-                    
-                    switch result {
-                    case .success(let theUser):
-                        self.theUser = theUser
-                        
-                        if theUser.role == "Recruiter" {
-                            self.contactsUidArray = theUser.contacts ?? [""]
-                            print("LIKED_INTERNS: \(self.contactsUidArray.count)")
+                    // convert the querySnapshots to TheUser format
+                    for uid in self.contactsUidArray {
+                        for document in querySnapshot!.documents {
+                            if uid == document.documentID {
+                                do {
+                                    let user = try document.data(as: TheUser.self)
+                                    self.contactsArray.append(user)
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
                         }
-                        
-                        //MARK: FUN CALL INSIDE FUN
-                        self.fetchContacts()
-                        break
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                        break
                     }
+
+                    print("2. ContactsArray: \(self.contactsArray.count)")
                 }
-        }
+            }
     }
 }
 
