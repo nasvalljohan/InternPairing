@@ -28,8 +28,7 @@ struct TheUser: Codable, Identifiable, Hashable {
     var dateOfBirth: Date?
     var gender: String?
     
-    
-    //TODO: collect recruitername to show on profile.
+
     
     
 }

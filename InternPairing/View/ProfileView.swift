@@ -23,12 +23,10 @@ struct RecruiterProfileView: View {
     
     var body: some View {
         
-        //TODO: Implement:
-        //            if let companyName = db.theUser?.companyName,
-        //               let description = db.theUser?.description {
-        //                let typeOfPosition = typeOf.typeOfPos(int: db.theUser?.typeOfPosition ?? 0)
-        //                let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
-        let imageUrl = db.theUser?.imageUrl
+        if let companyName = db.theUser?.companyName,
+           let description = db.theUser?.description,
+           let imageUrl = db.theUser?.imageUrl {
+
             ZStack {
                 Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
                 
@@ -55,22 +53,22 @@ struct RecruiterProfileView: View {
                         }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
                         
                         ZStack{
-                            if let imageUrl = imageUrl {
-                                AsyncImage(url: URL(string: imageUrl), content: {
-                                    pic in
-                                    pic
-                                        .resizable()
-                                        .scaledToFill()
-                                }, placeholder: {
-                                    Image("profile-placeholder")
-                                        .resizable()
-                                        .scaledToFill()
-                                }).frame(width: 220, height: 360)
-                                    .cornerRadius(20)
-                                    .clipped()
-                                    .shadow(radius: 4, x: 2, y: 2)
-                                
-                            }
+                            
+                            AsyncImage(url: URL(string: imageUrl), content: {
+                                pic in
+                                pic
+                                    .resizable()
+                                    .scaledToFill()
+                            }, placeholder: {
+                                Image("profile-placeholder")
+                                    .resizable()
+                                    .scaledToFill()
+                            }).frame(width: 220, height: 360)
+                                .cornerRadius(20)
+                                .clipped()
+                                .shadow(radius: 4, x: 2, y: 2)
+                            
+                            
                             ProfilePhotosPickerView()
                         }
                         
@@ -86,12 +84,14 @@ struct RecruiterProfileView: View {
                     
                     VStack {
                         VStack {
+                            //TODO: Add recruiter firstname
                             Text("Mr. Johnson").font(.title).fontWeight(.semibold)
-                            Text("Mobile Interaction").font(.title3).fontWeight(.light)
+                            Text(companyName).font(.title3).fontWeight(.light)
+                            //TODO: Add recruiter location?
                             Text("Stockholm").font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec qu").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text(description).lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     
@@ -100,6 +100,7 @@ struct RecruiterProfileView: View {
                 }
             }
         }
+    }
         
     }
 
@@ -114,15 +115,14 @@ struct StudentProfileView: View {
     var typeOf = TypeOf()
     
     var body: some View {
-        //TODO: Implement
-        
         if let firstName = db.theUser?.firstName,
            let lastName = db.theUser?.lastName,
            let dateOfBirth = db.theUser?.dateOfBirth,
            let location = db.theUser?.location,
            let description = db.theUser?.description,
            let imageUrl = db.theUser?.imageUrl {
-//           let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0),
+           let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
+            //TODO: ska dessa användas här?
 //           let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth),
 //           let age = ageConverter.ageConverter(string: dateString)
             ZStack {
@@ -154,19 +154,19 @@ struct StudentProfileView: View {
                         
                         ZStack{
                             
-                                AsyncImage(url: URL(string: imageUrl), content: {
-                                    pic in
-                                    pic
-                                        .resizable()
-                                        .scaledToFill()
-                                }, placeholder: {
-                                    Image("profile-placeholder")
-                                        .resizable()
-                                        .scaledToFill()
-                                }).frame(width: 220, height: 360)
-                                    .cornerRadius(20)
-                                    .clipped()
-                                    .shadow(radius: 4, x: 2, y: 2)
+                            AsyncImage(url: URL(string: imageUrl), content: {
+                                pic in
+                                pic
+                                    .resizable()
+                                    .scaledToFill()
+                            }, placeholder: {
+                                Image("profile-placeholder")
+                                    .resizable()
+                                    .scaledToFill()
+                            }).frame(width: 220, height: 360)
+                                .cornerRadius(20)
+                                .clipped()
+                                .shadow(radius: 4, x: 2, y: 2)
                             
                             ProfilePhotosPickerView()
                         }
@@ -184,15 +184,15 @@ struct StudentProfileView: View {
                     VStack {
                         VStack {
                             HStack {
-                                Text("\(firstName)").font(.title).fontWeight(.semibold)
-                                Text("\(lastName)").font(.title).fontWeight(.semibold)
+                                Text(firstName).font(.title).fontWeight(.semibold)
+                                Text(lastName).font(.title).fontWeight(.semibold)
                             }
                             
-                            Text("Android Developer").font(.title3).fontWeight(.light)
-                            Text("\(location)").font(.subheadline).fontWeight(.light)
+                            Text(typeOfDeveloper).font(.title3).fontWeight(.light)
+                            Text(location).font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text("\(description)").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text(description).lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     
@@ -251,16 +251,16 @@ struct ProfilePhotosPickerView: View {
 struct TypeOf {
     func typeOfDev(int: Int) -> String {
         var str = ""
-        
+        //TODO: Maybe add case for web-dev?
         switch int {
         case 1:
-            str = "Android"
+            str = "Android dev"
             break
         case 2:
-            str = "iOS"
+            str = "iOS dev"
             break
         case 3:
-            str = "React Native"
+            str = "Hybrid dev"
             break
         default:
             str = "Not specified"

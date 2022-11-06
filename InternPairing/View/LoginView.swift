@@ -47,7 +47,7 @@ struct AccountView: View {
                     Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
                 }
                 VStack {
-                    //TODO: Add Page-Title "Login
+                    //TODO: Add Page-Title "Login"
                 }
                 VStack{
                     VStack(alignment: .leading) {
@@ -122,6 +122,7 @@ struct NoAccountView: View {
                             .pickerStyle(.wheel)
                             .frame(width: 150, height: 50)
                             .offset(x: -10)
+                        //TODO: Add .clipped() and realign
                     }.frame(width: UIScreen.main.bounds.width * 0.9, height: 200).padding().offset(y: -10)
                     Spacer()
                     //Signup btn
