@@ -46,22 +46,21 @@ struct AccountView: View {
                     Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
                     Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
                 }
-                VStack {
-                    //TODO: Add Page-Title "Login"
-                }
-                VStack{
-                    VStack(alignment: .leading) {
-                        Text(" Email:").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                VStack (spacing: 0) {
+                    VStack {
+                        Text("Login").font(.title).fontWeight(.light)
+                    }.padding().offset(y: 40)
+                    VStack{
+                        VStack(alignment: .leading) {
+                            Text(" Email:").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $email)
+                                .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                            Text(" Password:").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            SecureField("", text: $password).textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                        }.padding()
                         
-                        TextField("", text: $email)
-                            .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
-                    }.padding()
-                    VStack(alignment: .leading){
-                        Text(" Password:").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
-                        SecureField("", text: $password).textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
-                    }.padding()
-                }.frame(width: UIScreen.main.bounds.width * 0.9, height: 200).padding().offset(y: -10)
-                
+                    }.frame(width: UIScreen.main.bounds.width * 0.9, height: 200).padding().offset(y: -10)
+                }
                 
                 Spacer()
                 //Login btn
@@ -111,19 +110,20 @@ struct NoAccountView: View {
                         Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
                         Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
                     }
-                    VStack {
-                        //TODO: Add Page-Title "Register as"
-                    }
-                    VStack {
+                    VStack (spacing: 0) {
+                        VStack {
+                            Text("Register as ").font(.title).fontWeight(.light)
+                        }.padding().offset(y: 40)
+                        VStack {
                             Picker(selection: $db.selected, label: Text("Favorite Color")) {
                                 Text("Student").tag(1)
                                 Text("Recruiter").tag(2)
                             }
                             .pickerStyle(.wheel)
-                            .frame(width: 150, height: 50)
-                            .offset(x: -10)
-                        //TODO: Add .clipped() and realign
-                    }.frame(width: UIScreen.main.bounds.width * 0.9, height: 200).padding().offset(y: -10)
+                            .frame(height: 80)
+                            .clipped(antialiased: true)
+                        }.frame(width: UIScreen.main.bounds.width * 0.9, height: 200).padding().offset(y: -10)
+                    }
                     Spacer()
                     //Signup btn
                     VStack {NavigationLink(destination:{
