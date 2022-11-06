@@ -46,7 +46,9 @@ struct AccountView: View {
                     Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
                     Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
                 }
-                
+                VStack {
+                    //TODO: Add Page-Title "Login
+                }
                 VStack{
                     VStack(alignment: .leading) {
                         Text(" Email:").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
@@ -110,7 +112,9 @@ struct NoAccountView: View {
                         Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
                     }
                     VStack {
-                        Text("I'm a").font(.title3).fontWeight(.light)
+                        //TODO: Add Page-Title "Register as"
+                    }
+                    VStack {
                             Picker(selection: $db.selected, label: Text("Favorite Color")) {
                                 Text("Student").tag(1)
                                 Text("Recruiter").tag(2)
