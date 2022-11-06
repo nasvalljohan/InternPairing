@@ -203,11 +203,8 @@ class DataManager: ObservableObject {
                     case .success(let theUser):
                         self.theUser = theUser
                         
-                        if theUser.role == "Recruiter" {
                             self.contactsUidArray = theUser.contacts ?? [""]
                             print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
-                        }
-                        
                         //MARK: FUN CALL INSIDE FUN
                         self.fetchContacts()
                         break
