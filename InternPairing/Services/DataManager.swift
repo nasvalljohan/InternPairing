@@ -108,7 +108,7 @@ class DataManager: ObservableObject {
     // MARK: Push to db functions
     
     // Adds values from UserDetailsView to db
-    func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String, imageUrl: String) {
+    func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             
@@ -121,7 +121,6 @@ class DataManager: ObservableObject {
                     "otherLink": otherLink,
                     "typeOfDeveloper": typeOfDeveloper,
                     "isUserComplete": true,
-                    "imageUrl": imageUrl
                 ]) {
                     error in
                     if let error = error {
@@ -136,7 +135,6 @@ class DataManager: ObservableObject {
                     "linkedInLink": linkedInLink,
                     "location": location,
                     "typeOfDeveloper": typeOfDeveloper,
-                    "imageUrl": imageUrl
                 ]) {
                     error in
                     if let error = error {
