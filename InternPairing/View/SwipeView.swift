@@ -64,6 +64,7 @@ struct SwipeView: View {
 struct CardView: View {
     @State private var translation: CGSize = .zero
     private var user: TheUser
+    var formatter = Formatter()
     private var onRemove: (_ user: TheUser) -> Void
     private var thresholdPercentage: CGFloat = 0.4 // when the user has draged 50% the width of the screen in either direction
     
@@ -84,7 +85,6 @@ struct CardView: View {
                 VStack {
                     ZStack (alignment: .bottomLeading) {
                         
-                        
                         AsyncImage(url: URL(string: user.imageUrl ?? ""), content: {
                             pic in
                             pic
@@ -101,16 +101,16 @@ struct CardView: View {
                         
                         VStack (alignment: .leading){
                             VStack(alignment: .leading, spacing: 6) {
-                                //TODO: Add age
-                                Text("\(user.firstName ?? ""), 29")
-                                    .font(.title)
-                                    .foregroundColor(Color(.white))
-                                    .bold()
-                                //TODO: Add typeofdeveloper-variable
-                                Text("Frontend Android Developer")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color(.white))
-                                    .bold()
+                                if let date = user.dateOfBirth {
+                                    Text("\(user.firstName ?? ""), \(formatter.showAge(date: date))")
+                                        .font(.title)
+                                        .foregroundColor(Color(.white))
+                                        .bold()
+                                    Text(formatter.typeOfDev(int: user.typeOfDeveloper ?? 0))
+                                        .font(.subheadline)
+                                        .foregroundColor(Color(.white))
+                                        .bold()
+                                }
                             }
                             HStack {
                                 Text("\(user.location ?? "")")
@@ -154,6 +154,7 @@ struct PopUpCardView: View {
     @EnvironmentObject var db: DataManager
     @Binding var showingSheet: Bool
     @Binding var currentIntern: TheUser?
+    var formatter = Formatter()
     var makeContact: (_ currentIntern: TheUser) -> Void
     
     
@@ -200,10 +201,8 @@ struct PopUpCardView: View {
                         }.offset(x: 10).shadow(radius: 4, x: 2, y: 2)
                     }
                     VStack {
-                        
                         Text("\(currentIntern.firstName ?? "") \(currentIntern.lastName ?? "")").font(.title).bold()
-                        //TODO: add functionality to translate db-int to android dev/hybrid/ios etc
-                        Text("Android Developer").font(.title3).fontWeight(.light)
+                        Text(formatter.typeOfDev(int: currentIntern.typeOfDeveloper ?? 0)).font(.title3).fontWeight(.light)
                         
                         ScrollView {
                             Text(currentIntern.description ?? "").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
