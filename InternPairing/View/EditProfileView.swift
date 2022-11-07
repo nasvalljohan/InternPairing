@@ -2,7 +2,7 @@
 import SwiftUI
 import PhotosUI
 
-struct UserDetailsView: View {
+struct EditProfileView: View {
     // TODO: make rules for going to next page
     @EnvironmentObject var db: DataManager
     var body: some View {

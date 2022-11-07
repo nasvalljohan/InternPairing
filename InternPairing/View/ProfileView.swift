@@ -24,8 +24,7 @@ struct RecruiterProfileView: View {
     var body: some View {
         
         if let companyName = db.theUser?.companyName,
-           let description = db.theUser?.description,
-           let imageUrl = db.theUser?.imageUrl {
+           let description = db.theUser?.description {
 
             ZStack {
                 Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
@@ -57,7 +56,7 @@ struct RecruiterProfileView: View {
                         
                         ZStack{
                             
-                            AsyncImage(url: URL(string: imageUrl), content: {
+                            AsyncImage(url: URL(string: db.theUser?.imageUrl ?? ""), content: {
                                 pic in
                                 pic
                                     .resizable()
@@ -70,7 +69,6 @@ struct RecruiterProfileView: View {
                                 .cornerRadius(20)
                                 .clipped()
                                 .shadow(radius: 4, x: 2, y: 2)
-                            
                             
                             ProfilePhotosPickerView()
                         }
@@ -117,17 +115,15 @@ struct StudentProfileView: View {
     var ageConverter = DateFormatting()
     var typeOf = TypeOfDeveloper()
     
+    var imageUrl: String?
+    
     var body: some View {
         if let firstName = db.theUser?.firstName,
            let lastName = db.theUser?.lastName,
-           let dateOfBirth = db.theUser?.dateOfBirth,
-           let location = db.theUser?.location,
-           let description = db.theUser?.description,
-           let imageUrl = db.theUser?.imageUrl {
-           let typeOfDeveloper = typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0)
-            //TODO: ska dessa användas här?
-//           let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth),
-//           let age = ageConverter.ageConverter(string: dateString)
+           let dateOfBirth = db.theUser?.dateOfBirth {
+            let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth)
+            let age = ageConverter.ageConverter(string: dateString)
+
             ZStack {
                 Color("tertiaryColor").ignoresSafeArea()
                 
@@ -161,20 +157,19 @@ struct StudentProfileView: View {
                         }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
                         
                         ZStack{
-                            
-                            AsyncImage(url: URL(string: imageUrl), content: {
-                                pic in
-                                pic
-                                    .resizable()
-                                    .scaledToFill()
-                            }, placeholder: {
-                                Image("profile-placeholder")
-                                    .resizable()
-                                    .scaledToFill()
-                            }).frame(width: 220, height: 360)
-                                .cornerRadius(20)
-                                .clipped()
-                                .shadow(radius: 4, x: 2, y: 2)
+                            AsyncImage(url: URL(string: db.theUser?.imageUrl ?? ""), content: {
+                                    pic in
+                                    pic
+                                        .resizable()
+                                        .scaledToFill()
+                                }, placeholder: {
+                                    Image("profile-placeholder")
+                                        .resizable()
+                                        .scaledToFill()
+                                }).frame(width: 220, height: 360)
+                                    .cornerRadius(20)
+                                    .clipped()
+                                    .shadow(radius: 4, x: 2, y: 2)
                             
                             ProfilePhotosPickerView()
                         }
@@ -194,13 +189,14 @@ struct StudentProfileView: View {
                             HStack {
                                 Text(firstName).font(.title).fontWeight(.semibold)
                                 Text(lastName).font(.title).fontWeight(.semibold)
+                                Text(age).font(.title2).fontWeight(.ultraLight).frame(alignment: .bottom)
                             }
                             
-                            Text(typeOfDeveloper).font(.title3).fontWeight(.light)
-                            Text(location).font(.subheadline).fontWeight(.light)
+                            Text(typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
+                            Text(db.theUser?.location ?? "Not specified lol").font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text(description).lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text(db.theUser?.description ?? "No description").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     
@@ -222,6 +218,7 @@ struct ProfileView_Previews: PreviewProvider {
     }
 }
 
+// MARK: ProfilePhotosPickerView
 struct ProfilePhotosPickerView: View {
     @EnvironmentObject var db: DataManager
     @EnvironmentObject var photoViewModel: PhotoPicker
