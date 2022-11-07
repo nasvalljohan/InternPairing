@@ -202,7 +202,6 @@ class DataManager: ObservableObject {
                     switch result {
                     case .success(let theUser):
                         self.theUser = theUser
-                        
                             self.contactsUidArray = theUser.contacts ?? [""]
                             print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
                         //MARK: FUN CALL INSIDE FUN
@@ -232,7 +231,12 @@ class DataManager: ObservableObject {
                     for document in querySnapshot!.documents {
                         do {
                             let user = try document.data(as: TheUser.self)
-                            self.swipeableInternsArray.append(user)
+                            
+                            if !self.contactsUidArray.contains(user.id ?? ""){
+                                self.swipeableInternsArray.append(user)
+                            }
+
+                                
                         } catch {
                             print(error.localizedDescription)
                         }
