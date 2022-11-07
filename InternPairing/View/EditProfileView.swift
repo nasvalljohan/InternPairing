@@ -192,6 +192,7 @@ struct EditRecruiterProfileView: View {
                         .shadow(radius: 4, x: 2, y: 2)
                         
                         Button(action: {
+                            // TODO: MAKE AN ALERT IF NOT FILLED CORRECTLY
                             db.pushUserDetails(
                                 firstName: editedFirstName,
                                 lastName: editedLastName,
@@ -285,21 +286,28 @@ struct EditInternProfileView: View {
                     ScrollView(showsIndicators: false) {
                         
                         VStack(alignment: .leading) {
-                            
-                            
-                            Text(" Firstname").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            HStack(spacing: 3) {
+                                Text(" Firstname").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
                             TextField("", text: $editedFirstName)
                                 .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
                         }
                         
                         VStack(alignment: .leading) {
-                            Text(" Lastname").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            HStack(spacing: 3) {
+                                Text(" Lastname").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
                             TextField("", text: $editedLastName)
                                 .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
                         }
                         
                         VStack(alignment: .leading) {
-                            Text(" Description").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            HStack(spacing: 3) {
+                                Text(" Description").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
                             TextField("", text: $editedDescription, axis: .vertical)
                                 .onChange(of: description, perform: { value in
                                     editedDescription=String(editedDescription.prefix(200))
@@ -327,7 +335,10 @@ struct EditInternProfileView: View {
                         }
                         
                         VStack(alignment: .leading) {
-                            Text(" Location").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            HStack(spacing: 3) {
+                                Text(" Location").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
                             TextField("", text: $editedLocation)
                                 .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
                         }
@@ -362,6 +373,7 @@ struct EditInternProfileView: View {
                         .shadow(radius: 4, x: 2, y: 2)
                         
                         Button(action: {
+                            // TODO: MAKE AN ALERT IF NOT FILLED CORRECTLY
                             db.pushUserDetails(
                                 firstName: editedFirstName,
                                 lastName: editedLastName,
