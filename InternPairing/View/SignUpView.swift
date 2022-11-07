@@ -24,6 +24,8 @@ struct RecruiterSignUp: View {
     
     @EnvironmentObject var db: DataManager
     
+    @State var firstName = ""
+    @State var lastName = ""
     @State var companyName = ""
     @State var companyEmail = ""
     @State var companyPassword = ""
@@ -42,32 +44,36 @@ struct RecruiterSignUp: View {
                 .shadow(radius: 4, x: 2, y: 2)
             
             VStack {
-                
                 Spacer()
-                
-                Text("Jinder")
-                
-                Spacer()
-                
+
                 ZStack(alignment: .topLeading) {
-                    
                     VStack {
+                        Text("Register as Recruiter")
+                            .font(.title)
+                            .foregroundColor(Color("primaryColor"))
+                            .padding()
                         Spacer()
                         VStack {
-                            Text("Register as Recruiter")
-                                .font(.title)
-                                .foregroundColor(Color("primaryColor"))
-                            
+                            HStack {
+                                VStack(alignment: .leading, spacing: 5){
+                                    Text(" Firstname:").foregroundColor(Color(.lightGray))
+                                    TextField("", text: $firstName)
+                                        .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                                }
+                                
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(" Lastname:").foregroundColor(Color(.lightGray))
+                                    TextField("", text: $lastName)
+                                        .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                                }
+                            }
                             Spacer()
-                            
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" Company name:").foregroundColor(Color(.lightGray))
                                 TextField("", text: $companyName)
                                     .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
-                            
                             Spacer()
-                            
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(" E-mail:").foregroundColor(Color(.lightGray))
                                 TextField("", text: $companyEmail)
@@ -86,18 +92,19 @@ struct RecruiterSignUp: View {
                                     .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                             Spacer()
+                            
                         }
                         Spacer()
                     }
-                    .padding(25)
+                    .padding()
                     .frame(
                         width: UIScreen.main.bounds.width * 0.9,
-                        height: UIScreen.main.bounds.height * 0.50
+                        height: UIScreen.main.bounds.height * 0.6
                     )
                     .shadow(radius: 0.1, x: 0.3, y: 0.3)
                 }
                 .background(Color("secondaryColor"))
-                .cornerRadius(30)
+                .cornerRadius(15)
                 .shadow(radius: 4, x: 2, y: 2)
                 
                 Spacer()
@@ -117,7 +124,7 @@ struct RecruiterSignUp: View {
                     
                     
                     Button(action: {
-                        db.registerUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: "", lastName: "", gender: "", companyName: companyName, isUserComplete: false)
+                        db.registerUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, companyName: companyName, isUserComplete: false)
                     }, label: {
                         Text("Next")
                             .padding()
@@ -162,15 +169,6 @@ struct StudentSignUp: View {
                 .shadow(radius: 4, x: 2, y: 2)
             
             VStack(spacing: 0) {
-                Spacer()
-                
-                VStack {
-                    Text("Jobbig Tinder")
-                        .bold()
-                        .foregroundColor(Color("tertiaryColor"))
-                }
-                .background(Color("primaryColor"))
-                .foregroundColor(.white)
                 
                 Spacer()
                 
@@ -202,7 +200,6 @@ struct StudentSignUp: View {
                                     .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
                             }
                         }
-                        Spacer()
                         
                         VStack {
                             
@@ -230,9 +227,8 @@ struct StudentSignUp: View {
                                 }.frame(width: 150).background(Color("tertiaryColor")).cornerRadius(5)
                                 
                             }
-                        }
+                        }.padding(.vertical)
                         
-                        Spacer()
                         VStack {
                             //TV Password & Input för lösenord
                             VStack(alignment: .leading, spacing: 5) {
@@ -250,7 +246,7 @@ struct StudentSignUp: View {
                         }
                         Spacer()
                     }
-                    .padding(25)
+                    .padding()
                     .frame(
                         width: UIScreen.main.bounds.width * 0.9,
                         height: UIScreen.main.bounds.height * 0.65
@@ -258,7 +254,7 @@ struct StudentSignUp: View {
                     .shadow(radius: 0.1, x: 0.3, y: 0.3)
                 }
                 .background(Color("secondaryColor"))
-                .cornerRadius(30)
+                .cornerRadius(15)
                 .shadow(radius: 4, x: 2, y: 2)
                 
                 Spacer()
@@ -276,10 +272,9 @@ struct StudentSignUp: View {
                             .cornerRadius(10)
                     }).shadow(radius: 4, x: 2, y: 2)
                     
-                    
                     Button(action: {
                         
-                        db.registerUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, gender: "male", companyName: "", isUserComplete: false)
+                        db.registerUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, companyName: "", isUserComplete: false)
                         print(date)
                     }, label: {
                         Text("Next")
