@@ -3,6 +3,8 @@ import Firebase
 
 // MARK: SignUpView
 struct SignUpView: View {
+    
+    // TODO: make rules for to go to detailsView
     @EnvironmentObject var db: DataManager
     
     var body: some View {
