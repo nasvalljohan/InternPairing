@@ -68,7 +68,7 @@ struct MatchesCard: View {
             VStack (alignment: .center) {
                 Text(user.firstName ?? "" )
                     .font(.subheadline)
-                    .foregroundColor(Color("tertiaryColor"))
+                    .foregroundColor(Color("primaryColor"))
                     .bold()
                 
                 if db.theUser?.role == "Intern" {
