@@ -106,6 +106,7 @@ struct CardView: View {
                                     .font(.title)
                                     .foregroundColor(Color(.white))
                                     .bold()
+                                //TODO: Add typeofdeveloper-variable
                                 Text("Frontend Android Developer")
                                     .font(.subheadline)
                                     .foregroundColor(Color(.white))
