@@ -45,7 +45,7 @@ class DataManager: ObservableObject {
     // MARK: Auth functions
     
     // Register
-    func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, gender: String?, companyName: String?, isUserComplete: Bool) {
+    func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, companyName: String?, isUserComplete: Bool) {
         var userRole = ""
         var newUser: TheUser?
         
@@ -204,7 +204,6 @@ class DataManager: ObservableObject {
                         self.theUser = theUser
                             self.contactsUidArray = theUser.contacts ?? [""]
                             print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
-                        //MARK: FUN CALL INSIDE FUN
                         self.fetchContacts()
                         break
                     case .failure(let error):
