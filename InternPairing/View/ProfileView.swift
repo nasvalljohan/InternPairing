@@ -19,7 +19,7 @@ struct ProfileView: View {
 // MARK: RecruiterProfileView
 struct RecruiterProfileView: View {
     @EnvironmentObject var db: DataManager
-    var typeOf = TypeOf()
+    var typeOf = TypeOfDeveloper()
     
     var body: some View {
         
@@ -35,6 +35,7 @@ struct RecruiterProfileView: View {
                         Spacer()
                         NavigationLink(destination: {
                             //TODO: GO SOMEWHERE
+                            //Edit Page
                         }, label: {
                             Image(systemName: "gearshape.fill").resizable()
                                 .frame(width: 25, height: 25)
@@ -114,7 +115,7 @@ struct StudentProfileView: View {
     @EnvironmentObject var storageManager: StorageManager
     
     var ageConverter = DateFormatting()
-    var typeOf = TypeOf()
+    var typeOf = TypeOfDeveloper()
     
     var body: some View {
         if let firstName = db.theUser?.firstName,
@@ -136,7 +137,8 @@ struct StudentProfileView: View {
                         Spacer()
                         
                         NavigationLink(destination: {
-                            //TODO: GO SOMEWHERE
+                            // TODO: GO SOMEWHERE
+                            // Edit Page
                         }, label: {
                             Image(systemName: "gearshape.fill").resizable()
                                 .frame(width: 25, height: 25)
@@ -254,7 +256,7 @@ struct ProfilePhotosPickerView: View {
 }
 
 // TODO: Move to own file
-struct TypeOf {
+struct TypeOfDeveloper {
     func typeOfDev(int: Int) -> String {
         var str = ""
         //TODO: Maybe add case for web-dev?
