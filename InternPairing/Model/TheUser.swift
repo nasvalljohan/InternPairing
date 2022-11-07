@@ -28,9 +28,7 @@ struct TheUser: Codable, Identifiable, Hashable {
     var dateOfBirth: Date?
     var gender: String?
     
+
     
-    //TODO: Add variable for recruiter-persons name
-    
-    //TODO: Check for unused variables, check also in db-calls - remove the same variables
     
 }

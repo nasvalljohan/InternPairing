@@ -4,7 +4,7 @@ import Network
 
 class NetworkManager: ObservableObject {
     
-    // TODO: Implementation.
+    // TODO: General implementation?
     
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "NetworkManager")

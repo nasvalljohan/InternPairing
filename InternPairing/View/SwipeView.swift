@@ -12,51 +12,55 @@ struct SwipeView: View {
     
     var body: some View {
         
-        ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color("primaryColor"))
-                .ignoresSafeArea()
-                .offset(y: -100)
-                .frame(height: UIScreen.main.bounds.height * 0.5)
-                .shadow(radius: 4, x: 2, y: 2)
-        VStack {
-            
-            GeometryReader { geometry in
-                ZStack{
-                    
-                    ForEach(db.swipeableInternsArray, id: \.self) { user in
+        if db.swipeableInternsArray.count <= 0 {
+            VStack (alignment: .center) {
+                Text("No more students").font(.title).fontWeight(.semibold)
+                Text("Come back later!").font(.title3).fontWeight(.light)
+            }
+        }
+            if db.swipeableInternsArray.count > 0 {
+                ZStack(alignment: .top) {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color("primaryColor"))
+                        .ignoresSafeArea()
+                        .offset(y: -100)
+                        .frame(height: UIScreen.main.bounds.height * 0.5)
+                        .shadow(radius: 4, x: 2, y: 2)
+                    VStack {
                         
-                        CardView(user: user, onRemove: { removedUser in
-                            let tempUser = removedUser
-                            db.swipeableInternsArray.removeAll { $0.id == removedUser.id }
-                            db.swipeableInternsArray.insert(tempUser, at: 0)
-                        })
-                        .onTapGesture {
-                            showingSheet.toggle()
-                            pickCurrentIntern(intern: user)
+                        GeometryReader { geometry in
+                            ForEach(db.swipeableInternsArray, id: \.self) { user in
+                                
+                                CardView(user: user, onRemove: { removedUser in
+                                    let tempUser = removedUser
+                                    db.swipeableInternsArray.removeAll { $0.id == removedUser.id }
+                                    db.swipeableInternsArray.insert(tempUser, at: 0)
+                                })
+                                .onTapGesture {
+                                    showingSheet.toggle()
+                                    pickCurrentIntern(intern: user)
+                                }
+                                .animation(.spring(), value: 10)
+                                .offset(y: -20)
+                            }
+                        }.sheet(isPresented: $showingSheet) {
+                            PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern, makeContact: {
+                                currentIntern in
+                                db.swipeableInternsArray.removeAll { $0.id == currentIntern.id }
+                            })
+                            
+                            
                         }
-                        .animation(.spring(), value: 10)
-                        .offset(y: -20)
+                        
                     }
-                }.sheet(isPresented: $showingSheet) {
-                    PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern, makeContact: {
-                        currentIntern in
-                        db.swipeableInternsArray.removeAll { $0.id == currentIntern.id }
-                    })
-                    
                     
                 }
-                
             }
-            
-        }
-        
     }
 }
-}
+
 
 // MARK: CardView
-// TODO: design a view when there is no interns to swipe
 struct CardView: View {
     @State private var translation: CGSize = .zero
     private var user: TheUser
@@ -80,6 +84,7 @@ struct CardView: View {
                 VStack {
                     ZStack (alignment: .bottomLeading) {
                         
+                        
                         AsyncImage(url: URL(string: user.imageUrl ?? ""), content: {
                             pic in
                             pic
@@ -96,7 +101,8 @@ struct CardView: View {
                         
                         VStack (alignment: .leading){
                             VStack(alignment: .leading, spacing: 6) {
-                                Text("\(user.firstName ?? "not specified"), 29")
+                                //TODO: Add age
+                                Text("\(user.firstName ?? ""), 29")
                                     .font(.title)
                                     .foregroundColor(Color(.white))
                                     .bold()
@@ -106,7 +112,7 @@ struct CardView: View {
                                     .bold()
                             }
                             HStack {
-                                Text("\(user.location ?? "not specified")")
+                                Text("\(user.location ?? "")")
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                                 Image(systemName: "info.circle")
@@ -142,7 +148,7 @@ struct CardView: View {
 }
 
 
-
+// MARK: Popup Card
 struct PopUpCardView: View {
     @EnvironmentObject var db: DataManager
     @Binding var showingSheet: Bool
@@ -199,14 +205,14 @@ struct PopUpCardView: View {
                         Text("Android Developer").font(.title3).fontWeight(.light)
                         
                         ScrollView {
-                            Text(currentIntern.description ?? "Go add description!").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
+                            Text(currentIntern.description ?? "").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
                         }
                         
                         
                         
                         HStack (spacing: 0){
                             Image(systemName: "mappin").foregroundColor(.gray)
-                            Text(currentIntern.location ?? "Location unknown").font(.subheadline).fontWeight(.light)
+                            Text(currentIntern.location ?? "").font(.subheadline).fontWeight(.light)
                         }
                         
                     }
@@ -232,12 +238,12 @@ struct PopUpCardView: View {
     
 }
 
-// MARK: Preview
+//// MARK: Preview
 //struct SwipeView_Previews: PreviewProvider {
-// 
+//
 //    static var previews: some View {
-//        
 ////
+//        SwipeView()
 ////        CardView(user: TheUser(role: "Intern", location: "Stockholm", imageUrl: "..", firstName: "Johan", dateOfBirth: Date()), onRemove: {
 ////            removedUser in
 ////        })
