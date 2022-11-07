@@ -26,12 +26,13 @@
 		3273F48F2914116A00938654 /* ContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3273F48E2914116A00938654 /* ContactsView.swift */; };
 		328DD42E28F6ABDF00F006EB /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328DD42D28F6ABDF00F006EB /* SignUpView.swift */; };
 		328DD43028F6FF5500F006EB /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328DD42F28F6FF5500F006EB /* ProfileView.swift */; };
-		3330A13F28FED94A00BE460E /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3330A13E28FED94A00BE460E /* UserDetailsView.swift */; };
+		3330A13F28FED94A00BE460E /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3330A13E28FED94A00BE460E /* EditProfileView.swift */; };
 		337E54C929092D53005465C2 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337E54C829092D53005465C2 /* DateFormatting.swift */; };
 		337E54CB29096166005465C2 /* ColorThemeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337E54CA29096166005465C2 /* ColorThemeProtocol.swift */; };
 		337E54CD290D8B11005465C2 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337E54CC290D8B11005465C2 /* PhotoPicker.swift */; };
 		33F19FB728F45ACA00FA46C0 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F19FB628F45ACA00FA46C0 /* DataManager.swift */; };
 		33F19FB928F45E7E00FA46C0 /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F19FB828F45E7E00FA46C0 /* SwipeView.swift */; };
+		33F1E86C2919287C00CEBFCC /* TypeOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F1E86B2919287C00CEBFCC /* TypeOf.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,12 +71,13 @@
 		3273F48E2914116A00938654 /* ContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsView.swift; sourceTree = "<group>"; };
 		328DD42D28F6ABDF00F006EB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		328DD42F28F6FF5500F006EB /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		3330A13E28FED94A00BE460E /* UserDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
+		3330A13E28FED94A00BE460E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		337E54C829092D53005465C2 /* DateFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatting.swift; sourceTree = "<group>"; };
 		337E54CA29096166005465C2 /* ColorThemeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemeProtocol.swift; sourceTree = "<group>"; };
 		337E54CC290D8B11005465C2 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		33F19FB628F45ACA00FA46C0 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		33F19FB828F45E7E00FA46C0 /* SwipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeView.swift; sourceTree = "<group>"; };
+		33F1E86B2919287C00CEBFCC /* TypeOf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeOf.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,7 +185,7 @@
 				33F19FB828F45E7E00FA46C0 /* SwipeView.swift */,
 				328DD42D28F6ABDF00F006EB /* SignUpView.swift */,
 				328DD42F28F6FF5500F006EB /* ProfileView.swift */,
-				3330A13E28FED94A00BE460E /* UserDetailsView.swift */,
+				3330A13E28FED94A00BE460E /* EditProfileView.swift */,
 				3273F48E2914116A00938654 /* ContactsView.swift */,
 			);
 			path = View;
@@ -205,6 +207,7 @@
 				323C16222906EF7100CC886B /* TheUser.swift */,
 				337E54CC290D8B11005465C2 /* PhotoPicker.swift */,
 				337E54C829092D53005465C2 /* DateFormatting.swift */,
+				33F1E86B2919287C00CEBFCC /* TypeOf.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -350,7 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3268E83528F4237B0059BF70 /* ContentView.swift in Sources */,
-				3330A13F28FED94A00BE460E /* UserDetailsView.swift in Sources */,
+				3330A13F28FED94A00BE460E /* EditProfileView.swift in Sources */,
 				33F19FB728F45ACA00FA46C0 /* DataManager.swift in Sources */,
 				3273F48F2914116A00938654 /* ContactsView.swift in Sources */,
 				337E54C929092D53005465C2 /* DateFormatting.swift in Sources */,
@@ -363,6 +366,7 @@
 				321350BA290FE83100F13D03 /* NetworkManager.swift in Sources */,
 				328DD43028F6FF5500F006EB /* ProfileView.swift in Sources */,
 				337E54CD290D8B11005465C2 /* PhotoPicker.swift in Sources */,
+				33F1E86C2919287C00CEBFCC /* TypeOf.swift in Sources */,
 				323C162B290A625300CC886B /* StorageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

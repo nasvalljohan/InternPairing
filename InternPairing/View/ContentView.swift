@@ -12,24 +12,13 @@ struct ContentView: View {
         VStack {
             if db.userLoggedIn {
                 if db.theUser?.role == "Recruiter" {
-                    if db.theUser?.isUserComplete == false{
-                        UserDetailsView()
-                    }else {
-                        TabViewRecruiter()
-                    }
-                    
+                    TabViewRecruiter()
                 } else if db.theUser?.role == "Intern" {
-                    if db.theUser?.isUserComplete == false {
-                        UserDetailsView()
-                    } else {
-                        TabViewStudent()
-                    }
-                    
+                    TabViewStudent()
                 }
             } else{
                 LoginView()
-            }
-                
+            }       
         }
         .environmentObject(db)
         .environmentObject(photoViewModel)
