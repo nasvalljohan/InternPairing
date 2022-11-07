@@ -24,6 +24,8 @@ struct RecruiterProfileView: View {
     var body: some View {
         
         if let companyName = db.theUser?.companyName,
+           let firstName = db.theUser?.firstName,
+           let lastName = db.theUser?.lastName,
            let description = db.theUser?.description {
 
             ZStack {
@@ -33,8 +35,7 @@ struct RecruiterProfileView: View {
                     HStack {
                         Spacer()
                         NavigationLink(destination: {
-                            //TODO: GO SOMEWHERE
-                            //Edit Page
+                            EditProfileView()
                         }, label: {
                             Image(systemName: "gearshape.fill").resizable()
                                 .frame(width: 25, height: 25)
@@ -85,9 +86,11 @@ struct RecruiterProfileView: View {
                     
                     VStack(alignment: .center) {
                         VStack {
-                            //TODO: Add recruiter firstname
-                            Text("Mr. Johnson").font(.title).fontWeight(.semibold)
-                            Text(companyName).font(.title3).fontWeight(.light)
+                            Text(companyName).font(.title).fontWeight(.semibold)
+                            HStack {
+                                Text(firstName).font(.title3).fontWeight(.light)
+                                Text(lastName).font(.title3).fontWeight(.light)
+                            }
                             //TODO: Add recruiter location?
                             Text("Stockholm").font(.subheadline).fontWeight(.light)
                         }
@@ -133,8 +136,7 @@ struct StudentProfileView: View {
                         Spacer()
                         
                         NavigationLink(destination: {
-                            // TODO: GO SOMEWHERE
-                            // Edit Page
+                            EditProfileView()
                         }, label: {
                             Image(systemName: "gearshape.fill").resizable()
                                 .frame(width: 25, height: 25)
@@ -252,26 +254,3 @@ struct ProfilePhotosPickerView: View {
     }
 }
 
-// TODO: Move to own file
-struct TypeOfDeveloper {
-    func typeOfDev(int: Int) -> String {
-        var str = ""
-        //TODO: Maybe add case for web-dev?
-        switch int {
-        case 1:
-            str = "Android dev"
-            break
-        case 2:
-            str = "iOS dev"
-            break
-        case 3:
-            str = "Hybrid dev"
-            break
-        default:
-            str = "Not specified"
-            break
-        }
-        
-        return str
-    }
-}
