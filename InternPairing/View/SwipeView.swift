@@ -64,7 +64,7 @@ struct SwipeView: View {
 struct CardView: View {
     @State private var translation: CGSize = .zero
     private var user: TheUser
-    var typeOf = TypeOfDeveloper()
+    var formatter = Formatter()
     private var onRemove: (_ user: TheUser) -> Void
     private var thresholdPercentage: CGFloat = 0.4 // when the user has draged 50% the width of the screen in either direction
     
@@ -101,15 +101,16 @@ struct CardView: View {
                         
                         VStack (alignment: .leading){
                             VStack(alignment: .leading, spacing: 6) {
-                                //TODO: Add age
-                                Text("\(user.firstName ?? ""), 29")
-                                    .font(.title)
-                                    .foregroundColor(Color(.white))
-                                    .bold()
-                                Text(typeOf.typeOfDev(int: user.typeOfDeveloper ?? 0))
-                                    .font(.subheadline)
-                                    .foregroundColor(Color(.white))
-                                    .bold()
+                                if let date = user.dateOfBirth {
+                                    Text("\(user.firstName ?? ""), \(formatter.showAge(date: date))")
+                                        .font(.title)
+                                        .foregroundColor(Color(.white))
+                                        .bold()
+                                    Text(formatter.typeOfDev(int: user.typeOfDeveloper ?? 0))
+                                        .font(.subheadline)
+                                        .foregroundColor(Color(.white))
+                                        .bold()
+                                }
                             }
                             HStack {
                                 Text("\(user.location ?? "")")
@@ -153,7 +154,7 @@ struct PopUpCardView: View {
     @EnvironmentObject var db: DataManager
     @Binding var showingSheet: Bool
     @Binding var currentIntern: TheUser?
-    var typeOf = TypeOfDeveloper()
+    var formatter = Formatter()
     var makeContact: (_ currentIntern: TheUser) -> Void
     
     
@@ -201,7 +202,7 @@ struct PopUpCardView: View {
                     }
                     VStack {
                         Text("\(currentIntern.firstName ?? "") \(currentIntern.lastName ?? "")").font(.title).bold()
-                        Text(typeOf.typeOfDev(int: currentIntern.typeOfDeveloper ?? 0)).font(.title3).fontWeight(.light)
+                        Text(formatter.typeOfDev(int: currentIntern.typeOfDeveloper ?? 0)).font(.title3).fontWeight(.light)
                         
                         ScrollView {
                             Text(currentIntern.description ?? "").font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true).padding()
