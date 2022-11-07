@@ -9,16 +9,19 @@ struct EditProfileView: View {
         ZStack {
             
             if db.theUser?.role == "Recruiter" {
-                RecruiterDetailsView()
+                EditRecruiterProfileView()
             } else if db.theUser?.role == "Intern" {
-                InternDetailsView()
+                EditInternProfileView()
             }
         }
     }
 }
 
 // MARK: Recruiter view
-struct RecruiterDetailsView: View {
+struct EditRecruiterProfileView: View {
+    // navigate back
+    @Environment(\.dismiss) var dismiss
+    
     @EnvironmentObject var db: DataManager
     @EnvironmentObject var photoViewModel: PhotoPicker
     @EnvironmentObject var storageManager: StorageManager
@@ -41,10 +44,6 @@ struct RecruiterDetailsView: View {
                 .shadow(radius: 4, x: 2, y: 2)
             
             VStack {
-                
-                Spacer()
-                
-                DetailsPhotosPickerView()
                 
                 Spacer()
                 
@@ -110,21 +109,15 @@ struct RecruiterDetailsView: View {
                 Spacer()
                 
                 Button(action: {
-                    
-                    if let data = photoViewModel.data {
-                        storageManager.uploadImage(image: data) { urlString in
-                            db.pushUserDetails(
-                                description: description,
-                                linkedInLink: linkedIn,
-                                otherLink: "",
-                                location: location,
-                                githubLink: "",
-                                typeOfDeveloper: typeOfDeveloper,
-                                companyLink: companyLink,
-                                imageUrl: urlString ?? "nil"
-                            )
-                        }
-                    }
+                    db.pushUserDetails(
+                        description: description,
+                        linkedInLink: linkedIn,
+                        otherLink: "",
+                        location: location,
+                        githubLink: "",
+                        typeOfDeveloper: typeOfDeveloper,
+                        companyLink: companyLink
+                    )
                 }, label: {
                     Text("Save")
                         .padding()
@@ -143,7 +136,8 @@ struct RecruiterDetailsView: View {
 
 
 //MARK: Intern View
-struct InternDetailsView: View {
+struct EditInternProfileView: View {
+    @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var db: DataManager
     @EnvironmentObject var photoViewModel: PhotoPicker
@@ -168,10 +162,6 @@ struct InternDetailsView: View {
                 .shadow(radius: 4, x: 2, y: 2)
             
             VStack {
-                
-                Spacer()
-                
-                DetailsPhotosPickerView()
                 
                 Spacer()
                 
@@ -239,9 +229,19 @@ struct InternDetailsView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    if let data = photoViewModel.data {
-                        storageManager.uploadImage(image: data) { urlString in
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Text(Image(systemName: "arrow.uturn.backward"))
+                            .padding()
+                            .frame(width: 60)
+                            .background(Color("primaryColor"))
+                            .foregroundColor(Color("secondaryColor"))
+                            .cornerRadius(10)
+                    }).shadow(radius: 4, x: 2, y: 2)
+                    HStack {
+                        Button(action: {
                             db.pushUserDetails(
                                 description: description,
                                 linkedInLink: linkedIn,
@@ -249,70 +249,23 @@ struct InternDetailsView: View {
                                 location: location,
                                 githubLink: github,
                                 typeOfDeveloper: typeOfDeveloper,
-                                companyLink: "",
-                                imageUrl: urlString ?? "nil"
+                                companyLink: ""
                             )
-                        }
+                        }, label: {
+                            Text("Save")
+                                .padding()
+                                .frame(width: 250)
+                                .background(Color("primaryColor"))
+                                .foregroundColor(Color("secondaryColor"))
+                                .cornerRadius(10)
+                        }).shadow(radius: 4, x: 2, y: 2)
                     }
-                }, label: {
-                    Text("Save")
-                        .padding()
-                        .frame(width: 250)
-                        .background(Color("primaryColor"))
-                        .foregroundColor(Color("secondaryColor"))
-                        .cornerRadius(10)
-                }).shadow(radius: 4, x: 2, y: 2)
-                
+                }
                 Spacer()
             }
         }
     }
 }
-
-// MARK: PhotosPickerView
-struct DetailsPhotosPickerView: View {
-    @EnvironmentObject var photoViewModel: PhotoPicker
-    
-    var body: some View {
-        ZStack {
-            if let data = photoViewModel.data,
-               let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .frame(width: 200, height: 200)
-                    .scaledToFit()
-                    .clipShape(Circle())
-                    .shadow(radius: 4, x: 2, y: 2)
-                
-            } else {
-                Image(systemName: "person.crop.circle").resizable()
-                    .frame(width: 200, height: 200).scaledToFit().clipShape(Circle())
-                    .foregroundColor(Color("tertiaryColor"))
-                    .shadow(radius: 4, x: 2, y: 2)
-            }
-            
-            VStack{
-                PhotosPicker(
-                    selection: $photoViewModel.imageSelection,
-                    matching: .images,
-                    photoLibrary: .shared()) {
-                        Image(systemName: "camera.fill")
-                            .resizable()
-                            .frame(width: 20, height: 17)
-                            .shadow(radius: 4, x: 2, y: 2)
-                    }
-            }
-            .foregroundColor(Color("secondaryColor"))
-            .padding(12)
-            .background(Color("primaryColor"))
-            .clipShape(Circle())
-            .offset(x: 65, y: 65)
-            .shadow(radius: 4, x: 2, y: 2)
-        }
-    }
-}
-
-
 //struct UserDetailsView_Previews: PreviewProvider {
 //
 //    static var previews: some View {

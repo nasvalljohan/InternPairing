@@ -7,9 +7,9 @@ struct ProfileView: View {
     var body: some View {
         VStack{
             if db.theUser?.role == "Recruiter" {
-                RecruiterProfileView()
+                RecruiterProfileView().navigationBarBackButtonHidden(true)
             } else if db.theUser?.role == "Intern" {
-                StudentProfileView()
+                StudentProfileView().navigationBarBackButtonHidden(true)
             }
         }
     }
@@ -19,7 +19,6 @@ struct ProfileView: View {
 // MARK: RecruiterProfileView
 struct RecruiterProfileView: View {
     @EnvironmentObject var db: DataManager
-    var typeOf = TypeOfDeveloper()
     
     var body: some View {
         
@@ -115,8 +114,7 @@ struct StudentProfileView: View {
     @EnvironmentObject var photoViewModel: PhotoPicker
     @EnvironmentObject var storageManager: StorageManager
     
-    var ageConverter = DateFormatting()
-    var typeOf = TypeOfDeveloper()
+    var formatter = Formatter()
     
     var imageUrl: String?
     
@@ -124,8 +122,8 @@ struct StudentProfileView: View {
         if let firstName = db.theUser?.firstName,
            let lastName = db.theUser?.lastName,
            let dateOfBirth = db.theUser?.dateOfBirth {
-            let dateString = ageConverter.dateToString(dateOfBirth: dateOfBirth)
-            let age = ageConverter.ageConverter(string: dateString)
+            let dateString = formatter.dateToString(dateOfBirth: dateOfBirth)
+            let age = formatter.ageConverter(string: dateString)
 
             ZStack {
                 Color("tertiaryColor").ignoresSafeArea()
@@ -194,7 +192,7 @@ struct StudentProfileView: View {
                                 Text(age).font(.title2).fontWeight(.ultraLight).frame(alignment: .bottom)
                             }
                             
-                            Text(typeOf.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
+                            Text(formatter.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
                             Text(db.theUser?.location ?? "Not specified lol").font(.subheadline).fontWeight(.light)
                         }
                         VStack {

@@ -147,7 +147,7 @@ struct StudentSignUp: View {
     // navigate back
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var db: DataManager
-    var formatter = DateFormatting()
+    var formatter = Formatter()
     
     @State var firstName = ""
     @State var lastName = ""
