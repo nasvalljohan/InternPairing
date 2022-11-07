@@ -30,17 +30,19 @@ struct RecruiterProfileView: View {
             ZStack {
                 Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
                 
-                VStack (alignment: .trailing) {
-                    NavigationLink(destination: {
-                        //TODO: GO SOMEWHERE
-                    }, label: {
-                        Image(systemName: "gearshape.fill").resizable()
-                            .frame(width: 25, height: 25)
-                            .shadow(radius: 1, x: 1, y: 1)
-                            .foregroundColor(Color("primaryColor"))
-                            .padding(.horizontal)
-                    }).padding(.horizontal)
-                    
+                VStack {
+                    HStack {
+                        Spacer()
+                        NavigationLink(destination: {
+                            //TODO: GO SOMEWHERE
+                        }, label: {
+                            Image(systemName: "gearshape.fill").resizable()
+                                .frame(width: 25, height: 25)
+                                .shadow(radius: 1, x: 1, y: 1)
+                                .foregroundColor(Color("primaryColor"))
+                                .padding(.horizontal)
+                        }).padding(.horizontal)
+                    }
                     Spacer()
                     
                     HStack {
@@ -82,7 +84,7 @@ struct RecruiterProfileView: View {
                         
                     }
                     
-                    VStack {
+                    VStack(alignment: .center) {
                         VStack {
                             //TODO: Add recruiter firstname
                             Text("Mr. Johnson").font(.title).fontWeight(.semibold)
@@ -128,17 +130,21 @@ struct StudentProfileView: View {
             ZStack {
                 Color("tertiaryColor").ignoresSafeArea()
                 
-                VStack (alignment: .trailing) {
-                    NavigationLink(destination: {
-                        //TODO: GO SOMEWHERE
-                    }, label: {
-                        Image(systemName: "gearshape.fill").resizable()
-                            .frame(width: 25, height: 25)
-                            .shadow(radius: 1, x: 1, y: 1)
-                            .foregroundColor(Color("primaryColor"))
-                            .padding(.horizontal)
-                    }).padding(.horizontal)
+                VStack {
                     
+                    HStack {
+                        Spacer()
+                        
+                        NavigationLink(destination: {
+                            //TODO: GO SOMEWHERE
+                        }, label: {
+                            Image(systemName: "gearshape.fill").resizable()
+                                .frame(width: 25, height: 25)
+                                .shadow(radius: 1, x: 1, y: 1)
+                                .foregroundColor(Color("primaryColor"))
+                                .padding(.horizontal)
+                        }).padding(.horizontal)
+                    }
                     
                     Spacer()
                     
