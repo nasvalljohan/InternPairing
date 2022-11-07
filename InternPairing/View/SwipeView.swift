@@ -65,7 +65,7 @@ struct CardView: View {
     @State private var translation: CGSize = .zero
     private var user: TheUser
     private var onRemove: (_ user: TheUser) -> Void
-    private var thresholdPercentage: CGFloat = 0.5 // when the user has draged 50% the width of the screen in either direction
+    private var thresholdPercentage: CGFloat = 0.4 // when the user has draged 50% the width of the screen in either direction
     
     
     init(user: TheUser, onRemove: @escaping (_ user: TheUser) -> Void){
