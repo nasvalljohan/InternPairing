@@ -41,6 +41,10 @@ struct TabViewRecruiter: View {
     var body: some View {
         NavigationStack(path: $mainStack){
             TabView{
+                ProfileView()
+                    .tabItem{
+                    Image(systemName: "person.circle")
+                }
                 SwipeView()
                     .tabItem {
                         Image(systemName: "suit.heart.fill")
@@ -49,11 +53,6 @@ struct TabViewRecruiter: View {
                     .tabItem{
                     Image(systemName: "message.fill")
                 }
-                ProfileView()
-                    .tabItem{
-                    Image(systemName: "person.circle")
-                }
-                
             }.accentColor(Color("primaryColor"))
             
         }
