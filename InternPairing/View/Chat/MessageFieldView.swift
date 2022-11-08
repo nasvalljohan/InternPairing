@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MessageField: View {
+struct MessageFieldView: View {
     @State private var message = ""
     
     var body: some View {
@@ -35,7 +35,7 @@ struct MessageField: View {
 
 struct MessageField_Previews: PreviewProvider {
     static var previews: some View {
-        MessageField()
+        MessageFieldView()
     }
 }
 

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ChatBubble: View {
+struct ChatBubbleView: View {
     var message: Message
     @State private var showTime = false
     
@@ -54,7 +54,7 @@ struct ChatBubble: View {
 
 struct ChatBubble_Previews: PreviewProvider {
     static var previews: some View {
-        ChatBubble(message: Message(
+        ChatBubbleView(message: Message(
             id: "123",
             text: "Hi friend, we need to speak. ASAP!",
             received: true,

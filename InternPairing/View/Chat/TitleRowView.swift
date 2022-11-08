@@ -9,7 +9,7 @@ import SwiftUI
 var imageUrl = URL(string: "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1085&q=80")
 
 var name = "Saiman Chen"
-struct TitleRow: View {
+struct TitleRowView: View {
     var body: some View {
         
         ZStack {
@@ -40,6 +40,6 @@ struct TitleRow: View {
 
 struct TitleRow_Previews: PreviewProvider {
     static var previews: some View {
-        TitleRow()
+        TitleRowView()
     }
 }
