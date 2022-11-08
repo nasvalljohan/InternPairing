@@ -7,9 +7,9 @@ struct ProfileView: View {
     var body: some View {
         VStack{
             if db.theUser?.role == "Recruiter" {
-                RecruiterProfileView().navigationBarBackButtonHidden(true)
+                RecruiterProfileView()
             } else if db.theUser?.role == "Intern" {
-                StudentProfileView().navigationBarBackButtonHidden(true)
+                StudentProfileView()
             }
         }
     }

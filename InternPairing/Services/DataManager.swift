@@ -108,17 +108,19 @@ class DataManager: ObservableObject {
     // MARK: Push to db functions
     
     // Adds values from UserDetailsView to db
-    func pushUserDetails(description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String) {
+    func pushUserDetails(firstName: String, lastName: String, companyName: String, description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String) {
         if let currentUser = currentUser {
             let reference = db.collection(collection).document(currentUser.uid)
             
             if selected == 1 {
                 reference.updateData([
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "companyName": companyName,
+                    "companyLink": companyLink,
                     "description": description,
-                    "githubLink": githubLink,
                     "linkedInLink": linkedInLink,
                     "location": location,
-                    "otherLink": otherLink,
                     "typeOfDeveloper": typeOfDeveloper,
                     "isUserComplete": true,
                 ]) {
@@ -129,10 +131,13 @@ class DataManager: ObservableObject {
                 }
             } else if selected == 2 {
                 reference.updateData([
-                    "companyLink": companyLink,
+                    "firstName": firstName,
+                    "lastName": lastName,
                     "description": description,
                     "isUserComplete": true,
                     "linkedInLink": linkedInLink,
+                    "githubLink": githubLink,
+                    "otherLink": otherLink,
                     "location": location,
                     "typeOfDeveloper": typeOfDeveloper,
                 ]) {

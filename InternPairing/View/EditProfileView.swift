@@ -9,9 +9,27 @@ struct EditProfileView: View {
         ZStack {
             
             if db.theUser?.role == "Recruiter" {
-                EditRecruiterProfileView()
+                EditRecruiterProfileView(
+                    firstName: db.theUser?.firstName ?? "",
+                    lastName: db.theUser?.lastName ?? "",
+                    companyName: db.theUser?.companyName ?? "",
+                    description: db.theUser?.description ?? "",
+                    linkedin: db.theUser?.linkedInLink ?? "https://www.linkedin.com/",
+                    location: db.theUser?.location ?? "",
+                    companyLink: db.theUser?.companyLink ?? "https://www.",
+                    typeOfDeveloper: db.theUser?.typeOfDeveloper ?? 1
+                ).navigationBarBackButtonHidden(true)
             } else if db.theUser?.role == "Intern" {
-                EditInternProfileView()
+                EditInternProfileView(
+                    firstName: db.theUser?.firstName ?? "",
+                    lastName: db.theUser?.lastName ?? "",
+                    description: db.theUser?.description ?? "",
+                    linkedin: db.theUser?.linkedInLink ?? "https://www.linkedin.com/",
+                    location: db.theUser?.location ?? "",
+                    typeOfDeveloper: db.theUser?.typeOfDeveloper ?? 1,
+                    github: db.theUser?.githubLink ?? "https://www.github.com/",
+                    otherLink: db.theUser?.otherLink ?? ""
+                ).navigationBarBackButtonHidden(true)
             }
         }
     }
@@ -25,109 +43,178 @@ struct EditRecruiterProfileView: View {
     @EnvironmentObject var db: DataManager
     @EnvironmentObject var photoViewModel: PhotoPicker
     @EnvironmentObject var storageManager: StorageManager
-    @State var description = ""
-    @State var linkedIn = ""
-    @State var location = ""
-    @State var companyLink = ""
-    @State var typeOfDeveloper = 1
+    
+    var firstName: String
+    @State var editedFirstName: String
+    var lastName: String
+    @State var editedLastName: String
+    var companyName: String
+    @State var editedCompanyName: String
+    var description: String
+    @State var editedDescription: String
+    var linkedIn: String
+    @State var editedLinkedIn: String
+    var location: String
+    @State var editedLocation: String
+    var companyLink: String
+    @State var editedCompanyLink: String
+    var typeOfDeveloper: Int
+    @State var editedTypeOfDeveloper: Int
+    
     @State var imageUrl = ""
     
+    
+    init(firstName: String, lastName: String, companyName: String, description: String, linkedin: String, location: String, companyLink: String, typeOfDeveloper: Int) {
+        self.firstName = firstName
+        self._editedFirstName = State(wrappedValue: firstName)
+        self.lastName = lastName
+        self._editedLastName = State(wrappedValue: lastName)
+        self.companyName = companyName
+        self._editedCompanyName = State(wrappedValue: companyName)
+        self.description = description
+        self._editedDescription = State(wrappedValue: description)
+        self.linkedIn = linkedin
+        self._editedLinkedIn = State(wrappedValue: linkedin)
+        self.location = location
+        self._editedLocation = State(wrappedValue: location)
+        self.companyLink = companyLink
+        self._editedCompanyLink = State(wrappedValue: companyLink)
+        self.typeOfDeveloper = typeOfDeveloper
+        self._editedTypeOfDeveloper = State(wrappedValue: typeOfDeveloper)
+    }
+    
     var body: some View {
-        ZStack (alignment: .top) {
+        
+        ZStack {
             Color("tertiaryColor").ignoresSafeArea()
-            
-            RoundedRectangle(cornerRadius: 50)
-                .fill(Color("primaryColor"))
-                .ignoresSafeArea()
-                .offset(y: -100)
-                .frame(height: UIScreen.main.bounds.height * 0.5)
-                .shadow(radius: 4, x: 2, y: 2)
             
             VStack {
                 
-                Spacer()
-                
-                ZStack {
-                    Color("secondaryColor")
+                VStack {
+                    Text("Edit profile")
+                        .font(.title)
+                        .fontWeight(.light)
+                        .foregroundColor(Color("primaryColor"))
+                    
+                    Spacer()
+                    
                     ScrollView(showsIndicators: false) {
-                        VStack {
-                            Text("Add details").font(.title3).fontWeight(.light)
-                            Spacer()
-                            VStack(alignment: .leading) {
-                                
-                                Text(" Description").font(.subheadline).fontWeight(.light).offset(y: 10)
-                                TextField("", text: $description, axis: .vertical)
-                                    .onChange(of: description, perform: { value in
-                                        description=String(description.prefix(200))
-                                    })
-                                    .lineLimit(2...4)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
-                                
-                                Text(" LinkedIn").font(.subheadline).fontWeight(.light).offset(y: 10)
-                                TextField("", text: $linkedIn)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
-                                
-                                Text(" Website").font(.subheadline).fontWeight(.light).offset(y: 10)
-                                TextField("", text: $companyLink)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
-                                
-                                Text(" Location").font(.subheadline).fontWeight(.light).offset(y: 10)
-                                TextField("", text: $location)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Firstname").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
                             }
+                            TextField("", text: $editedFirstName)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Lastname").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
+                            TextField("", text: $editedLastName)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Company name").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
+                            TextField("", text: $editedCompanyName)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Description").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
+                                
+                            TextField("", text: $editedDescription, axis: .vertical)
+                                .onChange(of: description, perform: { value in
+                                    editedDescription=String(editedDescription.prefix(200))
+                                })
+                                .lineLimit(2...4)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(" LinkedIn").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $editedLinkedIn)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(" Website").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $editedCompanyLink)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Location").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
+                            TextField("", text: $editedLocation)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
                             
-                            VStack {
-                                GeometryReader { geometry in
-                                    
-                                    HStack(spacing: 0) {
-                                        Text(" Looking for").font(.subheadline).fontWeight(.light)
-                                        Spacer()
-                                        Picker(
-                                            selection: $typeOfDeveloper, label: Text("Looking for")) {
-                                                Text("Android").tag(1)
-                                                Text("iOS").tag(2)
-                                                Text("Hybrid").tag(3)
-                                            }
-                                            .pickerStyle(.segmented)
-                                            .compositingGroup()
+                            HStack(spacing: 0) {
+                                Text(" Looking for").font(.subheadline).fontWeight(.light)
+                                Spacer()
+                                Picker(
+                                    selection: $editedTypeOfDeveloper, label: Text("Looking for")) {
+                                        Text("Android").tag(1)
+                                        Text("iOS").tag(2)
+                                        Text("Hybrid").tag(3)
                                     }
-                                }
+                                    .pickerStyle(.segmented)
+                                    .compositingGroup()
                             }.padding(.vertical)
-                            Spacer()
-                        }.padding(25)
                     }
-                    .shadow(radius: 0.1, x: 0.3, y: 0.3)
-                }
-                .background(Color("secondaryColor"))
-                .cornerRadius(30)
-                .shadow(radius: 4, x: 2, y: 2)
-                .frame(
-                    width: UIScreen.main.bounds.width * 0.9,
-                    height: UIScreen.main.bounds.height * 0.5
-                )
-                
-                Spacer()
-                
-                Button(action: {
-                    db.pushUserDetails(
-                        description: description,
-                        linkedInLink: linkedIn,
-                        otherLink: "",
-                        location: location,
-                        githubLink: "",
-                        typeOfDeveloper: typeOfDeveloper,
-                        companyLink: companyLink
-                    )
-                }, label: {
-                    Text("Save")
-                        .padding()
-                        .frame(width: 250)
-                        .background(Color("primaryColor"))
-                        .foregroundColor(Color("secondaryColor"))
-                        .cornerRadius(10)
-                }).shadow(radius: 4, x: 2, y: 2)
-                
-                Spacer()
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }, label: {
+                            Text(Image(systemName: "arrow.uturn.backward"))
+                                .padding()
+                                .frame(width: 60)
+                                .background(Color("primaryColor"))
+                                .foregroundColor(Color("secondaryColor"))
+                                .cornerRadius(10)
+                        })
+                        .shadow(radius: 4, x: 2, y: 2)
+                        
+                        Button(action: {
+                            // TODO: MAKE AN ALERT IF NOT FILLED CORRECTLY
+                            db.pushUserDetails(
+                                firstName: editedFirstName,
+                                lastName: editedLastName,
+                                companyName: editedCompanyName,
+                                description: editedDescription,
+                                linkedInLink: editedLinkedIn,
+                                otherLink: "",
+                                location: editedLocation,
+                                githubLink: "",
+                                typeOfDeveloper: editedTypeOfDeveloper,
+                                companyLink: editedCompanyLink
+                            )
+                        }, label: {
+                            Text("Save")
+                                .padding()
+                                .frame(width: 250)
+                                .background(Color("primaryColor"))
+                                .foregroundColor(Color("secondaryColor"))
+                                .cornerRadius(10)
+                        }).shadow(radius: 4, x: 2, y: 2)
+                    }
+                }.padding(25)
             }
         }
         
@@ -143,112 +230,160 @@ struct EditInternProfileView: View {
     @EnvironmentObject var photoViewModel: PhotoPicker
     @EnvironmentObject var storageManager: StorageManager
     
-    @State var description = ""
-    @State var linkedIn = ""
-    @State var location = ""
-    @State var github = ""
-    @State var typeOfDeveloper = 1
+    var firstName: String
+    @State var editedFirstName: String
+    var lastName: String
+    @State var editedLastName: String
+    var description: String
+    @State var editedDescription: String
+    var linkedIn: String
+    @State var editedLinkedIn: String
+    var location: String
+    @State var editedLocation: String
+    var typeOfDeveloper: Int
+    @State var editedTypeOfDeveloper: Int
+    var github: String
+    @State var editedGithub: String
+    var otherLink: String
+    @State var editedOtherLink: String
+    
     @State var imageUrl = ""
     
+    init(firstName: String, lastName: String, description: String, linkedin: String, location: String, typeOfDeveloper: Int, github: String, otherLink: String) {
+        self.firstName = firstName
+        self._editedFirstName = State(wrappedValue: firstName)
+        self.lastName = lastName
+        self._editedLastName = State(wrappedValue: lastName)
+        self.description = description
+        self._editedDescription = State(wrappedValue: description)
+        self.linkedIn = linkedin
+        self._editedLinkedIn = State(wrappedValue: linkedin)
+        self.location = location
+        self._editedLocation = State(wrappedValue: location)
+        self.typeOfDeveloper = typeOfDeveloper
+        self._editedTypeOfDeveloper = State(wrappedValue: typeOfDeveloper)
+        self.github = github
+        self._editedGithub = State(wrappedValue: github)
+        self.otherLink = otherLink
+        self._editedOtherLink = State(wrappedValue: otherLink)
+    }
+    
     var body: some View {
-        ZStack (alignment: .top) {
+        
+        ZStack {
             Color("tertiaryColor").ignoresSafeArea()
-            
-            RoundedRectangle(cornerRadius: 50)
-                .fill(Color("primaryColor"))
-                .ignoresSafeArea()
-                .offset(y: -100)
-                .frame(height: UIScreen.main.bounds.height * 0.5)
-                .shadow(radius: 4, x: 2, y: 2)
             
             VStack {
                 
-                Spacer()
-                
-                ZStack {
-                    Color("secondaryColor")
-                    ScrollView(showsIndicators: false){
-                        VStack {
-                            Text("Add details").font(.title3).fontWeight(.light)
-                            
-                            Spacer()
-                            
-                            VStack(alignment: .leading) {
-                                Text("Description").font(.subheadline).fontWeight(.light).offset(y: 10)
-                                TextField("", text: $description, axis: .vertical)
-                                    .onChange(of: description, perform: { value in
-                                        description=String(description.prefix(200))
-                                    })
-                                    .lineLimit(2...4)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
-                                
-                                Text("LinkedIn").font(.subheadline).fontWeight(.light).offset(y: 10)
-                                TextField("", text: $linkedIn)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
-                                
-                                Text("Github").font(.subheadline).fontWeight(.light).offset(y: 10)
-                                TextField("", text: $github)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
-                                
-                                Text("Location").font(.subheadline).fontWeight(.light).offset(y: 10)
-                                TextField("", text: $location)
-                                    .textFieldModifier(backgroundColor: Color("tertiaryColor"),textColor: Color("primaryColor"))
+                VStack {
+                    Text("Edit profile")
+                        .font(.title)
+                        .fontWeight(.light)
+                        .foregroundColor(Color("primaryColor"))
+                    
+                    Spacer()
+                    
+                    ScrollView(showsIndicators: false) {
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Firstname").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
                             }
+                            TextField("", text: $editedFirstName)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Lastname").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
+                            TextField("", text: $editedLastName)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Description").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
+                            TextField("", text: $editedDescription, axis: .vertical)
+                                .onChange(of: description, perform: { value in
+                                    editedDescription=String(editedDescription.prefix(200))
+                                })
+                                .lineLimit(2...4)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(" LinkedIn").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $editedLinkedIn)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(" Github").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $editedGithub)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(" Other link").font(.subheadline).fontWeight(.light).offset(y: 10)
+                            TextField("", text: $editedOtherLink)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 3) {
+                                Text(" Location").font(.subheadline).fontWeight(.light).offset(y: 10)
+                                Text("*").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            }
+                            TextField("", text: $editedLocation)
+                                .textFieldModifier(backgroundColor: Color("secondaryColor"),textColor: Color("primaryColor"))
+                        }
                             
-                            VStack {
-                                GeometryReader { geometry in
-                                    
-                                    HStack(spacing: 0) {
-                                        Text("Orientation").font(.subheadline).fontWeight(.light)
-                                        Spacer()
-                                        Picker(
-                                            selection: $typeOfDeveloper, label: Text("I am")) {
-                                                Text("Android").tag(1)
-                                                Text("iOS").tag(2)
-                                                Text("Hybrid").tag(3)
-                                            }
-                                            .pickerStyle(.segmented)
-                                            .compositingGroup()
-                                            .backgroundStyle(Color("tertiaryColor"))
-//                                            .foregroundColor(Color(.lightGray))
+                            HStack(spacing: 0) {
+                                Text(" Looking for").font(.subheadline).fontWeight(.light)
+                                Spacer()
+                                Picker(
+                                    selection: $editedTypeOfDeveloper, label: Text("Looking for")) {
+                                        Text("Android").tag(1)
+                                        Text("iOS").tag(2)
+                                        Text("Hybrid").tag(3)
                                     }
-                                }
+                                    .pickerStyle(.segmented)
+                                    .compositingGroup()
                             }.padding(.vertical)
-                            
-                            Spacer()
-                        }.padding(25)
-                    }.shadow(radius: 0.1, x: 0.3, y: 0.3)
-                }
-                .background(Color("secondaryColor"))
-                .cornerRadius(30)
-                .shadow(radius: 4, x: 2, y: 2)
-                .frame(
-                    width: UIScreen.main.bounds.width * 0.9,
-                    height: UIScreen.main.bounds.height * 0.5
-                )
-                
-                Spacer()
-                
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }, label: {
-                        Text(Image(systemName: "arrow.uturn.backward"))
-                            .padding()
-                            .frame(width: 60)
-                            .background(Color("primaryColor"))
-                            .foregroundColor(Color("secondaryColor"))
-                            .cornerRadius(10)
-                    }).shadow(radius: 4, x: 2, y: 2)
+                    }
+                    
+                    Spacer()
+                    
                     HStack {
                         Button(action: {
+                            dismiss()
+                        }, label: {
+                            Text(Image(systemName: "arrow.uturn.backward"))
+                                .padding()
+                                .frame(width: 60)
+                                .background(Color("primaryColor"))
+                                .foregroundColor(Color("secondaryColor"))
+                                .cornerRadius(10)
+                        })
+                        .shadow(radius: 4, x: 2, y: 2)
+                        
+                        Button(action: {
+                            // TODO: MAKE AN ALERT IF NOT FILLED CORRECTLY
                             db.pushUserDetails(
-                                description: description,
-                                linkedInLink: linkedIn,
-                                otherLink: "",
-                                location: location,
-                                githubLink: github,
-                                typeOfDeveloper: typeOfDeveloper,
+                                firstName: editedFirstName,
+                                lastName: editedLastName,
+                                companyName: "",
+                                description: editedDescription,
+                                linkedInLink: editedLinkedIn,
+                                otherLink: editedOtherLink,
+                                location: editedLocation,
+                                githubLink: editedGithub,
+                                typeOfDeveloper: editedTypeOfDeveloper,
                                 companyLink: ""
                             )
                         }, label: {
@@ -260,8 +395,7 @@ struct EditInternProfileView: View {
                                 .cornerRadius(10)
                         }).shadow(radius: 4, x: 2, y: 2)
                     }
-                }
-                Spacer()
+                }.padding(25)
             }
         }
     }
