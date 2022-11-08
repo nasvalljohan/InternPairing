@@ -2,6 +2,8 @@ import Foundation
 import FirebaseFirestoreSwift
 
 class Conversation: Identifiable, Codable {
+    
+    
     @DocumentID var id: String?
     var uid: UUID
     var name: String

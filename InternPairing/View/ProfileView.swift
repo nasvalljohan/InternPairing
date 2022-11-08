@@ -24,8 +24,7 @@ struct RecruiterProfileView: View {
         
         if let companyName = db.theUser?.companyName,
            let firstName = db.theUser?.firstName,
-           let lastName = db.theUser?.lastName,
-           let description = db.theUser?.description {
+           let lastName = db.theUser?.lastName {
 
             ZStack {
                 Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
@@ -94,7 +93,7 @@ struct RecruiterProfileView: View {
                             Text("Stockholm").font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text(description).lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text(db.theUser?.description ?? "Not specified").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     

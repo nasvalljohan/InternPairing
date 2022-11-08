@@ -5,10 +5,12 @@ class DataManager: ObservableObject {
     var db = Firestore.firestore()
     
     // Published variables
-    private let collection = "Users"
+    private let usersCollection = "Users"
+    private let conversationsCollection = "Conversations"
     @Published var swipeableInternsArray: Array<TheUser> = []
     @Published var contactsUidArray: Array<String> = []
     @Published var contactsArray: Array<TheUser> = []
+    @Published var conversationsArray: Array<Conversation> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
@@ -84,7 +86,7 @@ class DataManager: ObservableObject {
                 
                 // Firestore: Set new document to uid and set data from newUserIntern.
                 do {
-                    try self.db.collection(self.collection)
+                    try self.db.collection(self.usersCollection)
                         .document(authDataResult.user.uid)
                         .setData(from: newUser)
                     
@@ -110,7 +112,7 @@ class DataManager: ObservableObject {
     // Adds values from UserDetailsView to db
     func pushUserDetails(firstName: String, lastName: String, companyName: String, description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String) {
         if let currentUser = currentUser {
-            let reference = db.collection(collection).document(currentUser.uid)
+            let reference = db.collection(usersCollection).document(currentUser.uid)
             
             if selected == 1 {
                 reference.updateData([
@@ -152,7 +154,7 @@ class DataManager: ObservableObject {
     
     func pushImage(imageUrl: String) {
         if let currentUser = currentUser {
-            let reference = db.collection(collection).document(currentUser.uid)
+            let reference = db.collection(usersCollection).document(currentUser.uid)
             
             reference.updateData([
                 "imageUrl": imageUrl
@@ -164,8 +166,8 @@ class DataManager: ObservableObject {
     func pushToContactsArray(intern: String) {
         if let currentUser = currentUser {
             
-            let referenceRecruiter = db.collection(collection).document(currentUser.uid)
-            let referenceIntern = db.collection(collection).document(intern)
+            let referenceRecruiter = db.collection(usersCollection).document(currentUser.uid)
+            let referenceIntern = db.collection(usersCollection).document(intern)
             
             referenceRecruiter.updateData([
                 "contacts": FieldValue.arrayUnion([intern])
@@ -187,7 +189,7 @@ class DataManager: ObservableObject {
         self.contactsUidArray.removeAll()
         if let currentUser = currentUser {
             userDocumentListener = self.db
-                .collection(collection)
+                .collection(usersCollection)
                 .document(currentUser.uid)
                 .addSnapshotListener {
                     snapshot, error in
@@ -222,7 +224,7 @@ class DataManager: ObservableObject {
 
         self.swipeableInternsArray.removeAll()
         
-        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
+        db.collection(self.usersCollection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
             .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
@@ -250,7 +252,7 @@ class DataManager: ObservableObject {
     // Fetching contacts for both recruiter and intern
     func fetchContacts() {
         self.contactsArray.removeAll()
-        db.collection(self.collection).whereField("isUserComplete", isEqualTo: true)
+        db.collection(self.usersCollection).whereField("isUserComplete", isEqualTo: true)
             .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
@@ -278,6 +280,16 @@ class DataManager: ObservableObject {
     
     // MARK: Chat
     
-    
+    func pushMessages(id: String) {
+            // NOT DONE
+        let reference = db.collection(conversationsCollection).document(id)
+        reference.setData([
+            "id": id,
+            "members": [theUser, ],
+            
+            
+            
+        ])
+    }
 }
 
