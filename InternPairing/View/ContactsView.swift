@@ -7,23 +7,27 @@ struct ContactsView: View {
         ZStack(alignment: .topLeading) {
             Color("tertiaryColor").ignoresSafeArea()
             
-            Rectangle().fill(Color("primaryColor")).ignoresSafeArea().frame(height: 70)
             if let contacts = db.contactsArray {
+                
                 
                 VStack (alignment: .leading){
                     //TODO: Messaging
-                    VStack {
-                        
-                        Text("MESSAGES")
-                            .font(.title)
-                            .fontWeight(.light)
-                            .foregroundColor(Color("secondaryColor"))
+                    ZStack {
+                        HStack {
+                            Text("MESSAGES")
+                                .font(.title)
+//                                .fontWeight(.light)
+                                .foregroundColor(Color("secondaryColor"))
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+//                        .padding(.bottom)
+                        .background(Color("primaryColor"))
                         
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom)
-                    .background(Color("primaryColor"))
                     .frame(maxWidth: .infinity)
+                    .background(Color("primaryColor"))
                     
                     ScrollView (showsIndicators: false) {
                         VStack (spacing: 5) {
@@ -39,9 +43,9 @@ struct ContactsView: View {
                                 
                             }
                         }
-                    }.padding(.top)
+                    }.padding(.horizontal)
                     
-                }.padding()
+                }
             }
         }
     }
