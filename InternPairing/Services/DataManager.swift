@@ -114,7 +114,7 @@ class DataManager: ObservableObject {
         if let currentUser = currentUser {
             let reference = db.collection(usersCollection).document(currentUser.uid)
             
-            if selected == 1 {
+            if theUser?.role == "Recruiter" {
                 reference.updateData([
                     "firstName": firstName,
                     "lastName": lastName,
@@ -131,7 +131,9 @@ class DataManager: ObservableObject {
                         print(error.localizedDescription)
                     }
                 }
-            } else if selected == 2 {
+            }
+            
+            if theUser?.role == "Intern" {
                 reference.updateData([
                     "firstName": firstName,
                     "lastName": lastName,
@@ -280,15 +282,12 @@ class DataManager: ObservableObject {
     
     // MARK: Chat
     
-    func pushMessages(id: String) {
+    func pushMessages(id: String, conversation: Conversation) {
             // NOT DONE
         let reference = db.collection(conversationsCollection).document(id)
         reference.setData([
-            "id": id,
-            "members": [theUser, ],
-            
-            
-            
+            "conversation": conversation
+
         ])
     }
 }
