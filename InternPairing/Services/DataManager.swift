@@ -12,7 +12,6 @@ class DataManager: ObservableObject {
     @Published var contactsUidArray: Array<String> = []
     @Published var contactsArray: Array<TheUser> = []
     @Published var conversationsArray: Array<Conversation> = []
-    @Published var activeConversations: Array<TheUser> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
@@ -180,9 +179,7 @@ class DataManager: ObservableObject {
             referenceIntern.updateData([
                 "contacts": FieldValue.arrayUnion([currentUser.uid])
             ])
-            
         }
-        
     }
     
     
