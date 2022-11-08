@@ -89,6 +89,7 @@ struct EditRecruiterProfileView: View {
             Color("tertiaryColor").ignoresSafeArea()
             
             VStack {
+                // TODO: Make textFields Non-optional
                 
                 VStack {
                     Text("Edit profile")
@@ -267,6 +268,7 @@ struct EditInternProfileView: View {
         self.otherLink = otherLink
         self._editedOtherLink = State(wrappedValue: otherLink)
     }
+    // TODO: Make textFields Non-optional
     
     var body: some View {
         
