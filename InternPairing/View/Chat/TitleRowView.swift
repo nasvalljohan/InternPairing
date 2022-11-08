@@ -16,8 +16,9 @@ struct TitleRowView: View {
             
             HStack(spacing: 25) {
                 
-                Text("Back")
+                Text("<")
                     .foregroundColor(Color("secondaryColor"))
+                    .bold()
                 Spacer()
                 
                 Text(name)

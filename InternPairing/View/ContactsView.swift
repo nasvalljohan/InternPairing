@@ -4,27 +4,44 @@ struct ContactsView: View {
     @EnvironmentObject var db: DataManager
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             Color("tertiaryColor").ignoresSafeArea()
+            
+            Rectangle().fill(Color("primaryColor")).ignoresSafeArea().frame(height: 70)
             if let contacts = db.contactsArray {
                 
                 VStack (alignment: .leading){
                     //TODO: Messaging
-                    Text("MESSAGES").font(.title2)
-                        .foregroundColor(Color("primaryColor"))
-                        .bold()
+                    VStack {
+                        
+                        Text("MESSAGES")
+                            .font(.title)
+                            .fontWeight(.light)
+                            .foregroundColor(Color("secondaryColor"))
+                        
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                    .background(Color("primaryColor"))
+                    .frame(maxWidth: .infinity)
+                    
                     ScrollView (showsIndicators: false) {
                         VStack (spacing: 5) {
                             ForEach(contacts, id: \.self) {
                                 user in
-                                ChatCards(user: user)
-                            }.onTapGesture {
+                                
+                                    NavigationLink(destination: {
+                                        ChatRoomView().navigationBarBackButtonHidden(true)
+                                    }, label: {
+                                        ChatCards(user: user)
+                                    })
+                                
                                 
                             }
                         }
-                    }
+                    }.padding(.top)
                     
-                }.padding(.horizontal).padding(.top)
+                }.padding()
             }
         }
     }
