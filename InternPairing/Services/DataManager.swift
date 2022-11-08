@@ -7,10 +7,12 @@ class DataManager: ObservableObject {
     // Published variables
     private let usersCollection = "Users"
     private let conversationsCollection = "Conversations"
+    
     @Published var swipeableInternsArray: Array<TheUser> = []
     @Published var contactsUidArray: Array<String> = []
     @Published var contactsArray: Array<TheUser> = []
     @Published var conversationsArray: Array<Conversation> = []
+    @Published var activeConversations: Array<TheUser> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
@@ -282,13 +284,13 @@ class DataManager: ObservableObject {
     
     // MARK: Chat
     
-    func pushMessages(id: String, conversation: Conversation) {
-            // NOT DONE
-        let reference = db.collection(conversationsCollection).document(id)
-        reference.setData([
-            "conversation": conversation
-
-        ])
+    func newConversation(conversation: Conversation) {
+        // NOT DONE
+        do {
+            _ = try db.collection(conversationsCollection).addDocument(from: conversation)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
 

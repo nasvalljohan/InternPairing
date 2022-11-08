@@ -26,10 +26,16 @@ struct ContactsView: View {
                                             $0.id == user.id
                                         }
                                         
-                                        // create new conversation
-                                        
-                                        // add users to new conversations
-                                        // currentUser + tapped user
+                                        if let theUser = db.theUser {
+                                            db.newConversation(
+                                                conversation:
+                                                    Conversation(
+                                                        uid: UUID(),
+                                                        name: "hello",
+                                                        members: [user, theUser],
+                                                        messages: [])
+                                                )
+                                        }
                                     }
                             }.clipped()
                         }
