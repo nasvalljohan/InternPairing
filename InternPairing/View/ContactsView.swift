@@ -20,6 +20,17 @@ struct ContactsView: View {
                         HStack{
                             ForEach(contacts, id: \.self) { user in
                                 MatchesCard(user: user)
+                                    .onTapGesture {
+                                        
+                                        db.contactsArray.removeAll {
+                                            $0.id == user.id
+                                        }
+                                        
+                                        // create new conversation
+                                        
+                                        // add users to new conversations
+                                        // currentUser + tapped user
+                                    }
                             }.clipped()
                         }
                     }

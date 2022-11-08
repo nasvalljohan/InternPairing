@@ -8,6 +8,8 @@ class StorageManager: ObservableObject, Identifiable {
     
     var stringUrl = ""
     
+    // TODO: MAKE A DELETE FUNCTION - DELETE IMAGE ON STORAGE (WITH URL) AND THEN UPLOAD A NEW IMAGE TO STORAGE
+    
     func uploadImage(image: Data, completion: @escaping((String?) -> () )) {
         DispatchQueue.global(qos: .userInteractive).async {
             let storageReference = self.storage.reference()
