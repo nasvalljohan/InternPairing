@@ -1,9 +1,5 @@
 import SwiftUI
 
-var imageUrl = URL(string: "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1085&q=80")
-
-var name = "Saiman Chen"
-
 struct ChatRoomView: View {
     var messageArray = ["Hello you sexy one!", "We need to speak asap :)", "What do you think about us?", "Are we good?"]
     
@@ -31,6 +27,8 @@ struct ChatRoomView: View {
 struct ChatBubbleView: View {
     var message: Message
     @State private var showTime = false
+    var imageUrl = URL(string: "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1085&q=80")
+    
     
     var body: some View {
         VStack(alignment: message.received ? .leading : .trailing) {
@@ -74,6 +72,10 @@ struct ChatBubbleView: View {
 }
 
 struct TitleRowView: View {
+    @Environment(\.dismiss) var dismiss
+    
+    var name = "Saiman Chen"
+    
     var body: some View {
         
         ZStack {
@@ -81,8 +83,12 @@ struct TitleRowView: View {
             HStack(spacing: 25) {
                 
                 Text("<")
+                    .font(.title)
                     .foregroundColor(Color("secondaryColor"))
-                    .bold()
+                    .onTapGesture {
+                        dismiss()
+                    }
+                
                 Spacer()
                 
                 Text(name)

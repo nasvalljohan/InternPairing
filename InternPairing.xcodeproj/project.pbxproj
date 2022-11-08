@@ -190,13 +190,13 @@
 			children = (
 				3268E83428F4237B0059BF70 /* ContentView.swift */,
 				33F1E873291A4CE900CEBFCC /* ChatRoomView.swift */,
+				3273F48E2914116A00938654 /* ContactsView.swift */,
 				3330A13E28FED94A00BE460E /* EditProfileView.swift */,
 				3268E86428F451980059BF70 /* LoginView.swift */,
 				32A94895291A6A5B005A7BB4 /* LottieView.swift */,
 				328DD42F28F6FF5500F006EB /* ProfileView.swift */,
 				33F19FB828F45E7E00FA46C0 /* SwipeView.swift */,
 				328DD42D28F6ABDF00F006EB /* SignUpView.swift */,
-				3273F48E2914116A00938654 /* ContactsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
