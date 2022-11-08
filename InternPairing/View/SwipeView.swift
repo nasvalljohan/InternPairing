@@ -12,50 +12,38 @@ struct SwipeView: View {
     
     var body: some View {
         
-        if db.swipeableInternsArray.count <= 0 {
-            VStack (alignment: .center) {
-                Text("No more students").font(.title).fontWeight(.semibold)
-                Text("Come back later!").font(.title3).fontWeight(.light)
-            }
-        }
-            if db.swipeableInternsArray.count > 0 {
-                ZStack(alignment: .top) {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color("primaryColor"))
-                        .ignoresSafeArea()
-                        .offset(y: -100)
-                        .frame(height: UIScreen.main.bounds.height * 0.5)
-                        .shadow(radius: 4, x: 2, y: 2)
-                    VStack {
+        ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color("primaryColor"))
+                .ignoresSafeArea()
+                .offset(y: -100)
+                .frame(height: UIScreen.main.bounds.height * 0.5)
+                .shadow(radius: 4, x: 2, y: 2)
+            VStack {
+                
+                GeometryReader { geometry in
+                    ForEach(db.swipeableInternsArray, id: \.self) { user in
                         
-                        GeometryReader { geometry in
-                            ForEach(db.swipeableInternsArray, id: \.self) { user in
-                                
-                                CardView(user: user, onRemove: { removedUser in
-                                    let tempUser = removedUser
-                                    db.swipeableInternsArray.removeAll { $0.id == removedUser.id }
-                                    db.swipeableInternsArray.insert(tempUser, at: 0)
-                                })
-                                .onTapGesture {
-                                    showingSheet.toggle()
-                                    pickCurrentIntern(intern: user)
-                                }
-                                .animation(.spring(), value: 10)
-                                .offset(y: -20)
-                            }
-                        }.sheet(isPresented: $showingSheet) {
-                            PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern, makeContact: {
-                                currentIntern in
-                                db.swipeableInternsArray.removeAll { $0.id == currentIntern.id }
-                            })
-                            
-                            
+                        CardView(user: user, onRemove: { removedUser in
+                            let tempUser = removedUser
+                            db.swipeableInternsArray.removeAll { $0.id == removedUser.id }
+                            db.swipeableInternsArray.insert(tempUser, at: 0)
+                        })
+                        .onTapGesture {
+                            showingSheet.toggle()
+                            pickCurrentIntern(intern: user)
                         }
-                        
+                        .animation(.spring(), value: 10)
+                        .offset(y: -20)
                     }
-                    
+                }.sheet(isPresented: $showingSheet) {
+                    PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern, makeContact: {
+                        currentIntern in
+                        db.swipeableInternsArray.removeAll { $0.id == currentIntern.id }
+                    })
                 }
             }
+        }
     }
 }
 
@@ -66,7 +54,7 @@ struct CardView: View {
     private var user: TheUser
     var formatter = Formatter()
     private var onRemove: (_ user: TheUser) -> Void
-    private var thresholdPercentage: CGFloat = 0.4 // when the user has draged 50% the width of the screen in either direction
+    private var thresholdPercentage: CGFloat = 0.4
     
     
     init(user: TheUser, onRemove: @escaping (_ user: TheUser) -> Void){
@@ -119,12 +107,12 @@ struct CardView: View {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.gray)
                             }
-                        }.padding(5)
+                        }.padding(.vertical)
                     }.padding(.horizontal)
                 }
                 .background(Color.white)
+                .border(Color("primaryColor"))
                 .cornerRadius(10)
-                .shadow(radius: 2)
                 .padding(.bottom)
                 .padding(.top)
                 .offset(x: self.translation.width, y: self.translation.height/4)
@@ -133,11 +121,13 @@ struct CardView: View {
                         .onChanged { value in
                             self.translation = value.translation
                         }.onEnded { value in
-                            if abs(self.getGesturePercentage(geometry, from: value)) > self.thresholdPercentage {
-                                self.onRemove(self.user)
-                                self.translation = .zero
-                            } else {
-                                self.translation = .zero
+                            withAnimation(.interpolatingSpring(stiffness: 300, damping: 100)) {
+                                if abs(self.getGesturePercentage(geometry, from: value)) > self.thresholdPercentage {
+                                    self.onRemove(self.user)
+                                    self.translation = .zero
+                                } else {
+                                    self.translation = .zero
+                                }
                             }
                         }
                 )

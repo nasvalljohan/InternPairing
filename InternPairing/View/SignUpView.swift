@@ -56,7 +56,9 @@ struct RecruiterSignUp: View {
                             .padding()
                         Spacer()
                         VStack {
+                            //TODO: Make fields non-optional 
                             HStack {
+                                
                                 VStack(alignment: .leading, spacing: 5){
                                     Text(" Firstname:").foregroundColor(Color(.lightGray))
                                     TextField("", text: $firstName)
@@ -175,6 +177,8 @@ struct StudentSignUp: View {
                 Spacer()
                 
                 ZStack(alignment: .topLeading) {
+                    
+                    //TODO: Make fields non-optional
                     
                     VStack {
                         Spacer()
