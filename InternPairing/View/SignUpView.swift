@@ -5,14 +5,14 @@ import Firebase
 struct SignUpView: View {
     
     // TODO: make rules for to go to detailsView
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     
     var body: some View {
         ZStack {
-            if db.selected == 1 {
+            if um.theUser.role == "Intern" { // Selected 1 
                 StudentSignUp()
             }
-            else if db.selected == 2 {
+            else if um.theUser.role == "Recruiter" { //Selected 2
                 RecruiterSignUp()
             }
         }.ignoresSafeArea()
@@ -24,7 +24,7 @@ struct RecruiterSignUp: View {
     // navigate back
     @Environment(\.dismiss) var dismiss
     
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     
     @State var firstName = ""
     @State var lastName = ""
@@ -128,7 +128,7 @@ struct RecruiterSignUp: View {
                     
                     
                     Button(action: {
-                        db.registerUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, companyName: companyName, isUserComplete: false)
+                        um.registerUser(email: companyEmail, password: companyPassword, dateOfBirth: Date(), firstName: firstName, lastName: lastName, companyName: companyName, isUserComplete: false)
                     }, label: {
                         Text("Next")
                             .padding()
@@ -148,7 +148,7 @@ struct RecruiterSignUp: View {
 struct StudentSignUp: View {
     // navigate back
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     var formatter = Formatter()
     
     @State var firstName = ""
@@ -280,7 +280,7 @@ struct StudentSignUp: View {
                     
                     Button(action: {
                         
-                        db.registerUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, companyName: "", isUserComplete: false)
+                        um.registerUser(email: studentEmail, password: studentPassword, dateOfBirth: date, firstName: firstName, lastName: lastName, companyName: "", isUserComplete: false)
                         print(date)
                     }, label: {
                         Text("Next")

@@ -4,7 +4,7 @@ import Firebase
 
 // MARK: LoginView
 struct LoginView: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @State var isNotAUser: Bool = false
     
     var body: some View {
@@ -27,7 +27,7 @@ struct LoginView: View {
 // MARK: AccountView
 struct AccountView: View {
     
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @State private var email = ""
     @State private var password = ""
     @Binding var isNotAUser: Bool
@@ -66,7 +66,7 @@ struct AccountView: View {
                 //Login btn
                 VStack{
                     Button(action: {
-                        db.loginUser(email: email, password: password)
+                        um.login(email: email, password: password)
                     }, label: {
                         Text("Login")
                             .padding()
@@ -92,7 +92,7 @@ struct AccountView: View {
 // MARK: NoAccountView
 struct NoAccountView: View {
     
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @Binding var isNotAUser: Bool
     
     var body: some View {
@@ -115,7 +115,7 @@ struct NoAccountView: View {
                             Text("Register as ").font(.title).fontWeight(.light)
                         }.padding().offset(y: 40)
                         VStack {
-                            Picker(selection: $db.selected, label: Text("Favorite Color")) {
+                            Picker(selection: $um.selected, label: Text("Favorite Color")) {
                                 Text("Student").tag(1)
                                 Text("Recruiter").tag(2)
                             }
@@ -140,7 +140,7 @@ struct NoAccountView: View {
                         HStack {
                             Text("Already an user?").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
                             Button(action: {
-                                print(db.selected)
+                                print(um.selected)
                                 isNotAUser = false
                             }, label:{
                                 Text("Login").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.semibold).offset(y: 10)
@@ -163,6 +163,6 @@ struct LoginView_Previews: PreviewProvider {
 //        AccountView(isNotAUser: .constant(true))
 //        .environmentObject(DataManager())
         NoAccountView(isNotAUser: .constant(false))
-            .environmentObject(DataManager())
+            .environmentObject(UserManager())
     }
 }

@@ -1,13 +1,14 @@
 import SwiftUI
 
 struct ContactsView: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
+    @EnvironmentObject var cm: ConversationsManager
     
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color("tertiaryColor").ignoresSafeArea()
             
-            if let contacts = db.contactsArray {
+            if let contacts = um.contactsArray {
                 
                 
                 VStack (alignment: .leading){
@@ -52,7 +53,7 @@ struct ContactsView: View {
 }
 
 struct ChatCards: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     var user: TheUser
     
     var body: some View {
@@ -70,7 +71,7 @@ struct ChatCards: View {
                 
             }).frame(width: 70, height: 70).clipShape(Circle())
             
-            if db.theUser?.role == "Recruiter" {
+            if um.theUser.role == "Recruiter" {
                 VStack (alignment: .leading){
                     
                     Text(user.firstName ?? "").font(.subheadline)
@@ -82,7 +83,7 @@ struct ChatCards: View {
                 }
             }
             
-            if db.theUser?.role == "Intern" {
+            if um.theUser.role == "Intern" {
                 VStack (alignment: .leading){
                     HStack {
                         Text(user.firstName ?? "").font(.subheadline)

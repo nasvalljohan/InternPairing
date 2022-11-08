@@ -3,12 +3,13 @@ import _PhotosUI_SwiftUI
 
 // MARK: ProfileView
 struct ProfileView: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     var body: some View {
         VStack{
-            if db.theUser?.role == "Recruiter" {
+            if um.theUser.role == "Recruiter" {
                 RecruiterProfileView()
-            } else if db.theUser?.role == "Intern" {
+            }
+            if um.theUser.role == "Intern" {
                 StudentProfileView()
             }
         }
@@ -18,13 +19,13 @@ struct ProfileView: View {
 
 // MARK: RecruiterProfileView
 struct RecruiterProfileView: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     
     var body: some View {
         
-        if let companyName = db.theUser?.companyName,
-           let firstName = db.theUser?.firstName,
-           let lastName = db.theUser?.lastName {
+        if let companyName = um.theUser.companyName,
+           let firstName = um.theUser.firstName,
+           let lastName = um.theUser.lastName {
 
             ZStack {
                 Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
@@ -55,7 +56,7 @@ struct RecruiterProfileView: View {
                         
                         ZStack{
                             
-                            AsyncImage(url: URL(string: db.theUser?.imageUrl ?? ""), content: {
+                            AsyncImage(url: URL(string: um.theUser.imageUrl ?? ""), content: {
                                 pic in
                                 pic
                                     .resizable()
@@ -93,7 +94,7 @@ struct RecruiterProfileView: View {
                             Text("Stockholm").font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text(db.theUser?.description ?? "Not specified").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text(um.theUser.description ?? "Not specified").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     
@@ -109,7 +110,7 @@ struct RecruiterProfileView: View {
 
 // MARK: StudentProfileView
 struct StudentProfileView: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @EnvironmentObject var photoViewModel: PhotoPicker
     @EnvironmentObject var storageManager: StorageManager
     
@@ -118,9 +119,9 @@ struct StudentProfileView: View {
     var imageUrl: String?
     
     var body: some View {
-        if let firstName = db.theUser?.firstName,
-           let lastName = db.theUser?.lastName,
-           let dateOfBirth = db.theUser?.dateOfBirth {
+        if let firstName = um.theUser.firstName,
+           let lastName = um.theUser.lastName,
+           let dateOfBirth = um.theUser.dateOfBirth {
             let dateString = formatter.dateToString(dateOfBirth: dateOfBirth)
             let age = formatter.ageConverter(string: dateString)
 
@@ -156,7 +157,7 @@ struct StudentProfileView: View {
                         }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
                         
                         ZStack{
-                            AsyncImage(url: URL(string: db.theUser?.imageUrl ?? ""), content: {
+                            AsyncImage(url: URL(string: um.theUser.imageUrl ?? ""), content: {
                                     pic in
                                     pic
                                         .resizable()
@@ -191,11 +192,11 @@ struct StudentProfileView: View {
                                 Text(age).font(.title2).fontWeight(.ultraLight).frame(alignment: .bottom)
                             }
                             
-                            Text(formatter.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
-                            Text(db.theUser?.location ?? "Not specified lol").font(.subheadline).fontWeight(.light)
+                            Text(formatter.typeOfDev(int: um.theUser.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
+                            Text(um.theUser.location ?? "Not specified lol").font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text(db.theUser?.description ?? "No description").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text(um.theUser.description ?? "No description").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     
@@ -219,7 +220,7 @@ struct ProfileView_Previews: PreviewProvider {
 
 // MARK: ProfilePhotosPickerView
 struct ProfilePhotosPickerView: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @EnvironmentObject var photoViewModel: PhotoPicker
     @EnvironmentObject var storageManager: StorageManager
     
@@ -235,9 +236,11 @@ struct ProfilePhotosPickerView: View {
                         .shadow(radius: 4, x: 2, y: 2)
                 }.onChange(of: photoViewModel.data) { _ in
                     if let data = photoViewModel.data {
+                        
+                        //TODO: STORAGE SINGLETON ADD TO PUSHIMAGE IN USERMANAGER
                         storageManager.uploadImage(image: data) { urlString in
                             
-                            db.pushImage(imageUrl: urlString ?? "nil")
+                        um.pushImage(imageUrl: urlString ?? "nil")
                         }
                     }
                 }

@@ -4,31 +4,32 @@ import PhotosUI
 
 struct EditProfileView: View {
     // TODO: make rules for going to next page
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     var body: some View {
         ZStack {
             
-            if db.theUser?.role == "Recruiter" {
+            if um.theUser.role == "Recruiter" {
                 EditRecruiterProfileView(
-                    firstName: db.theUser?.firstName ?? "",
-                    lastName: db.theUser?.lastName ?? "",
-                    companyName: db.theUser?.companyName ?? "",
-                    description: db.theUser?.description ?? "",
-                    linkedin: db.theUser?.linkedInLink ?? "https://www.linkedin.com/",
-                    location: db.theUser?.location ?? "",
-                    companyLink: db.theUser?.companyLink ?? "https://www.",
-                    typeOfDeveloper: db.theUser?.typeOfDeveloper ?? 1
+                    firstName: um.theUser.firstName ?? "",
+                    lastName: um.theUser.lastName ?? "",
+                    companyName: um.theUser.companyName ?? "",
+                    description: um.theUser.description ?? "",
+                    linkedin: um.theUser.linkedInLink ?? "https://www.linkedin.com/",
+                    location: um.theUser.location ?? "",
+                    companyLink: um.theUser.companyLink ?? "https://www.",
+                    typeOfDeveloper: um.theUser.typeOfDeveloper ?? 1
                 ).navigationBarBackButtonHidden(true)
-            } else if db.theUser?.role == "Intern" {
+            }
+            if um.theUser.role == "Intern" {
                 EditInternProfileView(
-                    firstName: db.theUser?.firstName ?? "",
-                    lastName: db.theUser?.lastName ?? "",
-                    description: db.theUser?.description ?? "",
-                    linkedin: db.theUser?.linkedInLink ?? "https://www.linkedin.com/",
-                    location: db.theUser?.location ?? "",
-                    typeOfDeveloper: db.theUser?.typeOfDeveloper ?? 1,
-                    github: db.theUser?.githubLink ?? "https://www.github.com/",
-                    otherLink: db.theUser?.otherLink ?? ""
+                    firstName: um.theUser.firstName ?? "",
+                    lastName: um.theUser.lastName ?? "",
+                    description: um.theUser.description ?? "",
+                    linkedin: um.theUser.linkedInLink ?? "https://www.linkedin.com/",
+                    location: um.theUser.location ?? "",
+                    typeOfDeveloper: um.theUser.typeOfDeveloper ?? 1,
+                    github: um.theUser.githubLink ?? "https://www.github.com/",
+                    otherLink: um.theUser.otherLink ?? ""
                 ).navigationBarBackButtonHidden(true)
             }
         }
@@ -40,7 +41,7 @@ struct EditRecruiterProfileView: View {
     // navigate back
     @Environment(\.dismiss) var dismiss
     
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @EnvironmentObject var photoViewModel: PhotoPicker
     @EnvironmentObject var storageManager: StorageManager
     
@@ -194,7 +195,7 @@ struct EditRecruiterProfileView: View {
                         
                         Button(action: {
                             // TODO: MAKE AN ALERT IF NOT FILLED CORRECTLY
-                            db.pushUserDetails(
+                            um.pushUserDetails(
                                 firstName: editedFirstName,
                                 lastName: editedLastName,
                                 companyName: editedCompanyName,
@@ -227,7 +228,7 @@ struct EditRecruiterProfileView: View {
 struct EditInternProfileView: View {
     @Environment(\.dismiss) var dismiss
     
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @EnvironmentObject var photoViewModel: PhotoPicker
     @EnvironmentObject var storageManager: StorageManager
     
@@ -376,7 +377,7 @@ struct EditInternProfileView: View {
                         
                         Button(action: {
                             // TODO: MAKE AN ALERT IF NOT FILLED CORRECTLY
-                            db.pushUserDetails(
+                            um.pushUserDetails(
                                 firstName: editedFirstName,
                                 lastName: editedLastName,
                                 companyName: "",

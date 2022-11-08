@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: SwipeView
 struct SwipeView: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @State private var showingSheet: Bool = false
     @State var currentIntern: TheUser?
     
@@ -22,12 +22,12 @@ struct SwipeView: View {
             VStack {
                 
                 GeometryReader { geometry in
-                    ForEach(db.swipeableInternsArray, id: \.self) { user in
+                    ForEach(um.swipeableInternsArray, id: \.self) { user in
                         
                         CardView(user: user, onRemove: { removedUser in
                             let tempUser = removedUser
-                            db.swipeableInternsArray.removeAll { $0.id == removedUser.id }
-                            db.swipeableInternsArray.insert(tempUser, at: 0)
+                            um.swipeableInternsArray.removeAll { $0.id == removedUser.id }
+                            um.swipeableInternsArray.insert(tempUser, at: 0)
                         })
                         .onTapGesture {
                             showingSheet.toggle()
@@ -39,7 +39,7 @@ struct SwipeView: View {
                 }.sheet(isPresented: $showingSheet) {
                     PopUpCardView(showingSheet: $showingSheet, currentIntern: $currentIntern, makeContact: {
                         currentIntern in
-                        db.swipeableInternsArray.removeAll { $0.id == currentIntern.id }
+                        um.swipeableInternsArray.removeAll { $0.id == currentIntern.id }
                     })
                 }
             }
@@ -141,7 +141,7 @@ struct CardView: View {
 
 // MARK: Popup Card
 struct PopUpCardView: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @Binding var showingSheet: Bool
     @Binding var currentIntern: TheUser?
     var formatter = Formatter()
@@ -211,7 +211,7 @@ struct PopUpCardView: View {
                     Button(action: {
                             showingSheet.toggle()
                             self.makeContact(currentIntern)
-                            db.pushToContactsArray(intern: currentIntern.id ?? "")
+                            um.pushToContactsArray(intern: currentIntern.id ?? "")
                     }, label: {
                         Text("Make contact")
                             .padding()

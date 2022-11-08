@@ -1,54 +1,15 @@
 import Foundation
 import Firebase
 
-class DataManager: ObservableObject {
-    var db = Firestore.firestore()
-    
-    // Published variables
+class DataManager {
+    private var db = Firestore.firestore()
     private let usersCollection = "Users"
     private let conversationsCollection = "Conversations"
-    
-    @Published var swipeableInternsArray: Array<TheUser> = []
-    @Published var contactsUidArray: Array<String> = []
-    @Published var contactsArray: Array<TheUser> = []
-    @Published var conversationsArray: Array<Conversation> = []
-    @Published var selected = 1
-    @Published var theUser: TheUser?
-    @Published var userLoggedIn = false
-    @Published var currentUser: User?
-    var userDocumentListener: ListenerRegistration? // nil as long as user is logged out
-    
-    // Init - listening for changes in authstate
-    init() {
-        do {try Auth.auth().signOut() }
-        catch { print("logged out") }
-        Auth.auth().addStateDidChangeListener {
-            auth, user in
-            if let user = user {
-                self.userLoggedIn = true
-                self.currentUser = user
-                self.fetchCurrentUser()
-                self.fetchInterns()
-            } else {
-                self.userLoggedIn = false
-                self.currentUser = nil
-                self.stopListenToDatabase()
-            }
-        }
-    }
-    
-    //MARK: Listener
-    func stopListenToDatabase() {
-        if let userDocumentListener = userDocumentListener {
-            userDocumentListener.remove()
-        }
-    }
-    
+    private var userDocumentListener: ListenerRegistration? // nil as long as user is logged out
     
     // MARK: Auth functions
-    
     // Register
-    func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, companyName: String?, isUserComplete: Bool) {
+    func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, companyName: String?, isUserComplete: Bool, user: TheUser, role: String) {
         var userRole = ""
         var newUser: TheUser?
         
@@ -62,7 +23,7 @@ class DataManager: ObservableObject {
             // AUTH: If successfull
             if let authDataResult = authDataResult {
                 
-                if self.selected == 1 {
+                if user.role == "Intern" {
                     userRole = "Intern"
 
                     newUser = TheUser(
@@ -72,8 +33,8 @@ class DataManager: ObservableObject {
                         lastName: lastName,
                         dateOfBirth: dateOfBirth
                     )
-                } else if self.selected == 2 {
-                    userRole = "Recruiter"
+                }
+                if user.role == "Recruiter" {
 
                     newUser = TheUser(
                         id: authDataResult.user.uid,
@@ -111,11 +72,9 @@ class DataManager: ObservableObject {
     // MARK: Push to db functions
     
     // Adds values from UserDetailsView to db
-    func pushUserDetails(firstName: String, lastName: String, companyName: String, description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String) {
-        if let currentUser = currentUser {
+    func pushUserDetails(firstName: String, lastName: String, companyName: String, description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String, user: TheUser, currentUser: User) {
             let reference = db.collection(usersCollection).document(currentUser.uid)
-            
-            if theUser?.role == "Recruiter" {
+            if user.role == "Recruiter" {
                 reference.updateData([
                     "firstName": firstName,
                     "lastName": lastName,
@@ -134,7 +93,7 @@ class DataManager: ObservableObject {
                 }
             }
             
-            if theUser?.role == "Intern" {
+            if user.role == "Intern" {
                 reference.updateData([
                     "firstName": firstName,
                     "lastName": lastName,
@@ -152,23 +111,18 @@ class DataManager: ObservableObject {
                     }
                 }
             }
-        }
+        
     }
     
-    func pushImage(imageUrl: String) {
-        if let currentUser = currentUser {
+    func pushImage(imageUrl: String, currentUser: User) {
             let reference = db.collection(usersCollection).document(currentUser.uid)
-            
             reference.updateData([
                 "imageUrl": imageUrl
             ])
-        }
     }
     
     // Adds intern uid to recruiter document
-    func pushToContactsArray(intern: String) {
-        if let currentUser = currentUser {
-            
+    func pushToContactsArray(intern: String, currentUser: User) {
             let referenceRecruiter = db.collection(usersCollection).document(currentUser.uid)
             let referenceIntern = db.collection(usersCollection).document(intern)
             
@@ -179,16 +133,13 @@ class DataManager: ObservableObject {
             referenceIntern.updateData([
                 "contacts": FieldValue.arrayUnion([currentUser.uid])
             ])
-        }
     }
     
     
     // MARK: Fetch from db functions
         
     // fetches the current user that's logged in
-    func fetchCurrentUser() {
-        self.contactsUidArray.removeAll()
-        if let currentUser = currentUser {
+    func fetchCurrentUser(currentUser: User, user: TheUser) {
             userDocumentListener = self.db
                 .collection(usersCollection)
                 .document(currentUser.uid)
@@ -207,9 +158,9 @@ class DataManager: ObservableObject {
                     
                     switch result {
                     case .success(let theUser):
-                        self.theUser = theUser
-                            self.contactsUidArray = theUser.contacts ?? [""]
-                            print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
+                        user = theUser
+                        self.contactsUidArray = theUser.contacts ?? [""]
+                        print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
                         self.fetchContacts()
                         break
                     case .failure(let error):
@@ -217,13 +168,11 @@ class DataManager: ObservableObject {
                         break
                     }
                 }
-        }
+        
     }
     
     // fetches interns that recruiter hasn't matched with
-    func fetchInterns() {
-
-        self.swipeableInternsArray.removeAll()
+    func fetchInterns(contactsUidArray: [String], swipeableInternsArray: [TheUser]) -> TheUser{
         
         db.collection(self.usersCollection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
             .getDocuments() { (querySnapshot, error) in
@@ -237,8 +186,8 @@ class DataManager: ObservableObject {
                         do {
                             let user = try document.data(as: TheUser.self)
                             
-                            if !self.contactsUidArray.contains(user.id ?? ""){
-                                self.swipeableInternsArray.append(user)
+                            if !contactsUidArray.contains(user.id ?? ""){
+                                swipeableInternsArray.append(user)
                             }
 
                                 
@@ -251,8 +200,7 @@ class DataManager: ObservableObject {
     }
     
     // Fetching contacts for both recruiter and intern
-    func fetchContacts() {
-        self.contactsArray.removeAll()
+    func fetchContacts(contactsUidArray: [String], contactsArray: [TheUser]) {
         db.collection(self.usersCollection).whereField("isUserComplete", isEqualTo: true)
             .getDocuments() { (querySnapshot, error) in
                 
@@ -261,12 +209,12 @@ class DataManager: ObservableObject {
                 } else {
                     
                     // convert the querySnapshots to TheUser format
-                    for uid in self.contactsUidArray {
+                    for uid in contactsUidArray {
                         for document in querySnapshot!.documents {
                             if uid == document.documentID {
                                 do {
                                     let user = try document.data(as: TheUser.self)
-                                    self.contactsArray.append(user)
+                                    contactsArray.append(user)
                                 } catch {
                                     print(error.localizedDescription)
                                 }
@@ -281,13 +229,5 @@ class DataManager: ObservableObject {
     
     // MARK: Chat
     
-    func newConversation(conversation: Conversation) {
-        // NOT DONE
-        do {
-            _ = try db.collection(conversationsCollection).addDocument(from: conversation)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
 }
 

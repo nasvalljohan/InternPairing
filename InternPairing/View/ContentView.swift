@@ -1,26 +1,30 @@
 import SwiftUI
 import FirebaseAuth
 
+//Global singleton
+var dm = DataManager()
+
 // MARK: ContentView
 struct ContentView: View {
-    
+    @StateObject var um = UserManager()
+    @StateObject var cm = ConversationsManager()
     @StateObject var photoViewModel = PhotoPicker()
-    @StateObject var db = DataManager()
     @StateObject var storageManager = StorageManager()
     var body: some View {
         
         VStack {
-            if db.userLoggedIn {
-                if db.theUser?.role == "Recruiter" {
+            if um.userLoggedIn {
+                if um.theUser.role == "Recruiter" {
                     TabViewRecruiter()
-                } else if db.theUser?.role == "Intern" {
+                } else if um.theUser.role == "Intern" {
                     TabViewStudent()
                 }
             } else{
                 LoginView()
-            }       
+            }
         }
-        .environmentObject(db)
+        .environmentObject(um)
+        .environmentObject(cm)
         .environmentObject(photoViewModel)
         .environmentObject(storageManager)
     }
@@ -35,7 +39,7 @@ enum NavigationType: String, Hashable {
 
 // MARK: TabViewRecruiter
 struct TabViewRecruiter: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @State var mainStack: [NavigationType] = []
 
     var body: some View {
@@ -61,7 +65,7 @@ struct TabViewRecruiter: View {
 
 // MARK: TabViewStudent
 struct TabViewStudent: View {
-    @EnvironmentObject var db: DataManager
+    @EnvironmentObject var um: UserManager
     @State var mainStack: [NavigationType] = []
     
     

@@ -3,9 +3,7 @@ import Foundation
 
 class StorageManager: ObservableObject, Identifiable {
     internal var id = UUID()
-    
     private var storage = Storage.storage()
-    
     var stringUrl = ""
     
     // TODO: MAKE A DELETE FUNCTION - DELETE IMAGE ON STORAGE (WITH URL) AND THEN UPLOAD A NEW IMAGE TO STORAGE
