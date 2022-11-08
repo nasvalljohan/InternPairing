@@ -1,9 +1,7 @@
-
 import SwiftUI
 
 struct ContactsView: View {
     @EnvironmentObject var db: DataManager
-    var userList = ["Erik", "Jonas", "Peter", "Adam", "Oskar", "1"]
     
     var body: some View {
         ZStack {
@@ -21,20 +19,9 @@ struct ContactsView: View {
                             ForEach(contacts, id: \.self) { user in
                                 MatchesCard(user: user)
                                     .onTapGesture {
-                                        
+                                        db.activeConversations.append(user)
                                         db.contactsArray.removeAll {
                                             $0.id == user.id
-                                        }
-                                        
-                                        if let theUser = db.theUser {
-                                            db.newConversation(
-                                                conversation:
-                                                    Conversation(
-                                                        uid: UUID(),
-                                                        name: "hello",
-                                                        members: [user, theUser],
-                                                        messages: [])
-                                                )
                                         }
                                     }
                             }.clipped()
@@ -47,9 +34,10 @@ struct ContactsView: View {
                         .bold()
                     ScrollView (showsIndicators: false) {
                         VStack (spacing: 5) {
-                            ForEach(userList, id: \.self) {
+                            ForEach(db.activeConversations, id: \.self) {
                                 user in
-                                ChatCards()
+                                ChatCards(user: user)
+                            }.onTapGesture {
                                 
                             }
                         }
@@ -85,7 +73,7 @@ struct MatchesCard: View {
             VStack (alignment: .center) {
                 Text(user.firstName ?? "" )
                     .font(.subheadline)
-                    .foregroundColor(Color("primaryColor"))
+                    .foregroundColor(Color("tertiaryColor"))
                     .bold()
                 
                 if db.theUser?.role == "Intern" {
@@ -100,10 +88,12 @@ struct MatchesCard: View {
 
 struct ChatCards: View {
     @EnvironmentObject var db: DataManager
+    var user: TheUser
+    
     var body: some View {
         
         HStack {
-            AsyncImage(url: URL(string: "https://t3.ftcdn.net/jpg/01/71/25/36/360_F_171253635_8svqUJc0BnLUtrUOP5yOMEwFwA8SZayX.jpg"), content: {
+            AsyncImage(url: URL(string: user.imageUrl ?? "profile-placeholder"), content: {
                 pic in
                 pic
                     .resizable()
@@ -118,7 +108,7 @@ struct ChatCards: View {
             if db.theUser?.role == "Recruiter" {
                 VStack (alignment: .leading){
                     
-                    Text("FirstName").font(.subheadline)
+                    Text(user.firstName ?? "").font(.subheadline)
                         .foregroundColor(Color("primaryColor"))
                         .fontWeight(.semibold)
                     Text("latestMessagePreview").font(.subheadline)
@@ -130,10 +120,10 @@ struct ChatCards: View {
             if db.theUser?.role == "Intern" {
                 VStack (alignment: .leading){
                     HStack {
-                        Text("FirstName").font(.subheadline)
+                        Text(user.firstName ?? "").font(.subheadline)
                             .foregroundColor(Color("primaryColor"))
                             .fontWeight(.semibold)
-                        Text("CompanyName").font(.caption2).fontWeight(.ultraLight)
+                        Text(user.companyName ?? "").font(.caption2).fontWeight(.ultraLight)
                     }
                     Text("latestMessagePreview").font(.subheadline)
                         .foregroundColor(Color(.black))
