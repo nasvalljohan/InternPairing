@@ -10,36 +10,25 @@ struct ChatRoomView: View {
     var internImage: String
     var recruiterImage: String
     
-    var tempFname: String
-    var tempLname: String
-    var tempImage: String
-    
-//    init () {
-//        checkRole()
-//    }
-//    
-//    func checkRole(){
-//        if db.theUser?.role == "Recruiter"{
-//            self.tempImage = internImage
-//            self.tempLname = internLastName
-//            self.tempFname = internFirstName
-//        }
-//        
-//        if db.theUser?.role == "Intern"{
-//            self.tempImage = recruiterImage
-//            self.tempLname = recruiterLastName
-//            self.tempFname = recruiterFirstName
-//        }
-//    }
-    
     var body: some View {
         ZStack {
             Color("tertiaryColor").ignoresSafeArea()
             VStack {
-                TitleRowView()
+                TitleRowView(
+                    firstname: db.theUser?.role == "Recruiter" ? internFirstName : recruiterFirstName,
+                    lastname: db.theUser?.role == "Recruiter" ? internLastName : recruiterLastName
+                )
+                
                 ScrollView {
                     ForEach(messages, id: \.self) { text in
-                        ChatBubbleView(message: Message(id: text.id, text: text.text, received: text.received, timestamp: text.timestamp), image: tempImage)
+                        ChatBubbleView(
+                            message: Message(
+                                id: text.id,
+                                text: text.text,
+                                received: text.received,
+                                timestamp: text.timestamp),
+                            image: db.theUser?.role == "Recruiter" ? internImage : recruiterImage
+                        )
                     }
                 }
                 
@@ -146,7 +135,8 @@ struct CustomTextField: View {
 struct TitleRowView: View {
     @Environment(\.dismiss) var dismiss
     
-    var name = "Saiman Chen"
+    var firstname: String
+    var lastname: String
     
     var body: some View {
         
@@ -163,7 +153,7 @@ struct TitleRowView: View {
                 
                 Spacer()
                 
-                Text(name)
+                Text("\(firstname) \(lastname)")
                     .font(.title)
                     .fontWeight(.light)
                     .foregroundColor(Color("secondaryColor"))
