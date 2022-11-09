@@ -215,7 +215,7 @@ class DataManager: ObservableObject {
                         self.conversationsUidArray = theUser.conversations ?? []
                         
                         print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
-                        print("3. ConversationsUIDArray: \(self.conversationsUidArray.count)")
+                        print("2. ConversationsUIDArray: \(self.conversationsUidArray.count)")
                         
                         self.fetchContacts()
                         self.fetchConversations()
@@ -282,7 +282,7 @@ class DataManager: ObservableObject {
                         }
                     }
 
-                    print("2. ContactsArray: \(self.contactsArray.count)")
+                    print("3. ContactsArray: \(self.contactsArray.count)")
                 }
             }
     }
@@ -301,7 +301,9 @@ class DataManager: ObservableObject {
     
     func fetchConversations() {
         self.conversationsArray.removeAll()
-        db.collection(self.conversationsCollection).getDocuments() { (querySnapshot, error) in
+        db.collection(self.conversationsCollection)
+            .whereField("members", arrayContains: theUser?.id)
+            .getDocuments() { (querySnapshot, error) in
 
                 if let error = error {
                     print("\(error) getting documents: (err)")
@@ -314,6 +316,7 @@ class DataManager: ObservableObject {
                                 do {
                                     let conversation = try document.data(as: Conversation.self)
                                     self.conversationsArray.append(conversation)
+                                    print("This is the conversation: \(self.conversationsArray)")
                                     
                                 } catch {
                                     print(error.localizedDescription)
@@ -321,13 +324,11 @@ class DataManager: ObservableObject {
                             }
                         }
                     }
-
-                    print("4. conversationsArray: \(self.conversationsArray.count)")
                 }
             }
 
     }
-    
+    // Add listener to the function aswell 
     // push new messages
     
     // fetch new messages

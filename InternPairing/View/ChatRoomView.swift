@@ -2,7 +2,35 @@ import SwiftUI
 
 struct ChatRoomView: View {
     @EnvironmentObject var db: DataManager
-    @State var messageArray = ["Hello you sexy one!", "We need to speak asap :)", "What do you think about us?", "Are we good?"]
+    var messages: [Message]
+    var internFirstName: String
+    var internLastName: String
+    var recruiterFirstName: String
+    var recruiterLastName: String
+    var internImage: String
+    var recruiterImage: String
+    
+    var tempFname: String
+    var tempLname: String
+    var tempImage: String
+    
+//    init () {
+//        checkRole()
+//    }
+//    
+//    func checkRole(){
+//        if db.theUser?.role == "Recruiter"{
+//            self.tempImage = internImage
+//            self.tempLname = internLastName
+//            self.tempFname = internFirstName
+//        }
+//        
+//        if db.theUser?.role == "Intern"{
+//            self.tempImage = recruiterImage
+//            self.tempLname = recruiterLastName
+//            self.tempFname = recruiterFirstName
+//        }
+//    }
     
     var body: some View {
         ZStack {
@@ -10,16 +38,12 @@ struct ChatRoomView: View {
             VStack {
                 TitleRowView()
                 ScrollView {
-                    ForEach(messageArray, id: \.self) { text in
-                        ChatBubbleView(message: Message(
-                            id: "123",
-                            text: text,
-                            received: true,
-                            timestamp: Date()))
+                    ForEach(messages, id: \.self) { text in
+                        ChatBubbleView(message: Message(id: text.id, text: text.text, received: text.received, timestamp: text.timestamp), image: tempImage)
                     }
                 }
                 
-                MessageFieldView(messageArray: $messageArray).padding(.horizontal)
+//                MessageFieldView().padding(.horizontal)
             }
         }
     }
@@ -27,8 +51,9 @@ struct ChatRoomView: View {
 
 struct ChatBubbleView: View {
     var message: Message
+    var image: String
+
     @State private var showTime = false
-    var imageUrl = URL(string: "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1085&q=80")
     
     
     var body: some View {
@@ -37,7 +62,7 @@ struct ChatBubbleView: View {
             HStack {
                 
                 if message.received {
-                    AsyncImage(url: imageUrl) { image in
+                    AsyncImage(url: URL(string: image)) { image in
                         image.resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 50, height: 50)
@@ -155,9 +180,9 @@ struct TitleRowView: View {
         
     }
 }
-
-struct ChatRoom_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatRoomView()
-    }
-}
+//
+//struct ChatRoom_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ChatRoomView()
+//    }
+//}

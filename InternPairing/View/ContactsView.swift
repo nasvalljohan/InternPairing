@@ -7,7 +7,7 @@ struct ContactsView: View {
         ZStack(alignment: .topLeading) {
             Color("tertiaryColor").ignoresSafeArea()
             
-            if let contacts = db.contactsArray {
+            if let conversations = db.conversationsArray {
 
                 VStack (alignment: .leading, spacing: 0){
                     //TODO: Messaging
@@ -30,14 +30,16 @@ struct ContactsView: View {
                     
                     ScrollView (showsIndicators: false) {
                         VStack (spacing: 5) {
-                            ForEach(contacts, id: \.self) {
-                                user in
-                                
-                                    NavigationLink(destination: {
-                                        ChatRoomView().navigationBarBackButtonHidden(true)
-                                    }, label: {
-                                        ChatCards(user: user)
-                                    })
+                            ForEach(conversations, id: \.self) {
+                                conversation in
+
+                                NavigationLink(destination: {
+                                    ChatRoomView( messages: conversation.messages, internFirstName: conversation.internFirstname, internLastName: conversation.internLastname, recruiterFirstName: conversation.recruiterFirstname, recruiterLastName: conversation.recruiterLastname, internImage: conversation.internImage, recruiterImage: conversation.recruiterImage)
+                                    
+                                        .navigationBarBackButtonHidden(true)
+                                }, label: {
+                                    ChatCards(conversation: conversation)
+                                })
                                 
                                 
                             }
@@ -52,12 +54,12 @@ struct ContactsView: View {
 
 struct ChatCards: View {
     @EnvironmentObject var db: DataManager
-    var user: TheUser
-    
+    var conversation: Conversation
+
     var body: some View {
-        
+
         HStack {
-            AsyncImage(url: URL(string: user.imageUrl ?? "profile-placeholder"), content: {
+            AsyncImage(url: URL(string: db.theUser?.role == "Intern" ? conversation.recruiterImage : conversation.internImage ), content: {
                 pic in
                 pic
                     .resizable()
@@ -66,13 +68,13 @@ struct ChatCards: View {
                 Image("profile-placeholder")
                     .resizable()
                     .scaledToFill()
-                
+
             }).frame(width: 70, height: 70).clipShape(Circle())
-            
+
             if db.theUser?.role == "Recruiter" {
                 VStack (alignment: .leading){
-                    
-                    Text(user.firstName ?? "").font(.subheadline)
+
+                    Text(conversation.internFirstname ).font(.subheadline)
                         .foregroundColor(Color("primaryColor"))
                         .fontWeight(.semibold)
                     Text("latestMessagePreview").font(.subheadline)
@@ -80,14 +82,14 @@ struct ChatCards: View {
                         .fontWeight(.ultraLight)
                 }
             }
-            
+
             if db.theUser?.role == "Intern" {
                 VStack (alignment: .leading){
                     HStack {
-                        Text(user.firstName ?? "").font(.subheadline)
+                        Text(conversation.recruiterFirstname ).font(.subheadline)
                             .foregroundColor(Color("primaryColor"))
                             .fontWeight(.semibold)
-                        Text(user.companyName ?? "").font(.caption2).fontWeight(.ultraLight)
+                        Text(conversation.recruiterLastname ).font(.caption2).fontWeight(.ultraLight)
                     }
                     Text("latestMessagePreview").font(.subheadline)
                         .foregroundColor(Color(.black))

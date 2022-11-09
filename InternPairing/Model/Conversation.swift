@@ -19,7 +19,7 @@ import FirebaseFirestoreSwift
  - uid for document name
  */
 
-class Conversation: Identifiable, Codable {
+struct Conversation: Identifiable, Codable, Hashable {
     @DocumentID var id: String?
     var uid: UUID
     var recruiterFirstname: String
@@ -31,13 +31,7 @@ class Conversation: Identifiable, Codable {
     var members: [String]
     var messages: [Message]
   
-//    init(name: String, members: [String]) {
-//
-//        self.uid = UUID()
-//        self.name = name
-//        self.members = members
-//        self.messages = [Message]()
-//    }
+
     
     init(uid: UUID, recruiterFirstname: String, recruiterLastname: String, internFirstname: String, internLastname: String, recruiterImage: String, internImage: String, members: [String], messages: [Message] ) {
 
