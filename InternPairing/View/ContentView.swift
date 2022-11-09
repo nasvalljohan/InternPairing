@@ -10,15 +10,18 @@ struct ContentView: View {
     var body: some View {
         
         VStack {
+            
             if db.userLoggedIn {
                 if db.theUser?.role == "Recruiter" {
                     TabViewRecruiter()
-                } else if db.theUser?.role == "Intern" {
+                }
+                if db.theUser?.role == "Intern" {
                     TabViewStudent()
                 }
-            } else{
+            }
+            if !db.userLoggedIn{
                 LoginView()
-            }       
+            }
         }
         .environmentObject(db)
         .environmentObject(photoViewModel)

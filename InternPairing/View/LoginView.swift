@@ -15,7 +15,9 @@ struct LoginView: View {
             VStack {
                 if !isNotAUser {
                     AccountView(isNotAUser: $isNotAUser)
-                } else {
+                }
+                
+                if isNotAUser {
                     NoAccountView(isNotAUser: $isNotAUser)
                 }
 
@@ -140,7 +142,6 @@ struct NoAccountView: View {
                         HStack {
                             Text("Already an user?").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
                             Button(action: {
-                                print(db.selected)
                                 isNotAUser = false
                             }, label:{
                                 Text("Login").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.semibold).offset(y: 10)
