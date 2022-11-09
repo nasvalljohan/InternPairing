@@ -5,30 +5,9 @@ import _PhotosUI_SwiftUI
 struct ProfileView: View {
     @EnvironmentObject var db: DataManager
     var body: some View {
-        VStack{
-            if db.theUser?.role == "Recruiter" {
-                RecruiterProfileView()
-            } else if db.theUser?.role == "Intern" {
-                StudentProfileView()
-            }
-        }
-    }
-}
-
-
-// MARK: RecruiterProfileView
-struct RecruiterProfileView: View {
-    @EnvironmentObject var db: DataManager
-    
-    var body: some View {
-        
-        if let companyName = db.theUser?.companyName,
-           let firstName = db.theUser?.firstName,
-           let lastName = db.theUser?.lastName {
-
+        if let u = db.theUser {
             ZStack {
                 Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
-                
                 VStack {
                     HStack {
                         Spacer()
@@ -43,177 +22,161 @@ struct RecruiterProfileView: View {
                         }).padding(.horizontal)
                     }
                     Spacer()
-                    
-                    HStack {
-                        ZStack {
-                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
-                            Text("About us").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
-                                .rotationEffect(.degrees(-90))
-                                .fixedSize()
-                                .frame(width: 20, height: 180)
-                        }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
-                        
-                        ZStack{
-                            
-                            AsyncImage(url: URL(string: db.theUser?.imageUrl ?? ""), content: {
-                                pic in
-                                pic
-                                    .resizable()
-                                    .scaledToFill()
-                            }, placeholder: {
-                                Image("profile-placeholder")
-                                    .resizable()
-                                    .scaledToFill()
-                            }).frame(width: 220, height: 360)
-                                .cornerRadius(20)
-                                .clipped()
-                                .shadow(radius: 4, x: 2, y: 2)
-                            
-                            ProfilePhotosPickerView()
+                    VStack {
+                        if u.role == "Intern" {
+                            InternView()
                         }
-                        
-                        ZStack {
-                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
-                            Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
-                                .rotationEffect(.degrees(-90))
-                                .fixedSize()
-                                .frame(width: 20, height: 180)
-                        }.offset(x: 10).shadow(radius: 4, x: 2, y: 2).padding()
-                        
+                        if u.role == "Recruiter" {
+                            RecruiterView()
+                        }
                     }
-                    
-                    VStack(alignment: .center) {
-                        VStack {
-                            Text(companyName).font(.title).fontWeight(.semibold)
-                            HStack {
-                                Text(firstName).font(.title3).fontWeight(.light)
-                                Text(lastName).font(.title3).fontWeight(.light)
-                            }
-                            //TODO: Add recruiter location?
-                            Text("Stockholm").font(.subheadline).fontWeight(.light)
-                        }
-                        VStack {
-                            Text(db.theUser?.description ?? "Not specified").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
-                        }.padding()
-                    }.padding(.horizontal)
-                    
                     Spacer()
                     
                 }
             }
+            
         }
     }
-        
-    }
+}
 
-
-// MARK: StudentProfileView
-struct StudentProfileView: View {
+struct RecruiterView: View {
     @EnvironmentObject var db: DataManager
-    @EnvironmentObject var photoViewModel: PhotoPicker
-    @EnvironmentObject var storageManager: StorageManager
-    
-    var formatter = Formatter()
-    
-    var imageUrl: String?
     
     var body: some View {
-        if let firstName = db.theUser?.firstName,
-           let lastName = db.theUser?.lastName,
-           let dateOfBirth = db.theUser?.dateOfBirth {
-            let dateString = formatter.dateToString(dateOfBirth: dateOfBirth)
-            let age = formatter.ageConverter(string: dateString)
-
-            ZStack {
-                Color("tertiaryColor").ignoresSafeArea()
-                
-                VStack {
+        if let u = db.theUser {
+            VStack {
+                HStack {
+                    ZStack {
+                        Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                        Text("About us").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                            .rotationEffect(.degrees(-90))
+                            .fixedSize()
+                            .frame(width: 20, height: 180)
+                    }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
                     
-                    HStack {
-                        Spacer()
+                    ZStack{
                         
-                        NavigationLink(destination: {
-                            EditProfileView()
-                        }, label: {
-                            Image(systemName: "gearshape.fill").resizable()
-                                .frame(width: 25, height: 25)
-                                .shadow(radius: 1, x: 1, y: 1)
-                                .foregroundColor(Color("primaryColor"))
-                                .padding(.horizontal)
-                        }).padding(.horizontal)
+                        AsyncImage(url: URL(string: u.imageUrl ?? "profile-placeholder"), content: {
+                            pic in
+                            pic
+                                .resizable()
+                                .scaledToFill()
+                        }, placeholder: {
+                            Image("profile-placeholder")
+                                .resizable()
+                                .scaledToFill()
+                        }).frame(width: 220, height: 360)
+                            .cornerRadius(20)
+                            .clipped()
+                            .shadow(radius: 4, x: 2, y: 2)
+                        
+                        ProfilePhotosPickerView()
                     }
                     
-                    Spacer()
-                    
-                    
-                    HStack {
-                        ZStack {
-                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
-                            Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
-                                .rotationEffect(.degrees(-90))
-                                .fixedSize()
-                                .frame(width: 20, height: 180)
-                        }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
-                        
-                        ZStack{
-                            AsyncImage(url: URL(string: db.theUser?.imageUrl ?? ""), content: {
-                                    pic in
-                                    pic
-                                        .resizable()
-                                        .scaledToFill()
-                                }, placeholder: {
-                                    Image("profile-placeholder")
-                                        .resizable()
-                                        .scaledToFill()
-                                }).frame(width: 220, height: 360)
-                                    .cornerRadius(20)
-                                    .clipped()
-                                    .shadow(radius: 4, x: 2, y: 2)
-                            
-                            ProfilePhotosPickerView()
-                        }
-                        
-                        ZStack {
-                            Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
-                            Text("Resume").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
-                                .rotationEffect(.degrees(-90))
-                                .fixedSize()
-                                .frame(width: 20, height: 180)
-                        }.offset(x: 10).shadow(radius: 4, x: 2, y: 2).padding()
-                        
-                    }
-                    
-                    VStack {
-                        VStack {
-                            HStack {
-                                Text(firstName).font(.title).fontWeight(.semibold)
-                                Text(lastName).font(.title).fontWeight(.semibold)
-                                Text(age).font(.title2).fontWeight(.ultraLight).frame(alignment: .bottom)
-                            }
-                            
-                            Text(formatter.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
-                            Text(db.theUser?.location ?? "Not specified lol").font(.subheadline).fontWeight(.light)
-                        }
-                        VStack {
-                            Text(db.theUser?.description ?? "No description").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
-                        }.padding()
-                    }.padding(.horizontal)
-                    
-                    Spacer()
+                    ZStack {
+                        Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                        Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                            .rotationEffect(.degrees(-90))
+                            .fixedSize()
+                            .frame(width: 20, height: 180)
+                    }.offset(x: 10).shadow(radius: 4, x: 2, y: 2).padding()
                     
                 }
+                
+                VStack(alignment: .center) {
+                    VStack {
+                        Text(u.companyName ?? "").font(.title).fontWeight(.semibold)
+                        HStack {
+                            Text(u.firstName ?? "").font(.title3).fontWeight(.light)
+                            Text(u.lastName ?? "").font(.title3).fontWeight(.light)
+                        }
+                        //TODO: Add recruiter location?
+                        Text("Stockholm").font(.subheadline).fontWeight(.light)
+                    }
+                    VStack {
+                        Text(u.description ?? "").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                    }.padding()
+                }.padding(.horizontal)
             }
         }
     }
 }
 
+
+
+struct InternView: View {
+    @EnvironmentObject var db: DataManager
+    
+    var body: some View {
+        if let u = db.theUser,
+            let dateOfBirth = db.theUser?.dateOfBirth {
+            let dateString = formatter.dateToString(dateOfBirth: dateOfBirth)
+            let age = formatter.ageConverter(string: dateString)
+            
+            VStack {
+                HStack {
+                    ZStack {
+                        Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                        Text("Portfolio").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                            .rotationEffect(.degrees(-90))
+                            .fixedSize()
+                            .frame(width: 20, height: 180)
+                    }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
+                    
+                    ZStack{
+                        AsyncImage(url: URL(string: u.imageUrl ?? ""), content: {
+                            pic in
+                            pic
+                                .resizable()
+                                .scaledToFill()
+                        }, placeholder: {
+                            Image("profile-placeholder")
+                                .resizable()
+                                .scaledToFill()
+                        }).frame(width: 220, height: 360)
+                            .cornerRadius(20)
+                            .clipped()
+                            .shadow(radius: 4, x: 2, y: 2)
+                        
+                        ProfilePhotosPickerView()
+                    }
+                    
+                    ZStack {
+                        Rectangle().fill(Color("primaryColor")).frame(width: 60, height: 326).cornerRadius(10)
+                        Text("Resume").font(.title3).fontWeight(.light).foregroundColor(Color("tertiaryColor"))
+                            .rotationEffect(.degrees(-90))
+                            .fixedSize()
+                            .frame(width: 20, height: 180)
+                    }.offset(x: 10).shadow(radius: 4, x: 2, y: 2).padding()
+                    
+                }
+                
+                VStack {
+                    VStack {
+                        HStack {
+                            Text(u.firstName ?? "").font(.title).fontWeight(.semibold)
+                            Text(u.lastName ?? "").font(.title).fontWeight(.semibold)
+                            Text(age).font(.title2).fontWeight(.ultraLight).frame(alignment: .bottom)
+                        }
+                        
+                        Text(formatter.typeOfDev(int: db.theUser?.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
+                        Text(u.location ?? "").font(.subheadline).fontWeight(.light)
+                    }
+                    VStack {
+                        Text(u.description ?? "").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                    }.padding()
+                }.padding(.horizontal)
+            }
+        }
+    }
+}
 
 
 // MARK: Preview
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-//        StudentProfileView()
-        RecruiterProfileView()
+        ProfileView()
+            .environmentObject(DataManager())
     }
 }
 
