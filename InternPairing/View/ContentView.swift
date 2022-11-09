@@ -1,6 +1,9 @@
 import SwiftUI
 import FirebaseAuth
 
+//Global var 
+var formatter = Formatter()
+
 // MARK: ContentView
 struct ContentView: View {
     
