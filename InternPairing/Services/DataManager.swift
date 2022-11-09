@@ -281,13 +281,17 @@ class DataManager: ObservableObject {
     
     // MARK: Chat
     
-    func newConversation(conversation: Conversation) {
+    func pushNewConversation(conversation: Conversation) {
         // NOT DONE
         do {
-            _ = try db.collection(conversationsCollection).addDocument(from: conversation)
+            _ = try db.collection(conversationsCollection).document("\(conversation.uid)").setData(from: conversation)
         } catch {
             print(error.localizedDescription)
         }
     }
+    
+    // push new messages
+    
+    // fetch new messages
 }
 

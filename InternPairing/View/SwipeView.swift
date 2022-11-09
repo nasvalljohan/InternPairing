@@ -215,12 +215,19 @@ struct PopUpCardView: View {
                         
                         db.pushToContactsArray(intern: currentIntern.id ?? "")
                         
-                        db.newConversation(
+                        db.pushNewConversation(
                             conversation: Conversation(
                                 uid: UUID(),
-                                name: "Johan",
-                                members: [db.theUser ?? TheUser(), currentIntern],
-                                messages: []))
+                                recruiterFirstname: db.theUser?.firstName ?? "",
+                                recruiterLastname: db.theUser?.lastName ?? "",
+                                internFirstname: currentIntern.firstName ?? "",
+                                internLastname: currentIntern.lastName ?? "",
+                                recruiterImage: db.theUser?.imageUrl ?? "",
+                                internImage: currentIntern.imageUrl ?? "",
+                                members: [currentIntern.id ?? "", db.theUser?.id ?? ""],
+                                messages: []
+                            )
+                        )
                     }, label: {
                         Text("Make contact")
                             .padding()
