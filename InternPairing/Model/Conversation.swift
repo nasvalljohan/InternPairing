@@ -41,7 +41,7 @@ class Conversation: Identifiable, Codable {
     
     init(uid: UUID, recruiterFirstname: String, recruiterLastname: String, internFirstname: String, internLastname: String, recruiterImage: String, internImage: String, members: [String], messages: [Message] ) {
 
-        self.uid = UUID()
+        self.uid = uid
         self.recruiterFirstname = recruiterFirstname
         self.recruiterLastname = recruiterLastname
         self.internFirstname = internFirstname

@@ -11,6 +11,7 @@ class DataManager: ObservableObject {
     @Published var swipeableInternsArray: Array<TheUser> = []
     @Published var contactsUidArray: Array<String> = []
     @Published var contactsArray: Array<TheUser> = []
+    @Published var conversationsUidArray: Array<String> = []
     @Published var conversationsArray: Array<Conversation> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
@@ -29,6 +30,8 @@ class DataManager: ObservableObject {
                 self.currentUser = user
                 self.fetchCurrentUser()
                 self.fetchInterns()
+                
+                self.fetchConversations()
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -208,8 +211,9 @@ class DataManager: ObservableObject {
                     switch result {
                     case .success(let theUser):
                         self.theUser = theUser
-                            self.contactsUidArray = theUser.contacts ?? [""]
-                            print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
+                        self.contactsUidArray = theUser.contacts ?? [""]
+                        // convesationsUidArray
+                        print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
                         self.fetchContacts()
                         break
                     case .failure(let error):
@@ -237,7 +241,7 @@ class DataManager: ObservableObject {
                         do {
                             let user = try document.data(as: TheUser.self)
                             
-                            if !self.contactsUidArray.contains(user.id ?? ""){
+                            if !self.contactsUidArray.contains(user.id ?? "") {
                                 self.swipeableInternsArray.append(user)
                             }
 
@@ -288,6 +292,50 @@ class DataManager: ObservableObject {
         } catch {
             print(error.localizedDescription)
         }
+    }
+    
+    func pushToConversationsArray(internID: String, conversationID: String) {
+        if let currentUser = currentUser {
+            
+            let referenceRecruiter = db.collection(usersCollection).document(currentUser.uid)
+            let referenceIntern = db.collection(usersCollection).document(internID)
+            
+            referenceRecruiter.updateData([
+                "conversations": FieldValue.arrayUnion([conversationID])
+            ])
+            
+            referenceIntern.updateData([
+                "conversations": FieldValue.arrayUnion([conversationID])
+            ])
+        }
+    }
+    
+    func fetchConversations() {
+        userDocumentListener = self.db
+            .collection(conversationsCollection)
+            .document("A1006A9D-A6DF-4EBF-8EBE-73FB2C6981D2")
+            .addSnapshotListener {
+                snapshot, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+                
+                guard let snapshot = snapshot else { return }
+                
+                let result = Result {
+                    try snapshot.data(as: Conversation.self)
+                }
+                
+                switch result {
+                case .success(let conversation):
+                    print("CONVERSATION \(conversation.uid)")
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    break
+                }
+            }
     }
     
     // push new messages

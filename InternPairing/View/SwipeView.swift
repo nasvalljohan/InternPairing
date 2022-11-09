@@ -215,9 +215,11 @@ struct PopUpCardView: View {
                         
                         db.pushToContactsArray(intern: currentIntern.id ?? "")
                         
+                        let conversationID = UUID()
+                        
                         db.pushNewConversation(
                             conversation: Conversation(
-                                uid: UUID(),
+                                uid: conversationID,
                                 recruiterFirstname: db.theUser?.firstName ?? "",
                                 recruiterLastname: db.theUser?.lastName ?? "",
                                 internFirstname: currentIntern.firstName ?? "",
@@ -225,9 +227,12 @@ struct PopUpCardView: View {
                                 recruiterImage: db.theUser?.imageUrl ?? "",
                                 internImage: currentIntern.imageUrl ?? "",
                                 members: [currentIntern.id ?? "", db.theUser?.id ?? ""],
-                                messages: []
+                                messages: [Message(id: "1", text: "Hello Intern", received: false, timestamp: Date())]
                             )
                         )
+                        
+                        db.pushToConversationsArray(internID: currentIntern.id ?? "", conversationID: "\(conversationID)")
+                        
                     }, label: {
                         Text("Make contact")
                             .padding()
