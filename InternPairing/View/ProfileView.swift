@@ -6,10 +6,10 @@ struct ProfileView: View {
     @EnvironmentObject var um: UserManager
     var body: some View {
         VStack{
-            if um.theUser.role == "Recruiter" {
+            if um.theUser?.role == "Recruiter" {
                 RecruiterProfileView()
             }
-            if um.theUser.role == "Intern" {
+            if um.theUser?.role == "Intern" {
                 StudentProfileView()
             }
         }
@@ -23,9 +23,9 @@ struct RecruiterProfileView: View {
     
     var body: some View {
         
-        if let companyName = um.theUser.companyName,
-           let firstName = um.theUser.firstName,
-           let lastName = um.theUser.lastName {
+        if let companyName = um.theUser?.companyName,
+           let firstName = um.theUser?.firstName,
+           let lastName = um.theUser?.lastName {
 
             ZStack {
                 Rectangle().fill(Color("tertiaryColor")).ignoresSafeArea()
@@ -56,7 +56,7 @@ struct RecruiterProfileView: View {
                         
                         ZStack{
                             
-                            AsyncImage(url: URL(string: um.theUser.imageUrl ?? ""), content: {
+                            AsyncImage(url: URL(string: um.theUser?.imageUrl ?? ""), content: {
                                 pic in
                                 pic
                                     .resizable()
@@ -94,7 +94,7 @@ struct RecruiterProfileView: View {
                             Text("Stockholm").font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text(um.theUser.description ?? "Not specified").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text(um.theUser?.description ?? "Not specified").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     
@@ -119,9 +119,9 @@ struct StudentProfileView: View {
     var imageUrl: String?
     
     var body: some View {
-        if let firstName = um.theUser.firstName,
-           let lastName = um.theUser.lastName,
-           let dateOfBirth = um.theUser.dateOfBirth {
+        if let firstName = um.theUser?.firstName,
+           let lastName = um.theUser?.lastName,
+           let dateOfBirth = um.theUser?.dateOfBirth {
             let dateString = formatter.dateToString(dateOfBirth: dateOfBirth)
             let age = formatter.ageConverter(string: dateString)
 
@@ -157,7 +157,7 @@ struct StudentProfileView: View {
                         }.offset(x: -10).shadow(radius: 4, x: 2, y: 2).padding()
                         
                         ZStack{
-                            AsyncImage(url: URL(string: um.theUser.imageUrl ?? ""), content: {
+                            AsyncImage(url: URL(string: um.theUser?.imageUrl ?? ""), content: {
                                     pic in
                                     pic
                                         .resizable()
@@ -192,11 +192,11 @@ struct StudentProfileView: View {
                                 Text(age).font(.title2).fontWeight(.ultraLight).frame(alignment: .bottom)
                             }
                             
-                            Text(formatter.typeOfDev(int: um.theUser.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
-                            Text(um.theUser.location ?? "Not specified lol").font(.subheadline).fontWeight(.light)
+                            Text(formatter.typeOfDev(int: um.theUser?.typeOfDeveloper ?? 0) ).font(.title3).fontWeight(.light)
+                            Text(um.theUser?.location ?? "Not specified lol").font(.subheadline).fontWeight(.light)
                         }
                         VStack {
-                            Text(um.theUser.description ?? "No description").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
+                            Text(um.theUser?.description ?? "No description").lineLimit(4).font(.subheadline).fontWeight(.light).fixedSize(horizontal: false, vertical: true)
                         }.padding()
                     }.padding(.horizontal)
                     

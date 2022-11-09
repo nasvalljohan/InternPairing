@@ -9,10 +9,10 @@ struct SignUpView: View {
     
     var body: some View {
         ZStack {
-            if um.theUser.role == "Intern" { // Selected 1 
+            if um.selected == 1 { // Selected 1
                 StudentSignUp()
             }
-            else if um.theUser.role == "Recruiter" { //Selected 2
+            else if um.selected == 2 { //Selected 2
                 RecruiterSignUp()
             }
         }.ignoresSafeArea()

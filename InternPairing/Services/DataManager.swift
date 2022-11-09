@@ -9,7 +9,7 @@ class DataManager {
     
     // MARK: Auth functions
     // Register
-    func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, companyName: String?, isUserComplete: Bool, user: TheUser, role: String) {
+    func registerUser(email: String, password: String, dateOfBirth: Date?, firstName: String?, lastName: String?, companyName: String?, isUserComplete: Bool, role: String, selected: Int) {
         var userRole = ""
         var newUser: TheUser?
         
@@ -23,7 +23,7 @@ class DataManager {
             // AUTH: If successfull
             if let authDataResult = authDataResult {
                 
-                if user.role == "Intern" {
+                if selected == 1 {
                     userRole = "Intern"
 
                     newUser = TheUser(
@@ -34,7 +34,7 @@ class DataManager {
                         dateOfBirth: dateOfBirth
                     )
                 }
-                if user.role == "Recruiter" {
+                if selected == 2 {
 
                     newUser = TheUser(
                         id: authDataResult.user.uid,
@@ -66,6 +66,7 @@ class DataManager {
             if error != nil {
                 print(error!.localizedDescription)
             }
+            print("trying to log in")
         }
     }
     
@@ -139,7 +140,9 @@ class DataManager {
     // MARK: Fetch from db functions
         
     // fetches the current user that's logged in
-    func fetchCurrentUser(currentUser: User, user: TheUser) {
+    func fetchCurrentUser(currentUser: User, theUser: TheUser) -> TheUser {
+        var temp: TheUser = theUser
+        
             userDocumentListener = self.db
                 .collection(usersCollection)
                 .document(currentUser.uid)
@@ -158,21 +161,20 @@ class DataManager {
                     
                     switch result {
                     case .success(let theUser):
-                        user = theUser
-                        self.contactsUidArray = theUser.contacts ?? [""]
-                        print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
-                        self.fetchContacts()
+                        temp = theUser
                         break
                     case .failure(let error):
                         print(error.localizedDescription)
                         break
                     }
                 }
-        
+        return temp
     }
     
     // fetches interns that recruiter hasn't matched with
-    func fetchInterns(contactsUidArray: [String], swipeableInternsArray: [TheUser]) -> TheUser{
+    func fetchInterns(theUser: TheUser) -> TheUser{
+        
+        var temp: TheUser = theUser
         
         db.collection(self.usersCollection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
             .getDocuments() { (querySnapshot, error) in
@@ -186,24 +188,23 @@ class DataManager {
                         do {
                             let user = try document.data(as: TheUser.self)
                             
-                            if !contactsUidArray.contains(user.id ?? ""){
-                                swipeableInternsArray.append(user)
-                            }
-
-                                
+                            temp = user
                         } catch {
                             print(error.localizedDescription)
                         }
                     }
                 }
             }
+        return temp
     }
     
     // Fetching contacts for both recruiter and intern
-    func fetchContacts(contactsUidArray: [String], contactsArray: [TheUser]) {
-        db.collection(self.usersCollection).whereField("isUserComplete", isEqualTo: true)
-            .getDocuments() { (querySnapshot, error) in
-                
+    func fetchContacts(contactsUidArray: [String]) -> [TheUser] {
+    
+        var tempArray: [TheUser] = []
+        
+        db.collection(self.usersCollection).whereField("isUserComplete", isEqualTo: true).getDocuments() { (querySnapshot, error) in
+            
                 if let error = error {
                     print("\(error) getting documents: (err)")
                 } else {
@@ -214,7 +215,8 @@ class DataManager {
                             if uid == document.documentID {
                                 do {
                                     let user = try document.data(as: TheUser.self)
-                                    contactsArray.append(user)
+                                    
+                                    tempArray.append(user)
                                 } catch {
                                     print(error.localizedDescription)
                                 }
@@ -222,9 +224,9 @@ class DataManager {
                         }
                     }
 
-                    print("2. ContactsArray: \(self.contactsArray.count)")
                 }
             }
+        return tempArray
     }
     
     // MARK: Chat

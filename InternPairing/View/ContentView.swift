@@ -14,9 +14,9 @@ struct ContentView: View {
         
         VStack {
             if um.userLoggedIn {
-                if um.theUser.role == "Recruiter" {
+                if um.theUser?.role == "Recruiter" {
                     TabViewRecruiter()
-                } else if um.theUser.role == "Intern" {
+                } else if um.theUser?.role == "Intern" {
                     TabViewStudent()
                 }
             } else{

@@ -8,28 +8,28 @@ struct EditProfileView: View {
     var body: some View {
         ZStack {
             
-            if um.theUser.role == "Recruiter" {
+            if um.theUser?.role == "Recruiter" {
                 EditRecruiterProfileView(
-                    firstName: um.theUser.firstName ?? "",
-                    lastName: um.theUser.lastName ?? "",
-                    companyName: um.theUser.companyName ?? "",
-                    description: um.theUser.description ?? "",
-                    linkedin: um.theUser.linkedInLink ?? "https://www.linkedin.com/",
-                    location: um.theUser.location ?? "",
-                    companyLink: um.theUser.companyLink ?? "https://www.",
-                    typeOfDeveloper: um.theUser.typeOfDeveloper ?? 1
+                    firstName: um.theUser?.firstName ?? "",
+                    lastName: um.theUser?.lastName ?? "",
+                    companyName: um.theUser?.companyName ?? "",
+                    description: um.theUser?.description ?? "",
+                    linkedin: um.theUser?.linkedInLink ?? "https://www.linkedin.com/",
+                    location: um.theUser?.location ?? "",
+                    companyLink: um.theUser?.companyLink ?? "https://www.",
+                    typeOfDeveloper: um.theUser?.typeOfDeveloper ?? 1
                 ).navigationBarBackButtonHidden(true)
             }
-            if um.theUser.role == "Intern" {
+            if um.theUser?.role == "Intern" {
                 EditInternProfileView(
-                    firstName: um.theUser.firstName ?? "",
-                    lastName: um.theUser.lastName ?? "",
-                    description: um.theUser.description ?? "",
-                    linkedin: um.theUser.linkedInLink ?? "https://www.linkedin.com/",
-                    location: um.theUser.location ?? "",
-                    typeOfDeveloper: um.theUser.typeOfDeveloper ?? 1,
-                    github: um.theUser.githubLink ?? "https://www.github.com/",
-                    otherLink: um.theUser.otherLink ?? ""
+                    firstName: um.theUser?.firstName ?? "",
+                    lastName: um.theUser?.lastName ?? "",
+                    description: um.theUser?.description ?? "",
+                    linkedin: um.theUser?.linkedInLink ?? "https://www.linkedin.com/",
+                    location: um.theUser?.location ?? "",
+                    typeOfDeveloper: um.theUser?.typeOfDeveloper ?? 1,
+                    github: um.theUser?.githubLink ?? "https://www.github.com/",
+                    otherLink: um.theUser?.otherLink ?? ""
                 ).navigationBarBackButtonHidden(true)
             }
         }

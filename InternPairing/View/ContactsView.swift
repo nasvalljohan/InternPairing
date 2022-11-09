@@ -71,7 +71,7 @@ struct ChatCards: View {
                 
             }).frame(width: 70, height: 70).clipShape(Circle())
             
-            if um.theUser.role == "Recruiter" {
+            if um.theUser?.role == "Recruiter" {
                 VStack (alignment: .leading){
                     
                     Text(user.firstName ?? "").font(.subheadline)
@@ -83,7 +83,7 @@ struct ChatCards: View {
                 }
             }
             
-            if um.theUser.role == "Intern" {
+            if um.theUser?.role == "Intern" {
                 VStack (alignment: .leading){
                     HStack {
                         Text(user.firstName ?? "").font(.subheadline)

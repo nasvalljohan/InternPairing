@@ -4,7 +4,7 @@ import Foundation
 
 class UserManager: ObservableObject {
     @Published var swipeableInternsArray: Array<TheUser> = []
-    @Published var theUser: TheUser
+    @Published var theUser: TheUser?
     @Published var userLoggedIn = false
     @Published var currentUser: User?
     @Published var selected = 0
@@ -40,7 +40,10 @@ class UserManager: ObservableObject {
         if selected == 2 {
             role = "Recruiter"
         }
-        dm.registerUser(email: email, password: password, dateOfBirth: dateOfBirth, firstName: firstName, lastName: lastName, companyName: companyName, isUserComplete: isUserComplete, user: theUser, role: role)
+        
+            print("hll")
+            dm.registerUser(email: email, password: password, dateOfBirth: dateOfBirth, firstName: firstName, lastName: lastName, companyName: companyName, isUserComplete: isUserComplete, role: role, selected: selected)
+        
     }
     
     func login(email: String, password: String) {
@@ -50,7 +53,8 @@ class UserManager: ObservableObject {
     
     //MARK: Push
     func pushUserDetails(firstName: String, lastName: String, companyName: String, description: String, linkedInLink: String, otherLink: String, location: String, githubLink: String, typeOfDeveloper: Int, companyLink: String){
-        if let currentUser = currentUser {
+        if let currentUser = currentUser,
+           let theUser = theUser {
             dm.pushUserDetails(firstName: firstName, lastName: lastName, companyName: companyName, description: description, linkedInLink: linkedInLink, otherLink: otherLink, location: location, githubLink: githubLink, typeOfDeveloper: typeOfDeveloper, companyLink: companyLink, user: theUser, currentUser: currentUser)
         }
     }
@@ -69,16 +73,29 @@ class UserManager: ObservableObject {
     
     //MARK: Fetch
     func fetchCurrentUser(){
-        if let currentUser = currentUser {
-            dm.fetchCurrentUser(currentUser: currentUser, user: theUser)
+        if let currentUser = currentUser,
+           let theUser = theUser {
+            var xUser = dm.fetchCurrentUser(currentUser: currentUser, theUser: theUser)
+            contactsUidArray = xUser.contacts ?? []
         }
     }
     
-    func fetchInterns(){
-        dm.fetchInterns(contactsUidArray: contactsUidArray, swipeableInternsArray: swipeableInternsArray)
+    func fetchInterns() {
+        if let theUser = theUser {
+            var xUser = dm.fetchInterns(theUser: theUser)
+            
+            for contact in contactsUidArray {
+                if !contactsUidArray.contains(contact) {
+                    swipeableInternsArray.append(xUser)
+                }
+            }
+        }
     }
     
     func fetchContacts(){
-        dm.fetchContacts(contactsUidArray: contactsUidArray, contactsArray: contactsArray)
+        var xUsers = dm.fetchContacts(contactsUidArray: contactsUidArray)
+        for user in xUsers {
+            contactsArray.append(user)
+        }
     }
 }
