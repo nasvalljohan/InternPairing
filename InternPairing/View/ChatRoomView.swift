@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ChatRoomView: View {
+    @EnvironmentObject var db: DataManager
     @State var messageArray = ["Hello you sexy one!", "We need to speak asap :)", "What do you think about us?", "Are we good?"]
     
     var body: some View {

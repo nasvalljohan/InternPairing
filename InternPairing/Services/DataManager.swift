@@ -30,8 +30,6 @@ class DataManager: ObservableObject {
                 self.currentUser = user
                 self.fetchCurrentUser()
                 self.fetchInterns()
-                
-                self.fetchConversations()
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -169,18 +167,20 @@ class DataManager: ObservableObject {
     }
     
     // Adds intern uid to recruiter document
-    func pushToContactsArray(intern: String) {
+    func pushToContactsArray(intern: String, conversationID: String) {
         if let currentUser = currentUser {
             
             let referenceRecruiter = db.collection(usersCollection).document(currentUser.uid)
             let referenceIntern = db.collection(usersCollection).document(intern)
             
             referenceRecruiter.updateData([
-                "contacts": FieldValue.arrayUnion([intern])
+                "contacts": FieldValue.arrayUnion([intern]),
+                "conversations": FieldValue.arrayUnion([conversationID])
             ])
             
             referenceIntern.updateData([
-                "contacts": FieldValue.arrayUnion([currentUser.uid])
+                "contacts": FieldValue.arrayUnion([currentUser.uid]),
+                "conversations": FieldValue.arrayUnion([conversationID])
             ])
         }
     }
@@ -211,10 +211,14 @@ class DataManager: ObservableObject {
                     switch result {
                     case .success(let theUser):
                         self.theUser = theUser
-                        self.contactsUidArray = theUser.contacts ?? [""]
-                        // convesationsUidArray
+                        self.contactsUidArray = theUser.contacts ?? []
+                        self.conversationsUidArray = theUser.conversations ?? []
+                        
                         print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
+                        print("3. ConversationsUIDArray: \(self.conversationsUidArray.count)")
+                        
                         self.fetchContacts()
+                        self.fetchConversations()
                         break
                     case .failure(let error):
                         print(error.localizedDescription)
@@ -294,48 +298,34 @@ class DataManager: ObservableObject {
         }
     }
     
-    func pushToConversationsArray(internID: String, conversationID: String) {
-        if let currentUser = currentUser {
-            
-            let referenceRecruiter = db.collection(usersCollection).document(currentUser.uid)
-            let referenceIntern = db.collection(usersCollection).document(internID)
-            
-            referenceRecruiter.updateData([
-                "conversations": FieldValue.arrayUnion([conversationID])
-            ])
-            
-            referenceIntern.updateData([
-                "conversations": FieldValue.arrayUnion([conversationID])
-            ])
-        }
-    }
     
     func fetchConversations() {
-        userDocumentListener = self.db
-            .collection(conversationsCollection)
-            .document("A1006A9D-A6DF-4EBF-8EBE-73FB2C6981D2")
-            .addSnapshotListener {
-                snapshot, error in
+        self.conversationsArray.removeAll()
+        db.collection(self.conversationsCollection).getDocuments() { (querySnapshot, error) in
+
                 if let error = error {
-                    print(error.localizedDescription)
-                    return
-                }
-                
-                guard let snapshot = snapshot else { return }
-                
-                let result = Result {
-                    try snapshot.data(as: Conversation.self)
-                }
-                
-                switch result {
-                case .success(let conversation):
-                    print("CONVERSATION \(conversation.uid)")
-                    break
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    break
+                    print("\(error) getting documents: (err)")
+                } else {
+
+                    // convert the querySnapshots to TheUser format
+                    for uid in self.conversationsUidArray {
+                        for document in querySnapshot!.documents {
+                            if uid == document.documentID {
+                                do {
+                                    let conversation = try document.data(as: Conversation.self)
+                                    self.conversationsArray.append(conversation)
+                                    
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                        }
+                    }
+
+                    print("4. conversationsArray: \(self.conversationsArray.count)")
                 }
             }
+
     }
     
     // push new messages

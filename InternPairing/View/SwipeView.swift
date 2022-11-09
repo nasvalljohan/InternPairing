@@ -212,10 +212,10 @@ struct PopUpCardView: View {
                         showingSheet.toggle()
                         
                         self.makeContact(currentIntern)
-                        
-                        db.pushToContactsArray(intern: currentIntern.id ?? "")
-                        
                         let conversationID = UUID()
+                        db.pushToContactsArray(intern: currentIntern.id ?? "", conversationID: "\(conversationID)")
+                        
+                        
                         
                         db.pushNewConversation(
                             conversation: Conversation(
@@ -231,7 +231,7 @@ struct PopUpCardView: View {
                             )
                         )
                         
-                        db.pushToConversationsArray(internID: currentIntern.id ?? "", conversationID: "\(conversationID)")
+                        
                         
                     }, label: {
                         Text("Make contact")
