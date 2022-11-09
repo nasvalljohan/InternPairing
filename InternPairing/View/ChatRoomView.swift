@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ChatRoomView: View {
-    var messageArray = ["Hello you sexy one!", "We need to speak asap :)", "What do you think about us?", "Are we good?"]
+    @State var messageArray = ["Hello you sexy one!", "We need to speak asap :)", "What do you think about us?", "Are we good?"]
     
     var body: some View {
         ZStack {
@@ -18,7 +18,7 @@ struct ChatRoomView: View {
                     }
                 }
                 
-                MessageFieldView().padding(.horizontal)
+                MessageFieldView(messageArray: $messageArray).padding(.horizontal)
             }
         }
     }
@@ -67,7 +67,53 @@ struct ChatBubbleView: View {
         }
         .frame(maxWidth: .infinity, alignment: message.received ? .leading : .trailing)
         .padding(message.received ? .leading : .trailing)
-//        .padding(.top)
+        .padding(.top)
+    }
+}
+
+struct MessageFieldView: View {
+    @State private var message = ""
+    @Binding var messageArray: Array<String>
+    
+    var body: some View {
+        HStack {
+            CustomTextField(placeholder: Text("Enter your message here"), text: $message)
+            
+            Button(action: {
+                print("MESSAGE SENT!")
+                messageArray.append(message)
+                message = ""
+            }, label: {
+                Image(systemName: "paperplane.fill")
+                    .foregroundColor(Color("secondaryColor"))
+                    .padding(10)
+                    .background(Color("primaryColor"))
+                    .cornerRadius(50)
+            })
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 10)
+        .background(Color("secondaryColor"))
+        .cornerRadius(20)
+        .padding()
+    }
+}
+
+struct CustomTextField: View {
+    var placeholder: Text
+    @Binding var text: String
+    var editingChanged: (Bool) -> () = { _ in }
+    var commit: () -> () = {}
+    
+    var body: some View {
+        ZStack(alignment: .leading) {
+            if text.isEmpty {
+                placeholder
+                    .opacity(0.5)
+            }
+            
+            TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
+        }
     }
 }
 
@@ -108,51 +154,6 @@ struct TitleRowView: View {
         
     }
 }
-
-struct MessageFieldView: View {
-    @State private var message = ""
-    
-    var body: some View {
-        HStack {
-            CustomTextField(placeholder: Text("Enter your message here"), text: $message)
-            
-            Button(action: {
-                print("MESSAGE SENT!")
-                message = ""
-            }, label: {
-                Image(systemName: "paperplane.fill")
-                    .foregroundColor(Color("secondaryColor"))
-                    .padding(10)
-                    .background(Color("primaryColor"))
-                    .cornerRadius(50)
-            })
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 10)
-        .background(Color("secondaryColor"))
-        .cornerRadius(20)
-        .padding()
-    }
-}
-
-struct CustomTextField: View {
-    var placeholder: Text
-    @Binding var text: String
-    var editingChanged: (Bool) -> () = { _ in }
-    var commit: () -> () = {}
-    
-    var body: some View {
-        ZStack(alignment: .leading) {
-            if text.isEmpty {
-                placeholder
-                    .opacity(0.5)
-            }
-            
-            TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
-        }
-    }
-}
-
 
 struct ChatRoom_Previews: PreviewProvider {
     static var previews: some View {

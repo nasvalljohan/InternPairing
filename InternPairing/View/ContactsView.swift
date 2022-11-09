@@ -8,9 +8,8 @@ struct ContactsView: View {
             Color("tertiaryColor").ignoresSafeArea()
             
             if let contacts = db.contactsArray {
-                
-                
-                VStack (alignment: .leading){
+
+                VStack (alignment: .leading, spacing: 0){
                     //TODO: Messaging
                     ZStack {
                         HStack {
@@ -22,7 +21,7 @@ struct ContactsView: View {
                             Spacer()
                         }
                         .padding(.horizontal)
-//                        .padding(.bottom)
+                        .padding(.bottom)
                         .background(Color("primaryColor"))
                         
                     }
@@ -95,7 +94,7 @@ struct ChatCards: View {
                         .fontWeight(.ultraLight)
                 }
             }
-        }
+        }.padding(.top)
     }
 }
 

@@ -209,9 +209,18 @@ struct PopUpCardView: View {
                     Spacer()
                     
                     Button(action: {
-                            showingSheet.toggle()
-                            self.makeContact(currentIntern)
-                            db.pushToContactsArray(intern: currentIntern.id ?? "")
+                        showingSheet.toggle()
+                        
+                        self.makeContact(currentIntern)
+                        
+                        db.pushToContactsArray(intern: currentIntern.id ?? "")
+                        
+                        db.newConversation(
+                            conversation: Conversation(
+                                uid: UUID(),
+                                name: "Johan",
+                                members: [db.theUser ?? TheUser(), currentIntern],
+                                messages: []))
                     }, label: {
                         Text("Make contact")
                             .padding()
