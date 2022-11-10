@@ -33,7 +33,7 @@ struct LoginView: View {
                 
                 //Login btn
                 VStack{
-                    if isUser {
+                    if !isUser {
                         Button(action: {
                             db.loginUser(email: email, password: password)
                         }, label: {
@@ -45,7 +45,7 @@ struct LoginView: View {
                                 .cornerRadius(10)
                         }).shadow(radius: 4, x: 2, y: 2)
                     }
-                    if !isUser {
+                    if isUser {
                         NavigationLink(destination:{
                             SignUpView().navigationBarBackButtonHidden(true)
                         }, label: {
