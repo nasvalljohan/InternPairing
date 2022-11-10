@@ -218,12 +218,6 @@ struct PopUpCardView: View {
                         db.pushNewConversation(
                             conversation: Conversation(
                                 uid: UUID(),
-                                recruiterFirstname: db.theUser?.firstName ?? "",
-                                recruiterLastname: db.theUser?.lastName ?? "",
-                                internFirstname: currentIntern.firstName ?? "",
-                                internLastname: currentIntern.lastName ?? "",
-                                recruiterImage: db.theUser?.imageUrl ?? "",
-                                internImage: currentIntern.imageUrl ?? "",
                                 members: [currentIntern.id ?? "", db.theUser?.id ?? ""],
                                 messages: [Message(id: "1", text: "Hello Intern", received: false, timestamp: Date())]
                             )
