@@ -17,7 +17,7 @@ struct ChatRoomView: View {
                 )
                 
                 ScrollView {
-                    ForEach(db.messages, id: \.self) { text in
+                    ForEach(db.messages, id: \.self.id) { text in
                         ChatBubbleView(
                             message: Message(
                                 id: text.id,
@@ -34,7 +34,8 @@ struct ChatRoomView: View {
                     
                     Button(action: {
                         print("MESSAGE SENT!")
-                        db.pushMessages(message: Message(id: "\(UUID())", text: text, received: false, timestamp: Date.now), documentID: self.currentDocID)
+                        db.pushMessages(message: Message(id: "\(UUID())", text: text, received: false, timestamp: Date.now), dID: self.currentDocID)
+                        self.text = ""
                     }, label: {
                         Image(systemName: "paperplane.fill")
                             .foregroundColor(Color("secondaryColor"))

@@ -218,7 +218,7 @@ class DataManager: ObservableObject {
                         print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
                         
                         self.fetchContacts()
-                        self.fetchConversations()
+                        self.fetchConversations(currentUser: currentUser)
                         break
                     case .failure(let error):
                         print(error.localizedDescription)
@@ -306,10 +306,10 @@ class DataManager: ObservableObject {
     }
     
     
-    func fetchConversations() {
+    func fetchConversations(currentUser: User) {
         self.conversationsArray.removeAll()
         db.collection(self.conversationsCollection)
-            .whereField("members", arrayContains: theUser?.id)
+            .whereField("members", arrayContains: currentUser.uid)
             .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
@@ -322,7 +322,7 @@ class DataManager: ObservableObject {
                             let conversation = try document.data(as: Conversation.self)
                             self.conversationsArray.append(conversation)
                             for conv in self.conversationsArray {
-                                self.messages.append(conv.messages)
+                                self.messages.append(contentsOf: conv.messages)
                             }
                             
                         } catch {
@@ -336,25 +336,16 @@ class DataManager: ObservableObject {
     
     // Add listener to the function aswell
     // push new messages
-    func pushMessages(message: Message, documentID: String) {
+    func pushMessages(message: Message, dID: String) {
         
         let xMessage = ["id" : "\(message.id)",
                         "recieved": message.received,
                           "text" : message.text,
                           "timestamp" : message.timestamp] as [String : Any]
         
-            db.collection(conversationsCollection).document(documentID).updateData([
+            db.collection(conversationsCollection).document(dID).updateData([
                 "messages": FieldValue.arrayUnion([xMessage])
             ])
     }
     // fetch new messages
 }
-
-
-
-//Conversation(
-//    _id: FirebaseFirestoreSwift.DocumentID<Swift.String>(value: Optional("826E92BA-BE08-4CC5-80D5-3D4F771786A2")),
-//    uid: 826E92BA-BE08-4CC5-80D5-3D4F771786A2,
-//    members: ["DFHzUWsTTIh11glt170Y9umQ7YG3", "KAGO4EZ655SUOjsVPKrlTVlpOwD3"],
-//    messages: [InternPairing.Message(id: "1", text: "Petra", received: false, timestamp: 2022-11-10 10:55:03 +0000)]
-//)
