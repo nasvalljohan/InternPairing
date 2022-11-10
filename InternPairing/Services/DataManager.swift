@@ -20,6 +20,7 @@ class DataManager: ObservableObject {
     @Published var messages: Array<Message> = []
     @Published var documentID = ""
     
+    var convoDocumentListener: ListenerRegistration?
     var userDocumentListener: ListenerRegistration? // nil as long as user is logged out
     
     // Init - listening for changes in authstate
@@ -32,6 +33,7 @@ class DataManager: ObservableObject {
                 self.userLoggedIn = true
                 self.currentUser = user
                 self.fetchCurrentUser()
+                self.fetchMessages()
                 self.fetchInterns()
 
             } else {
@@ -216,6 +218,40 @@ class DataManager: ObservableObject {
                         self.contactsUidArray = theUser.contacts ?? []
                         
                         print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
+                        break
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        break
+                    }
+                }
+        }
+    }
+    
+    // fetches the current user that's logged in
+    func fetchMessages() {
+        self.conversationsArray.removeAll()
+        self.messages.removeAll()
+        if let currentUser = currentUser {
+            convoDocumentListener = self.db
+                .collection(conversationsCollection)
+                .document("D67D795A-A637-4155-9B6E-2173011C296D")
+                .addSnapshotListener {
+                    snapshot, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    
+                    guard let snapshot = snapshot else { return }
+                    
+                    let result = Result {
+                        try snapshot.data(as: Conversation.self)
+                    }
+                    
+                    switch result {
+                    case .success(let conversation):
+                        print("listener heard something!!! ")
+                        //DO SOMETHING WITH THE NEW DATA??
                         
                         self.fetchContacts()
                         self.fetchConversations(currentUser: currentUser)
@@ -227,6 +263,9 @@ class DataManager: ObservableObject {
                 }
         }
     }
+    
+
+    
     
     // fetches interns that recruiter hasn't matched with
     func fetchInterns() {
@@ -307,7 +346,7 @@ class DataManager: ObservableObject {
     
     
     func fetchConversations(currentUser: User) {
-        self.conversationsArray.removeAll()
+
         db.collection(self.conversationsCollection)
             .whereField("members", arrayContains: currentUser.uid)
             .getDocuments() { (querySnapshot, error) in
