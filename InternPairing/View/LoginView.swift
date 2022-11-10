@@ -5,68 +5,72 @@ import Firebase
 // MARK: LoginView
 struct LoginView: View {
     @EnvironmentObject var db: DataManager
-    @State var isUser: Bool = false
+    @State var isUser: Bool = true
     @State private var email = ""
     @State private var password = ""
 
     var body: some View {
-        ZStack {
-            Color("tertiaryColor").ignoresSafeArea()
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color("secondaryColor"))
-                .frame(height: UIScreen.main.bounds.height * 0.3)
-                .shadow(radius: 4, x: 2, y: 2).padding()
-            VStack {
-                Spacer()
-                ZStack{
-                    Circle().fill(Color("secondaryColor")).frame(width: 100).offset(y: -40)
-                    Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
-                    Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
-                }
-                if !isUser {
-                    Login(email: $email, password: $password, isNotAUser: $isUser)
-                }
-                if isUser {
-                    Register(isNotAUser: $isUser)
-                }
-                Spacer()
-                
-                //Login btn
-                VStack{
+        NavigationView {
+            ZStack {
+                Color("tertiaryColor").ignoresSafeArea()
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color("secondaryColor"))
+                    .frame(height: UIScreen.main.bounds.height * 0.3)
+                    .shadow(radius: 4, x: 2, y: 2).padding()
+                VStack {
+                    Spacer()
+                    ZStack{
+                        Circle().fill(Color("secondaryColor")).frame(width: 100).offset(y: -40)
+                        Image(systemName: "ferry").resizable().frame(width: 50, height: 50).offset(y: -40)
+                        Text("fINNDäRN").font(.largeTitle).fontWeight(.light)
+                    }
                     if !isUser {
-                        Button(action: {
-                            db.loginUser(email: email, password: password)
-                        }, label: {
-                            Text("Login")
-                                .padding()
-                                .frame(width: 300)
-                                .background(Color("primaryColor"))
-                                .foregroundColor(Color("secondaryColor"))
-                                .cornerRadius(10)
-                        }).shadow(radius: 4, x: 2, y: 2)
+                        Login(email: $email, password: $password, isNotAUser: $isUser)
                     }
                     if isUser {
-                        NavigationLink(destination:{
-                            SignUpView().navigationBarBackButtonHidden(true)
-                        }, label: {
-                            Text("Sign up")
-                                .padding()
-                                .frame(width: 300)
-                                .background(Color("primaryColor"))
-                                .foregroundColor(Color("secondaryColor"))
-                                .cornerRadius(10)
-                        }).shadow(radius: 4, x: 2, y: 2)
+                        Register(isNotAUser: $isUser)
                     }
-                    HStack {
-                        Text(isUser ? "Not registered?" : "Already an user?").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
-
-                        Button(action: {
-                            isUser.toggle()
-                        }, label: {
-                            Text(isUser ? "Sign Up" : "Login").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.semibold).offset(y: 10)
-                        })
-                    }
-                }.padding()
+                    Spacer()
+                    
+                    //Login btn
+                    VStack{
+                        if isUser {
+                            NavigationLink(destination:{
+                                SignUpView().navigationBarBackButtonHidden(true)
+                            }, label: {
+                                Text("Sign up")
+                                    .padding()
+                                    .frame(width: 300)
+                                    .background(Color("primaryColor"))
+                                    .foregroundColor(Color("secondaryColor"))
+                                    .cornerRadius(10)
+                            }).shadow(radius: 4, x: 2, y: 2)
+                        }
+                        if !isUser {
+                            Button(action: {
+                                db.loginUser(email: email, password: password)
+                            }, label: {
+                                Text("Login")
+                                    .padding()
+                                    .frame(width: 300)
+                                    .background(Color("primaryColor"))
+                                    .foregroundColor(Color("secondaryColor"))
+                                    .cornerRadius(10)
+                            }).shadow(radius: 4, x: 2, y: 2)
+                        }
+                        
+                        HStack {
+                            Text(isUser ? "Already an user?" : "Not registered?").foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.light).offset(y: 10)
+                            
+                            Button(action: {
+                                isUser.toggle()
+                                print(isUser)
+                            }, label: {
+                                Text(isUser ? "Login" : "Sign Up" ).foregroundColor(Color("primaryColor")).font(.subheadline).fontWeight(.semibold).offset(y: 10)
+                            })
+                        }
+                    }.padding()
+                }
             }
         }
     }
@@ -121,6 +125,6 @@ struct Register: View {
 // MARK: Preview
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView().environmentObject(DataManager())
     }
 }
