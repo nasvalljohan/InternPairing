@@ -43,8 +43,6 @@ struct ContactsView: View {
                                 }).simultaneousGesture(TapGesture().onEnded {
                                     for conversation in conversations {
                                         if conversation.members.contains(user.id ?? "") {
-                                            db.messages = conversation.messages
-                                            print(db.messages)
                                             currentDocID = conversation.id ?? ""
                                         }
                                     }
