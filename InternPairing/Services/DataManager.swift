@@ -11,7 +11,6 @@ class DataManager: ObservableObject {
     @Published var swipeableInternsArray: Array<TheUser> = []
     @Published var contactsUidArray: Array<String> = []
     @Published var contactsArray: Array<TheUser> = []
-    @Published var conversationsUidArray: Array<String> = []
     @Published var conversationsArray: Array<Conversation> = []
     @Published var selected = 1
     @Published var theUser: TheUser?
@@ -65,7 +64,7 @@ class DataManager: ObservableObject {
                 
                 if self.selected == 1 {
                     userRole = "Intern"
-
+                    
                     newUser = TheUser(
                         id: authDataResult.user.uid,
                         role: userRole,
@@ -75,7 +74,7 @@ class DataManager: ObservableObject {
                     )
                 } else if self.selected == 2 {
                     userRole = "Recruiter"
-
+                    
                     newUser = TheUser(
                         id: authDataResult.user.uid,
                         role: userRole,
@@ -167,7 +166,7 @@ class DataManager: ObservableObject {
     }
     
     // Adds intern uid to recruiter document
-    func pushToContactsArray(intern: String, conversationID: String) {
+    func pushToContactsArray(intern: String) {
         if let currentUser = currentUser {
             
             let referenceRecruiter = db.collection(usersCollection).document(currentUser.uid)
@@ -175,19 +174,17 @@ class DataManager: ObservableObject {
             
             referenceRecruiter.updateData([
                 "contacts": FieldValue.arrayUnion([intern]),
-                "conversations": FieldValue.arrayUnion([conversationID])
             ])
             
             referenceIntern.updateData([
                 "contacts": FieldValue.arrayUnion([currentUser.uid]),
-                "conversations": FieldValue.arrayUnion([conversationID])
             ])
         }
     }
     
     
     // MARK: Fetch from db functions
-        
+    
     // fetches the current user that's logged in
     func fetchCurrentUser() {
         self.contactsUidArray.removeAll()
@@ -212,10 +209,8 @@ class DataManager: ObservableObject {
                     case .success(let theUser):
                         self.theUser = theUser
                         self.contactsUidArray = theUser.contacts ?? []
-                        self.conversationsUidArray = theUser.conversations ?? []
                         
                         print("1. ContactsUIDArray: \(self.contactsUidArray.count)")
-                        print("2. ConversationsUIDArray: \(self.conversationsUidArray.count)")
                         
                         self.fetchContacts()
                         self.fetchConversations()
@@ -230,7 +225,7 @@ class DataManager: ObservableObject {
     
     // fetches interns that recruiter hasn't matched with
     func fetchInterns() {
-
+        
         self.swipeableInternsArray.removeAll()
         
         db.collection(self.usersCollection).whereField("isUserComplete", isEqualTo: true).whereField("role", isEqualTo: "Intern")
@@ -248,8 +243,8 @@ class DataManager: ObservableObject {
                             if !self.contactsUidArray.contains(user.id ?? "") {
                                 self.swipeableInternsArray.append(user)
                             }
-
-                                
+                            
+                            
                         } catch {
                             print(error.localizedDescription)
                         }
@@ -281,11 +276,18 @@ class DataManager: ObservableObject {
                             }
                         }
                     }
-
+                    
                     print("3. ContactsArray: \(self.contactsArray.count)")
                 }
             }
     }
+    
+    // MARK: ------------------------------------------------------------------------------
+    
+  
+    
+    
+    
     
     // MARK: Chat
     
@@ -304,31 +306,27 @@ class DataManager: ObservableObject {
         db.collection(self.conversationsCollection)
             .whereField("members", arrayContains: theUser?.id)
             .getDocuments() { (querySnapshot, error) in
-
+                
                 if let error = error {
                     print("\(error) getting documents: (err)")
                 } else {
-
-                    // convert the querySnapshots to TheUser format
-                    for uid in self.conversationsUidArray {
-                        for document in querySnapshot!.documents {
-                            if uid == document.documentID {
-                                do {
-                                    let conversation = try document.data(as: Conversation.self)
-                                    self.conversationsArray.append(conversation)
-                                    print("This is the conversation: \(self.conversationsArray)")
-                                    
-                                } catch {
-                                    print(error.localizedDescription)
-                                }
-                            }
+                    
+                    for document in querySnapshot!.documents {
+                        do {
+                            let conversation = try document.data(as: Conversation.self)
+                            self.conversationsArray.append(conversation)
+                            print("This is the conversation: \(self.conversationsArray)")
+                            
+                        } catch {
+                            print(error.localizedDescription)
                         }
                     }
+                    
                 }
             }
-
+        
     }
-    // Add listener to the function aswell 
+    // Add listener to the function aswell
     // push new messages
     
     // fetch new messages
