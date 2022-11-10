@@ -28,6 +28,7 @@
 		328DD43028F6FF5500F006EB /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328DD42F28F6FF5500F006EB /* ProfileView.swift */; };
 		32A94894291A66D3005A7BB4 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 32A94893291A66D3005A7BB4 /* Lottie */; };
 		32A94896291A6A5B005A7BB4 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A94895291A6A5B005A7BB4 /* LottieView.swift */; };
+		32A948D7291CEDAB005A7BB4 /* TextFieldModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A948D6291CEDAB005A7BB4 /* TextFieldModifier.swift */; };
 		3330A13F28FED94A00BE460E /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3330A13E28FED94A00BE460E /* EditProfileView.swift */; };
 		337E54C929092D53005465C2 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337E54C829092D53005465C2 /* Formatter.swift */; };
 		337E54CB29096166005465C2 /* ColorThemeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337E54CA29096166005465C2 /* ColorThemeProtocol.swift */; };
@@ -76,6 +77,7 @@
 		328DD42D28F6ABDF00F006EB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		328DD42F28F6FF5500F006EB /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		32A94895291A6A5B005A7BB4 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
+		32A948D6291CEDAB005A7BB4 /* TextFieldModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldModifier.swift; sourceTree = "<group>"; };
 		3330A13E28FED94A00BE460E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		337E54C829092D53005465C2 /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		337E54CA29096166005465C2 /* ColorThemeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemeProtocol.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 		3268E86328F44F890059BF70 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				32A948D5291CED75005A7BB4 /* View modifiers */,
 				3268E83428F4237B0059BF70 /* ContentView.swift */,
 				33F1E873291A4CE900CEBFCC /* ChatRoomView.swift */,
 				3273F48E2914116A00938654 /* ContactsView.swift */,
@@ -211,6 +214,14 @@
 				337E54C829092D53005465C2 /* Formatter.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		32A948D5291CED75005A7BB4 /* View modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				32A948D6291CEDAB005A7BB4 /* TextFieldModifier.swift */,
+			);
+			path = "View modifiers";
 			sourceTree = "<group>";
 		};
 		33F19FAD28F4532E00FA46C0 /* Model */ = {
@@ -371,6 +382,7 @@
 				33F19FB728F45ACA00FA46C0 /* DataManager.swift in Sources */,
 				3273F48F2914116A00938654 /* ContactsView.swift in Sources */,
 				337E54C929092D53005465C2 /* Formatter.swift in Sources */,
+				32A948D7291CEDAB005A7BB4 /* TextFieldModifier.swift in Sources */,
 				3268E83328F4237B0059BF70 /* InternPairingApp.swift in Sources */,
 				3268E86528F451980059BF70 /* LoginView.swift in Sources */,
 				32A94896291A6A5B005A7BB4 /* LottieView.swift in Sources */,
