@@ -17,7 +17,7 @@ class DataManager: ObservableObject {
     @Published var userLoggedIn = false
     @Published var currentUser: User?
     
-    @Published var messages: [Message] = []
+    @Published var messages: Array<Message> = []
     @Published var documentID = ""
     
     var userDocumentListener: ListenerRegistration? // nil as long as user is logged out
@@ -33,6 +33,7 @@ class DataManager: ObservableObject {
                 self.currentUser = user
                 self.fetchCurrentUser()
                 self.fetchInterns()
+
             } else {
                 self.userLoggedIn = false
                 self.currentUser = nil
@@ -298,7 +299,7 @@ class DataManager: ObservableObject {
     func pushNewConversation(conversation: Conversation) {
         // NOT DONE
         do {
-            _ = try db.collection(conversationsCollection).document("\(conversation.uid)").setData(from: conversation)
+            try db.collection(conversationsCollection).document("\(conversation.uid)").setData(from: conversation)
         } catch {
             print(error.localizedDescription)
         }
@@ -315,29 +316,45 @@ class DataManager: ObservableObject {
                     print("\(error) getting documents: (err)")
                 } else {
                     
+                    
                     for document in querySnapshot!.documents {
                         do {
                             let conversation = try document.data(as: Conversation.self)
                             self.conversationsArray.append(conversation)
+                            for conv in self.conversationsArray {
+                                self.messages.append(conv.messages)
+                            }
                             
                         } catch {
-                            print(error.localizedDescription)
+                            print("FEL I CONVERDSATION FETCH ")
                         }
                     }
                     
                 }
             }
-        
     }
+    
     // Add listener to the function aswell
     // push new messages
     func pushMessages(message: Message, documentID: String) {
-        let reference = db.collection(conversationsCollection).document(documentID)
         
-        reference.updateData([
-            "messages": FieldValue.arrayUnion([message])
-        ])
+        let xMessage = ["id" : "\(message.id)",
+                        "recieved": message.received,
+                          "text" : message.text,
+                          "timestamp" : message.timestamp] as [String : Any]
+        
+            db.collection(conversationsCollection).document(documentID).updateData([
+                "messages": FieldValue.arrayUnion([xMessage])
+            ])
     }
     // fetch new messages
 }
 
+
+
+//Conversation(
+//    _id: FirebaseFirestoreSwift.DocumentID<Swift.String>(value: Optional("826E92BA-BE08-4CC5-80D5-3D4F771786A2")),
+//    uid: 826E92BA-BE08-4CC5-80D5-3D4F771786A2,
+//    members: ["DFHzUWsTTIh11glt170Y9umQ7YG3", "KAGO4EZ655SUOjsVPKrlTVlpOwD3"],
+//    messages: [InternPairing.Message(id: "1", text: "Petra", received: false, timestamp: 2022-11-10 10:55:03 +0000)]
+//)

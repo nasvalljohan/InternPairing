@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ChatRoomView: View {
     @EnvironmentObject var db: DataManager
+    @State private var text = ""
+    @Binding var currentDocID: String
     var chatPerson: TheUser
     var imageUrl = "https://images.unsplash.com/photo-1668063497279-7ecb0f0ffa8a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80"
     
@@ -27,7 +29,26 @@ struct ChatRoomView: View {
                     }
                 }
                 
-                MessageFieldView().padding(.horizontal)
+                HStack {
+                    CustomTextField(placeholder: Text("Enter your message here"), text: $text)
+                    
+                    Button(action: {
+                        print("MESSAGE SENT!")
+                        db.pushMessages(message: Message(id: "\(UUID())", text: text, received: false, timestamp: Date.now), documentID: self.currentDocID)
+                    }, label: {
+                        Image(systemName: "paperplane.fill")
+                            .foregroundColor(Color("secondaryColor"))
+                            .padding(10)
+                            .background(Color("primaryColor"))
+                            .cornerRadius(50)
+                    })
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                .background(Color("secondaryColor"))
+                .cornerRadius(20)
+                .padding()
+                .padding(.horizontal)
             }
         }
     }
@@ -144,7 +165,6 @@ struct TitleRowView: View {
                     .foregroundColor(Color("secondaryColor"))
                     .onTapGesture {
                         dismiss()
-                        db.messages = []
                         print(db.messages)
                     }
                 

@@ -24,13 +24,9 @@ struct Conversation: Identifiable, Codable, Hashable {
     var uid: UUID
     var members: [String]
     var messages: [Message]
-  
-
     
     init(uid: UUID, members: [String], messages: [Message] ) {
-
         self.uid = uid
-
         self.members = members
         self.messages = messages
     }

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContactsView: View {
     @EnvironmentObject var db: DataManager
-    
+    @State var currentDocID = ""
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color("tertiaryColor").ignoresSafeArea()
@@ -36,7 +36,7 @@ struct ContactsView: View {
                                 
                                 
                                 NavigationLink(destination: {
-                                    ChatRoomView(chatPerson: user)
+                                    ChatRoomView(currentDocID: $currentDocID, chatPerson: user)
                                         .navigationBarBackButtonHidden(true)
                                 }, label: {
                                     ChatCards(user: user)
@@ -44,9 +44,8 @@ struct ContactsView: View {
                                     for conversation in conversations {
                                         if conversation.members.contains(user.id ?? "") {
                                             db.messages = conversation.messages
-                                            db.documentID = "\(conversation.uid)"
                                             print(db.messages)
-                                            print(db.documentID)
+                                            currentDocID = conversation.id ?? ""
                                         }
                                     }
                                 })
@@ -106,10 +105,10 @@ struct ChatCards: View {
         }.padding(.top)
     }
 }
-
-struct ContactsView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-                ContactsView()
-    }
-}
+//
+//struct ContactsView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//                ContactsView()
+//    }
+//}
