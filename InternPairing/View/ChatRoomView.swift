@@ -34,7 +34,9 @@ struct ChatRoomView: View {
                     
                     Button(action: {
                         print("MESSAGE SENT!")
-                        db.pushMessages(message: Message(id: "\(UUID())", text: text, received: false, timestamp: Date.now), documentID: self.currentDocID)
+                        db.messages.append(Message(id: "\(UUID())", text: text, received: false, timestamp: Date()))
+                        
+                        db.pushMessages(documentID: self.currentDocID, members: [db.currentUser?.uid ?? "", chatPerson.id ?? ""])
                     }, label: {
                         Image(systemName: "paperplane.fill")
                             .foregroundColor(Color("secondaryColor"))

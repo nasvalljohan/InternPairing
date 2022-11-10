@@ -36,8 +36,10 @@ struct ContactsView: View {
                                 
                                 
                                 NavigationLink(destination: {
-                                    ChatRoomView(currentDocID: $currentDocID, chatPerson: user)
-                                        .navigationBarBackButtonHidden(true)
+                                    
+                                        ChatRoomView(currentDocID: $currentDocID, chatPerson: user)
+                                            .navigationBarBackButtonHidden(true)
+                                    
                                 }, label: {
                                     ChatCards(user: user)
                                 }).simultaneousGesture(TapGesture().onEnded {

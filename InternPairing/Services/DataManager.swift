@@ -309,7 +309,7 @@ class DataManager: ObservableObject {
     func fetchConversations() {
         self.conversationsArray.removeAll()
         db.collection(self.conversationsCollection)
-            .whereField("members", arrayContains: theUser?.id)
+            .whereField("members", arrayContains: theUser?.id ?? "")
             .getDocuments() { (querySnapshot, error) in
                 
                 if let error = error {
@@ -321,9 +321,6 @@ class DataManager: ObservableObject {
                         do {
                             let conversation = try document.data(as: Conversation.self)
                             self.conversationsArray.append(conversation)
-                            for conv in self.conversationsArray {
-                                self.messages.append(conv.messages)
-                            }
                             
                         } catch {
                             print("FEL I CONVERDSATION FETCH ")
@@ -336,16 +333,15 @@ class DataManager: ObservableObject {
     
     // Add listener to the function aswell
     // push new messages
-    func pushMessages(message: Message, documentID: String) {
+    func pushMessages(documentID: String, members: [String]) {
         
-        let xMessage = ["id" : "\(message.id)",
-                        "recieved": message.received,
-                          "text" : message.text,
-                          "timestamp" : message.timestamp] as [String : Any]
+        let conversation =  Conversation(uid: UUID(uuidString: documentID) ?? UUID(), members: members, messages: messages)
         
-            db.collection(conversationsCollection).document(documentID).updateData([
-                "messages": FieldValue.arrayUnion([xMessage])
-            ])
+        do {
+           try db.collection(conversationsCollection).document("\(documentID)").setData(from: conversation)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     // fetch new messages
 }

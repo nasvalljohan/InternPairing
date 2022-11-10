@@ -219,7 +219,10 @@ struct PopUpCardView: View {
                             conversation: Conversation(
                                 uid: UUID(),
                                 members: [currentIntern.id ?? "", db.theUser?.id ?? ""],
-                                messages: [Message(id: "1", text: "Hello Intern", received: false, timestamp: Date())]
+                                messages: [
+                                    Message(id: "\(UUID())", text: "Hello Intern", received: false, timestamp: Date()),
+                                    Message(id: "\(UUID())", text: "Bye", received: true, timestamp: Date())
+                                ]
                             )
                         )
                         
