@@ -47,7 +47,6 @@ struct ContentView: View {
     }
 }
 
-
 enum NavigationType: String, Hashable {
     case swipe = "SWIPE VIEW"
     case contact = "CONTACT VIEW"
@@ -61,5 +60,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
-
