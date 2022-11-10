@@ -33,20 +33,26 @@ struct ContactsView: View {
                         VStack (spacing: 5) {
                             ForEach(contacts, id: \.self) {
                                 user in
-
+                                
+                                
                                 NavigationLink(destination: {
-                                    ChatRoomView().navigationBarBackButtonHidden(true)
+                                    ChatRoomView(chatPerson: user)
+                                        .navigationBarBackButtonHidden(true)
                                 }, label: {
-                                    ChatCards(user: user).onTapGesture {
-                                        
+                                    ChatCards(user: user)
+                                }).simultaneousGesture(TapGesture().onEnded {
+                                    for conversation in conversations {
+                                        if conversation.members.contains(user.id ?? "") {
+                                            db.messages = conversation.messages
+                                            db.documentID = "\(conversation.uid)"
+                                            print(db.messages)
+                                            print(db.documentID)
+                                        }
                                     }
                                 })
-                                
-                                
                             }
-                        }
-                    }.padding(.horizontal)
-                    
+                        }.padding(.horizontal)
+                    }
                 }
             }
         }

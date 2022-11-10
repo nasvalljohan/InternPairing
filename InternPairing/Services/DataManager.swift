@@ -16,6 +16,10 @@ class DataManager: ObservableObject {
     @Published var theUser: TheUser?
     @Published var userLoggedIn = false
     @Published var currentUser: User?
+    
+    @Published var messages: [Message] = []
+    @Published var documentID = ""
+    
     var userDocumentListener: ListenerRegistration? // nil as long as user is logged out
     
     // Init - listening for changes in authstate
@@ -284,7 +288,7 @@ class DataManager: ObservableObject {
     
     // MARK: ------------------------------------------------------------------------------
     
-  
+    
     
     
     
@@ -315,7 +319,6 @@ class DataManager: ObservableObject {
                         do {
                             let conversation = try document.data(as: Conversation.self)
                             self.conversationsArray.append(conversation)
-                            print("This is the conversation: \(self.conversationsArray)")
                             
                         } catch {
                             print(error.localizedDescription)
@@ -328,7 +331,13 @@ class DataManager: ObservableObject {
     }
     // Add listener to the function aswell
     // push new messages
-    
+    func pushMessages(message: Message, documentID: String) {
+        let reference = db.collection(conversationsCollection).document(documentID)
+        
+        reference.updateData([
+            "messages": FieldValue.arrayUnion([message])
+        ])
+    }
     // fetch new messages
 }
 
